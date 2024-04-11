@@ -23,12 +23,15 @@ const NavBar = () => {
             </span>
           </li>
         )}
-        {status === 'unauthenticated' && <Link className='mr-3 link link-hover' href='/api/auth/signin'>
-          Sign In
-        </Link>}
-        {status === 'unauthenticated' && <Link className='link link-hover' href='/register'>
-          Register
-        </Link>}
+        {status === 'unauthenticated' && (<li>
+          <Link className='mr-3 link link-hover' href='/api/auth/signin'>
+            Sign In
+          </Link>
+          <Link className='link link-hover' href='/register'>
+            Register
+          </Link>
+        </li>
+        )}
       </ul>
     </nav>
   )
