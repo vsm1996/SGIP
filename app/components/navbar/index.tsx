@@ -27,9 +27,6 @@ const NavBar = () => {
           <Link className='mr-3 link link-hover' href='/api/auth/signin'>
             Sign In
           </Link>
-          <Link className='link link-hover' href='/register'>
-            Register
-          </Link>
         </li>
         )}
       </ul>
