@@ -65,7 +65,7 @@ const RegisterForm = () => {
           <input ref={passwordRef} id='password' type='password' placeholder='Password' className='grow bg-transparent' required />
         </label>
 
-        <button type='submit' className='btn btn-outline btn-neutral mt-3'>Submit</button>
+        <button type='submit' className='btn btn-outline btn-neutral mt-5'>Submit</button>
       </form>
     </div>
   )

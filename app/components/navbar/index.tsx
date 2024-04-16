@@ -9,7 +9,7 @@ const NavBar = () => {
   const { status, data: session } = useSession()
 
   return (
-    <nav className='p-5 navbar bg-base-300'>
+    <nav className='p-5 navbar bg-base-300 z-10 absolute top-0 left-0'>
       <ul className='w-full flex items-center max-sm:justify-between'>
         <li className='mr-6 lg:mr-9'>
           <ThemeController />

@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <NavBar />
-          <main className='p-5'>
+          <main className="z-0 relative">
             <Suspense fallback={<p>Looooader</p>}>
               {children}
             </Suspense>
