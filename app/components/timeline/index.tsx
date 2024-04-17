@@ -31,7 +31,7 @@ const Timeline = () => {
   }, [])
 
   return (
-    <div className='lg:w-1/2'>
+    <div className='w-full lg:w-1/2'>
       <CreatePost handlePost={handleFetch} />
       {error && <p>{error}</p>}
       <ul className='flex flex-col'>
