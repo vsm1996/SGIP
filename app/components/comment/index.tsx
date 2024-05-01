@@ -33,7 +33,7 @@ const Comment = ({ comment, postId }: any) => {
   }
 
   return (
-    <div className='card bg-neutral shadow-xl mb-5'>
+    <div className='card bg-neutral shadow-xl'>
       <div className='card-body'>
         <p className='text-left mb-4'> {comment.user.name || comment.user.username} </p>
         <p> {comment.message} </p>

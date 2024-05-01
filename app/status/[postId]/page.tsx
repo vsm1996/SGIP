@@ -42,11 +42,11 @@ const PostStatusPage = () => {
         {post && <Post post={post} />}
         {post && <CreateComment handleComment={handleFetch} postId={post.id} />}
         {post?.comments.length > 0 &&
-          <div className='border border-base-200 rounded p-5'>
+          <div className='border border-base-300 rounded-lg p-5'>
             {post.comments.map((comment: any) => (
               <span key={comment.id}>
                 <Comment postId={post.id} comment={comment} />
-                {post.comments.length > 1 && <div className="divider"></div>}
+                {post.comments.length > 1 && <div className="divider my-5"></div>}
               </span>
             ))}
           </div>
