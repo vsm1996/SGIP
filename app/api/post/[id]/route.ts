@@ -15,6 +15,7 @@ export async function POST(request: NextRequest,
     data: {
       message: body.message,
       userId: id,
+      likes: 0,
     }
   })
 
@@ -30,7 +31,15 @@ export async function GET(
 ) {
   // Fetch data from a db
   const post = await prisma.post.findUnique({
-    where: { id: id }
+    where: { id: id },
+    include: {
+      user: true,
+      comments: {
+        include: {
+          user: true
+        }
+      }
+    },
   })
 
   // If not found, return 404 error

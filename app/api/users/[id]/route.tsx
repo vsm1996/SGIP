@@ -13,7 +13,10 @@ export async function GET(
 ) {
   // Fetch data from a db
   const user = await prisma.user.findUnique({
-    where: { id: id }
+    where: { id: id },
+    include: {
+      posts: true
+    }
   })
 
   // If not found, return 404 error

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache"
 import { AxiosResponse, AxiosError, CanceledError } from 'axios';
 import Post from '../post';
 import CreatePost from './createPost';
+import Link from 'next/link';
 
 const Timeline = () => {
   const [posts, setPosts] = useState<any>([])
@@ -22,7 +23,8 @@ const Timeline = () => {
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
-        setErrorMessage(err.response.data.error)
+        console.log(err.response)
+        setErrorMessage(err.response?.data.error)
       })
   }
 
@@ -36,7 +38,12 @@ const Timeline = () => {
       {error && <p>{error}</p>}
       <ul className='flex flex-col'>
         {/* reverse posts */}
-        {posts.map((post: any) => <Post key={post.id} post={post} />)}
+        {posts.map((post: any) => <>
+          <Link href={`/status/${post.id}`} className='z-0'>
+            <Post key={post.id} post={post} />
+          </Link>
+        </>
+        )}
       </ul>
     </div>
   )
