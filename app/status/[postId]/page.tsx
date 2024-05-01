@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
@@ -13,9 +13,10 @@ const PostStatusPage = () => {
   const [post, setPost] = useState<any>(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
+
   const pathname = usePathname().split('/').slice(2)[0];
 
-  const handleFetch = () => {
+  const handleFetch = async () => {
     apiClient
       .get(`/post/${pathname}`)
       .then((res: AxiosResponse) => {
