@@ -1,5 +1,3 @@
-'use client';
-
 import apiClient from '@/app/services/api-client'
 import { useSession } from 'next-auth/react'
 import React, { FormEvent, useRef, useState } from 'react'

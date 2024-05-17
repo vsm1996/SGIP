@@ -14,7 +14,7 @@ const PostStatusPage = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
 
-  const pathname = usePathname().split('/').slice(2)[0];
+  const pathname = usePathname().split('/').pop();
 
   const handleFetch = async () => {
     apiClient

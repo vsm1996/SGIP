@@ -16,6 +16,7 @@ export async function POST(request: NextRequest,
       message: body.message,
       userId: id,
       likes: 0,
+      // likes: {userId: id, postId: commentId}
     }
   })
 

@@ -42,13 +42,14 @@ model User {
   posts           Post[]
   comments        Comment[]
   commentsReplies CommentReply[]
+  // likes           Like[]
 }
 
 model Post {
   id       String    @id @default(cuid())
   message  String
   userId   String
-  likes    Int?
+  likes    Int       @default(0)
   comments Comment[]
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -56,22 +57,35 @@ model Post {
 model Comment {
   id             String         @id @default(cuid())
   message        String
-  likes          Int
+  likes          Int            @default(0)
   userId         String
   postId         String
   commentReplies CommentReply[]
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Post           Post           @relation(fields: [postId], references: [id])
+  post           Post           @relation(fields: [postId], references: [id])
 }
 
 model CommentReply {
   id        String   @id @default(cuid())
   message   String
-  likes     Int
+  likes     Int      @default(0)
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Comment   Comment? @relation(fields: [commentId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id])
   commentId String?
+}
+
+model Like {
+  id             String  @id @default(cuid())
+  count          Int @default(0)
+  userId         String
+  postId         String?
+  commentId      String?
+  commentReplyId String?
+  // user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // post           Post?         @relation(fields: [postId], references: [id])
+  // comment        Comment?      @relation(fields: [commentId], references: [id])
+  // commentReply   CommentReply? @relation(fields: [commentReplyId], references: [id])
 }
 
 model Session {

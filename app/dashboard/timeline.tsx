@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import apiClient from '@/app/services/api-client';
 import { revalidatePath } from "next/cache"
 import { AxiosResponse, AxiosError, CanceledError } from 'axios';
-import Post from '../post';
+import Post from '../components/post';
 import CreatePost from './createPost';
 import Link from 'next/link';
 
@@ -19,7 +19,6 @@ const Timeline = () => {
       .then((res: AxiosResponse) => {
         const newData = res.data.reverse()
         setPosts(newData)
-        revalidatePath('/dashboard')
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
@@ -28,7 +27,7 @@ const Timeline = () => {
       })
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     handleFetch()
   }, [])
 
@@ -37,12 +36,12 @@ const Timeline = () => {
       <CreatePost handlePost={handleFetch} />
       {error && <p>{error}</p>}
       <ul className='flex flex-col'>
-        {/* reverse posts */}
-        {posts.map((post: any) => <>
-          <Link href={`/status/${post.id}`} className='z-0'>
-            <Post key={post.id} post={post} />
+        {!posts && <div className='loading loading-ring loading-lg py-20' />}
+        {posts && posts.map((post: any) => (
+          <Link href={`/status/${post.id}`} className='z-0' key={post.id}>
+            <Post post={post} />
           </Link>
-        </>
+        )
         )}
       </ul>
     </div>

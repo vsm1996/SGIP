@@ -9,6 +9,7 @@ export async function POST(request: NextRequest,
     where: { id: id },
     data: {
       likes: { decrement: 1 },
+      // { count: { decrement: 1 }}
     },
   })
 
