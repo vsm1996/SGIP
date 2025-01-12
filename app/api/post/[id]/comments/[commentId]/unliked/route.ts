@@ -4,14 +4,17 @@ import prisma from "@/prisma/client";
 export const revalidate = 0
 
 export async function POST(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
-  const comment = await prisma.comment.update({
-    where: { id: id },
-    data: {
-      likes: { decrement: 1 },
-      // { count: { decrement: 1 }}
-    },
-  })
+  { params: { commentId } }: { params: { commentId: string } }) {
+  const body = await request.json()
 
-  return NextResponse.json(comment)
+  const { userId } = body
+
+  const deletedLike = await prisma.like.deleteMany({
+    where: {
+      userId,
+      commentId,
+    },
+  });
+
+  return NextResponse.json(deletedLike, { status: 200 })
 }

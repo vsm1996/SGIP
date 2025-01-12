@@ -13,7 +13,6 @@ const PostStatusPage = () => {
   const [post, setPost] = useState<any>(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
-
   const pathname = usePathname().split('/').pop();
 
   const handleFetch = async () => {
@@ -24,7 +23,7 @@ const PostStatusPage = () => {
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
-        console.log(err.response)
+        console.error(err)
         setErrorMessage(err.response?.data.error)
       })
   }
@@ -40,7 +39,7 @@ const PostStatusPage = () => {
         <div className="loading loading-ring loading-lg py-20"></div>
       )}
       <div className='w-1/2'>
-        {post && <Post post={post} />}
+        {post && <Post post={post} handleFetch={handleFetch} />}
         {post && <CreateComment handleComment={handleFetch} postId={post.id} />}
         {post?.comments.length > 0 &&
           <div className='border border-base-300 rounded-lg p-5'>

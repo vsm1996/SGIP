@@ -9,7 +9,8 @@ import apiClient from '@/app/services/api-client';
 const RegisterForm = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
-  const nameRef = useRef<HTMLInputElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -23,7 +24,8 @@ const RegisterForm = () => {
       .post('/register', {
         email: emailRef.current!.value,
         password: passwordRef.current!.value,
-        name: nameRef.current!.value,
+        firstName: firstNameRef.current!.value,
+        lastName: lastNameRef.current!.value,
         username: usernameRef.current!.value,
       })
       .then(res => {
@@ -46,8 +48,12 @@ const RegisterForm = () => {
       </div>)}
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor='name' className='input input-bordered flex items-center gap-2'>
-          <input ref={nameRef} id='name' type='text' placeholder='Full Name' className='grow bg-transparent' required />
+        <label htmlFor='firstName' className='input input-bordered flex items-center gap-2'>
+          <input ref={firstNameRef} id='firstName' type='text' placeholder='First Name' className='grow bg-transparent' required />
+        </label>
+
+        <label htmlFor='lastName' className='input input-bordered flex items-center gap-2'>
+          <input ref={lastNameRef} id='lastName' type='text' placeholder='Last Name' className='grow bg-transparent' required />
         </label>
 
         <label htmlFor='username' className='input input-bordered flex items-center gap-2'>

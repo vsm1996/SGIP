@@ -5,13 +5,16 @@ export const revalidate = 0
 
 export async function POST(request: NextRequest,
   { params: { id } }: { params: { id: string } }) {
-  const post = await prisma.post.update({
-    where: { id: id },
-    data: {
-      likes: { decrement: 1 },
-      // { count: { decrement: 1 }}
-    },
-  })
+  const body = await request.json()
 
-  return NextResponse.json(post)
+  const { userId } = body
+
+  const deletedLike = await prisma.like.deleteMany({
+    where: {
+      userId: userId,
+      postId: id,
+    },
+  });
+
+  return NextResponse.json(deletedLike, { status: 200 })
 }

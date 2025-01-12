@@ -10,7 +10,8 @@ export async function GET(request: NextRequest,
     where: { id: id },
     include: {
       user: true,
-      comments: true
+      comments: true,
+      likes: true
     },
   })
 

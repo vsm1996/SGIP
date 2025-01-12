@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
+import { getToken } from 'next-auth/jwt';
 // import middleware from "next-auth/middleware";
 
 export { default } from "next-auth/middleware";
@@ -20,7 +21,8 @@ export const config = {
   // ?: zero or one parameters ie (?)
   matcher: [
     '/dashboard/:path*',
-    '/change-password'
+    '/change-password',
+    '/'
   ]
   // matcher: ['/users/:id*']
 }
@@ -32,12 +34,30 @@ export const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
-export function middleware(request: NextRequest) {
-  if (request.method === 'OPTIONS') {
+export async function middleware(req: NextRequest) {
+  if (req.method === 'OPTIONS') {
     return NextResponse.json({}, { headers: corsHeaders })
   }
 
-  let authCookie = request.cookies.get('__Secure-next-auth.session-token') || request.cookies.get('next-auth.session-token')
+  const token = await getToken({ req });
+  const pathname = req.nextUrl.pathname;
 
-  if (!authCookie || authCookie.value.length === 0) return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+  // Redirect signed-in users away from the homepage
+  if (token && pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  // Allow unauthenticated users to access the homepage
+  if (!token) {
+    if (pathname === '/api/auth/signin') {
+      return NextResponse.next(); // Allow access to the sign-in page
+    } else if (pathname === '/') {
+      return NextResponse.next(); // Proceed to homepage
+    }
+
+    return NextResponse.redirect(new URL('/api/auth/signin', req.url));
+  }
+
+  // Allow authenticated users to access protected routes
+  return NextResponse.next();
 }

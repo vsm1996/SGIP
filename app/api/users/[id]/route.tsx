@@ -69,5 +69,5 @@ export async function DELETE(
     where: { id: id }
   })
   // Return 200
-  return NextResponse.json(deletedUser)
+  return NextResponse.json(deletedUser, { status: 200 })
 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
 import prisma from "@/prisma/client";
 
+export const revalidate = 0
 
 export async function POST(request: NextRequest,
   { params: { id } }: { params: { id: string } }) {
@@ -15,8 +16,7 @@ export async function POST(request: NextRequest,
     data: {
       message: body.message,
       userId: id,
-      likes: 0,
-      // likes: {userId: id, postId: commentId}
+      // likes: {userId: id, postId: commentId}[]
     }
   })
 
@@ -36,6 +36,12 @@ export async function GET(
     include: {
       user: true,
       comments: {
+        include: {
+          user: true,
+          likes: true
+        }
+      },
+      likes: {
         include: {
           user: true
         }

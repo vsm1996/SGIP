@@ -41,8 +41,19 @@ const authOptions: NextAuthOptions = {
     strategy: 'jwt'
   },
   callbacks: {
-    async session({ session, token, user }) {
-      return { ...session, ...user, ...token }
+    async session({ session, token }) {
+
+      if (session?.user?.email) {
+
+        const user = await prisma.user.findUnique({
+          where: { email: session.user.email }
+        })
+
+        session.user.firstName = user?.firstName!
+        session.user.lastName = user?.lastName!
+      }
+
+      return { ...session, ...token }
     },
     async redirect({ url, baseUrl }) {
       return Promise.resolve('/dashboard')

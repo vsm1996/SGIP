@@ -31,6 +31,8 @@ model Account {
 
 model User {
   id              String         @id @default(cuid())
+  firstName       String?
+  lastName        String?
   name            String?
   username        String?        @unique
   email           String?        @unique
@@ -42,14 +44,14 @@ model User {
   posts           Post[]
   comments        Comment[]
   commentsReplies CommentReply[]
-  // likes           Like[]
+  likes           Like[]
 }
 
 model Post {
   id       String    @id @default(cuid())
   message  String
   userId   String
-  likes    Int       @default(0)
+  likes    Like[]
   comments Comment[]
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -57,7 +59,7 @@ model Post {
 model Comment {
   id             String         @id @default(cuid())
   message        String
-  likes          Int            @default(0)
+  likes          Like[]
   userId         String
   postId         String
   commentReplies CommentReply[]
@@ -68,7 +70,7 @@ model Comment {
 model CommentReply {
   id        String   @id @default(cuid())
   message   String
-  likes     Int      @default(0)
+  likes     Like[]
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   Comment? @relation(fields: [commentId], references: [id])
@@ -76,16 +78,15 @@ model CommentReply {
 }
 
 model Like {
-  id             String  @id @default(cuid())
-  count          Int @default(0)
+  id             String        @id @default(cuid())
   userId         String
   postId         String?
   commentId      String?
   commentReplyId String?
-  // user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // post           Post?         @relation(fields: [postId], references: [id])
-  // comment        Comment?      @relation(fields: [commentId], references: [id])
-  // commentReply   CommentReply? @relation(fields: [commentReplyId], references: [id])
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post           Post?         @relation(fields: [postId], references: [id])
+  comment        Comment?      @relation(fields: [commentId], references: [id])
+  commentReply   CommentReply? @relation(fields: [commentReplyId], references: [id])
 }
 
 model Session {

@@ -1,23 +1,24 @@
 'use client';
 
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import apiClient from '@/app/services/api-client';
-import { revalidatePath } from "next/cache"
-import { AxiosResponse, AxiosError, CanceledError } from 'axios';
+import { AxiosResponse, CanceledError } from 'axios';
 import Post from '../components/post';
 import CreatePost from './createPost';
+import PostSkeleton from '@/app/components/post/postSkeleton'
 import Link from 'next/link';
+import { revalidatePath } from 'next/cache';
 
 const Timeline = () => {
   const [posts, setPosts] = useState<any>([])
   const [error, setErrorMessage] = useState<any>()
 
 
-  const handleFetch = async () => {
+  const handleFetch = () => {
     apiClient
       .get('/post')
-      .then((res: AxiosResponse) => {
-        const newData = res.data.reverse()
+      .then(async (res: AxiosResponse) => {
+        const newData = await res.data.reverse()
         setPosts(newData)
       })
       .catch((err) => {
@@ -36,13 +37,12 @@ const Timeline = () => {
       <CreatePost handlePost={handleFetch} />
       {error && <p>{error}</p>}
       <ul className='flex flex-col'>
-        {!posts && <div className='loading loading-ring loading-lg py-20' />}
-        {posts && posts.map((post: any) => (
-          <Link href={`/status/${post.id}`} className='z-0' key={post.id}>
-            <Post post={post} />
-          </Link>
-        )
-        )}
+        <Suspense fallback={<PostSkeleton />}>
+          {posts && posts.map((post: any) => (
+            <Post key={post.id} post={post} handleFetch={handleFetch} />
+          )
+          )}
+        </Suspense>
       </ul>
     </div>
   )

@@ -17,7 +17,7 @@ const config: Config = {
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
-    themes: ["aqua", "synthwave"
+    themes: ["aqua", "synthwave",
       // {
       //   mytheme: {
       //     "primary": "#a991f7",

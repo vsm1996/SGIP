@@ -10,6 +10,7 @@ export async function GET(request: NextRequest,
     where: { id: commentId },
     include: {
       user: true,
+      likes: true,
     },
   })
 
@@ -26,8 +27,6 @@ export async function POST(request: NextRequest,
   const post = await prisma.comment.create({
     data: {
       message: body.message,
-      likes: 0,
-      // likes: { userId: id, commentId: commentId }
       userId: id,
       postId: commentId
     }
