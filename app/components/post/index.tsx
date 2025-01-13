@@ -17,12 +17,9 @@ const Post = ({ post, handleFetch }: PostProps) => {
   const [liked, setLiked] = useState<boolean>(false)
 
   useEffect(() => {
-    if (session && post.likes) {
-      let userLiked = post.likes.some((like: Like) => like.userId === session.sub)
-      console.log(post.message, userLiked)
-      if (userLiked) setLiked(true)
-    }
-  }, [post.likes, session])
+    let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
+    if (userLiked) setLiked(true)
+  }, [session, post.likes])
 
   return (
     <div className='card bg-neutral shadow-xl mb-5'>
@@ -35,7 +32,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
         </Link>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1 z-10'>
-            <PostLikeButton post={post} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
+            <PostLikeButton session={session} post={post} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
             <p> {post.likes?.length || 0} </p>
           </div>
           <div className='flex items-center gap-1 z-10'>

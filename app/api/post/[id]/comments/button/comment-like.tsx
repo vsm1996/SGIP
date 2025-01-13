@@ -4,6 +4,7 @@ import { CanceledError } from 'axios'
 import React, { Dispatch, MouseEvent, SetStateAction } from 'react'
 
 interface CommentLikeButtonProps {
+  session: any,
   comment: Comment,
   postId: string,
   liked: boolean,
@@ -11,13 +12,13 @@ interface CommentLikeButtonProps {
   handleFetch: () => void,
 }
 
-const CommentLikeButton = ({ comment, postId, liked, setLiked, handleFetch, }: CommentLikeButtonProps) => {
+const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFetch, }: CommentLikeButtonProps) => {
 
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient
         .post(`/post/${postId}/comments/${comment.id}/unliked`, {
-          userId: comment.userId
+          userId: session.sub
         })
         .then(res => {
           setLiked(false)
@@ -28,7 +29,7 @@ const CommentLikeButton = ({ comment, postId, liked, setLiked, handleFetch, }: C
         })) : (
       apiClient
         .post(`/post/${postId}/comments/${comment.id}/liked`, {
-          userId: comment.userId
+          userId: session.userId
         })
         .then(res => {
           setLiked(true)

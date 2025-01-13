@@ -37,7 +37,7 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
         <p> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
-            <CommentLikeButton comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
+            <CommentLikeButton session={session} comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
             <p> {comment.likes?.length || 0} </p>
           </div>
           {/* <div className='flex items-center gap-1 z-1'>

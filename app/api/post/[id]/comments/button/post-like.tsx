@@ -4,19 +4,20 @@ import { CanceledError } from 'axios'
 import React, { Dispatch, MouseEvent, SetStateAction } from 'react'
 
 interface PostLikeButtonProps {
+  session: any,
   post: Post,
   liked: boolean,
   setLiked: Dispatch<SetStateAction<boolean>>,
   handleFetch: () => void,
 }
 
-const PostLikeButton = ({ post, liked, setLiked, handleFetch, }: PostLikeButtonProps) => {
+const PostLikeButton = ({ session, post, liked, setLiked, handleFetch, }: PostLikeButtonProps) => {
 
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient
         .post(`/post/${post.id}/unliked`, {
-          userId: post.userId
+          userId: session.sub
         })
         .then(res => {
           setLiked(false)
@@ -28,7 +29,7 @@ const PostLikeButton = ({ post, liked, setLiked, handleFetch, }: PostLikeButtonP
     ) : (
       apiClient
         .post(`/post/${post.id}/liked`, {
-          userId: post.userId
+          userId: session.sub
         })
         .then(res => {
           setLiked(true)
