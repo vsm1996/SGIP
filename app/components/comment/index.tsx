@@ -5,38 +5,23 @@ import apiClient from '@/app/services/api-client'
 import { CanceledError } from 'axios'
 import { useSession } from 'next-auth/react'
 import { Like } from '@prisma/client'
+import CommentLikeButton from '@/app/api/post/[id]/comments/button/comment-like'
+import PostDeleteButton from '@/app/api/post/[id]/comments/button/post-delete'
+import CommentDeleteButton from '@/app/api/post/[id]/comments/button/comment-delete'
 
 interface User {
   name: string,
 }
 
-const Comment = ({ comment, postId }: any) => {
+interface CommentProps {
+  comment: any,
+  postId: string,
+  handleFetch: () => void,
+}
+
+const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
   const { data: session } = useSession()
   const [liked, setLiked] = useState<boolean>(false)
-
-  const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
-    liked ? (apiClient
-      .post(`/post/${postId}/comments/${comment.id}/unliked`, {
-        userId: comment.userId
-      })
-      .then(res => {
-        setLiked(false)
-      })
-      .catch(err => {
-        if (err instanceof CanceledError) return
-      })) : (
-      apiClient
-        .post(`/post/${postId}/comments/${comment.id}/liked`, {
-          userId: comment.userId
-        })
-        .then(res => {
-          setLiked(true)
-        })
-        .catch(err => {
-          if (err instanceof CanceledError) return
-        }))
-  }
-
 
   useEffect(() => {
     let userLiked = session && comment.likes?.find((like: Like) => like!.userId === session?.sub)
@@ -51,11 +36,7 @@ const Comment = ({ comment, postId }: any) => {
         <p> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
-            <button onClick={handleLike}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill={liked ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 hover:fill-current">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-              </svg>
-            </button>
+            <CommentLikeButton comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
             <p> {comment.likes?.length || 0} </p>
           </div>
           {/* <div className='flex items-center gap-1 z-1'>
@@ -64,6 +45,9 @@ const Comment = ({ comment, postId }: any) => {
             </svg>
             {comment?.commentReplies?.length || 0}
           </div> */}
+          {comment.userId === session!.sub && (<div className='flex items-center z-10'>
+            <CommentDeleteButton comment={comment} handleFetch={handleFetch} />
+          </div>)}
         </div>
       </div>
     </div>

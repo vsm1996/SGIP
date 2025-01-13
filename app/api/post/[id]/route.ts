@@ -4,6 +4,22 @@ import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
+export async function DELETE(request: NextRequest,
+  { params: { id } }: { params: { id: string } }) {
+
+  // delete from db
+  const deletedPost = await prisma.post.delete({
+    where: {
+      id: id,
+    }
+  })
+
+  //return post
+  return NextResponse.json(deletedPost,
+    // Status: 200 or 204 -> an object was deleted
+    { status: 200 })
+}
+
 export async function POST(request: NextRequest,
   { params: { id } }: { params: { id: string } }) {
   const body = await request.json();

@@ -4,6 +4,22 @@ import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
+export async function DELETE(request: NextRequest,
+  { params: { commentId } }: { params: { commentId: string } }) {
+
+  // delete from db
+  const deletedComment = await prisma.comment.delete({
+    where: {
+      id: commentId,
+    }
+  })
+
+  //return comment
+  return NextResponse.json(deletedComment,
+    // Status: 200 or 204 -> an object was deleted
+    { status: 200 })
+}
+
 export async function GET(request: NextRequest,
   { params: { commentId } }: { params: { commentId: string } }) {
   const comment = await prisma.comment.findUnique({

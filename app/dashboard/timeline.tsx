@@ -6,8 +6,6 @@ import { AxiosResponse, CanceledError } from 'axios';
 import Post from '../components/post';
 import CreatePost from './createPost';
 import PostSkeleton from '@/app/components/post/postSkeleton'
-import Link from 'next/link';
-import { revalidatePath } from 'next/cache';
 
 const Timeline = () => {
   const [posts, setPosts] = useState<any>([])
