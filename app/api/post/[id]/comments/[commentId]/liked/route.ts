@@ -9,6 +9,15 @@ export async function POST(request: NextRequest,
 
   const { userId } = body
 
+  // Check if the user has already liked this comment
+  const existingLike = await prisma.like.findFirst({
+    where: { userId, commentId: commentId },
+  });
+
+  if (existingLike) {
+    return NextResponse.json({ message: "Already liked" }, { status: 400 });
+  }
+
   const like = await prisma.like.create({
     data: {
       userId,

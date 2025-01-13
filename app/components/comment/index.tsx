@@ -24,10 +24,11 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
   const [liked, setLiked] = useState<boolean>(false)
 
   useEffect(() => {
-    let userLiked = session && comment.likes?.find((like: Like) => like!.userId === session?.sub)
-
-    if (userLiked) setLiked(true)
-  }, [])
+    if (session && comment.likes) {
+      let userLiked = comment.likes?.some((like: Like) => like!.userId === session.sub)
+      if (userLiked) setLiked(true)
+    }
+  }, [comment.likes, session])
 
   return (
     <div className='card bg-neutral shadow-xl'>

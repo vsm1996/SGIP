@@ -17,10 +17,12 @@ const Post = ({ post, handleFetch }: PostProps) => {
   const [liked, setLiked] = useState<boolean>(false)
 
   useEffect(() => {
-    let userLiked = session && post.likes?.find((like: Like) => like!.userId === session!.sub)
-
-    if (userLiked) setLiked(true)
-  }, [])
+    if (session && post.likes) {
+      let userLiked = post.likes.some((like: Like) => like.userId === session.sub)
+      console.log(post.message, userLiked)
+      if (userLiked) setLiked(true)
+    }
+  }, [post.likes, session])
 
   return (
     <div className='card bg-neutral shadow-xl mb-5'>
