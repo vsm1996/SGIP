@@ -12,7 +12,7 @@ export async function POST(request: NextRequest,
   const deletedLike = await prisma.like.deleteMany({
     where: {
       userId,
-      commentId,
+      id: commentId,
     },
   });
 

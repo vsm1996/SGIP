@@ -11,7 +11,7 @@ export async function POST(request: NextRequest,
 
   // Check if the user has already liked this comment
   const existingLike = await prisma.like.findFirst({
-    where: { userId, commentId: commentId },
+    where: { userId, commentId },
   });
 
   if (existingLike) {
