@@ -17,8 +17,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
   const [liked, setLiked] = useState<boolean>(false)
 
   useEffect(() => {
-    let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
-    if (userLiked) setLiked(true)
+    if (session && post.likes) {
+      let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
+      if (userLiked) setLiked(true)
+    }
   }, [session, post.likes])
 
   return (
@@ -43,7 +45,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
             </Link>
             {post?.comments?.length || 0}
           </div>
-          {post.userId === session!.sub && <div className='flex items-center z-10'>
+          {session && post.userId === session!.sub && <div className='flex items-center z-10'>
             <PostDeleteButton postId={post.id} handleFetch={handleFetch} />
           </div>}
         </div>

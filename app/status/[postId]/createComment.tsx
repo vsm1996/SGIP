@@ -32,7 +32,7 @@ const CreateComment = ({ handleComment, postId }: any) => {
   return (
     <>
       {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit} className='flex flex-col items-end w-full mb-5'>
+      <form onSubmit={handleSubmit} className='flex flex-col items-end w-full mb-5 mt-1'>
         <textarea
           ref={messageRef}
           placeholder="Anything to share?"

@@ -17,7 +17,7 @@ const config: Config = {
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   daisyui: {
-    themes: ["aqua", "synthwave",
+    themes: ["aqua", "synthwave", "corporate", "night", "nord"
       // {
       //   mytheme: {
       //     "primary": "#a991f7",
@@ -25,7 +25,7 @@ const config: Config = {
       //     "accent": "#37cdbe",
       //     "neutral": "#3d4451",
       //     "base-100": "#ffffff",
-      //   },
+      //   },s
       // },
     ],
   },

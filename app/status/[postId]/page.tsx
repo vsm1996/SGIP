@@ -38,14 +38,14 @@ const PostStatusPage = () => {
       {!post && (
         <div className="loading loading-ring loading-lg py-20"></div>
       )}
-      <div className='w-1/2'>
+      <div className='w-full p-6 md:p-0 md:w-1/2'>
         {post && <Post post={post} handleFetch={handleFetch} />}
         {post && <CreateComment handleComment={handleFetch} postId={post.id} />}
         {post?.comments.length > 0 &&
-          <div className='border border-base-300 rounded-lg p-5'>
+          <div className='border border-base-300 rounded-lg p-4 md:p-5'>
             {post.comments.map((comment: any) => (
               <span key={comment.id}>
-                <Comment postId={post.id} comment={comment} handleFetch={handleFetch} />
+                <Comment key={comment.id} postId={post.id} comment={comment} handleFetch={handleFetch} />
                 {post.comments.length > 1 && <div className="divider my-5"></div>}
               </span>
             ))}

@@ -46,7 +46,7 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
             </svg>
             {comment?.commentReplies?.length || 0}
           </div> */}
-          {comment.userId === session!.sub && (<div className='flex items-center z-10'>
+          {session && comment.userId === session!.sub && (<div className='flex items-center z-10'>
             <CommentDeleteButton comment={comment} handleFetch={handleFetch} />
           </div>)}
         </div>
