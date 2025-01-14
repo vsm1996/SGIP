@@ -6,7 +6,7 @@ const PostSkeleton = () => {
     <div className='skeleton card shadow-xl mb-5'>
       <div className='card-body w-full'>
         <p className='bg-neutral text-left mb-4'> </p>
-        <p className=''> </p>
+        <p className=''></p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1 z-1'>
             <button className=''>

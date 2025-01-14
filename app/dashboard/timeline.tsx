@@ -17,7 +17,7 @@ const Timeline = () => {
       .get('/post')
       .then(async (res: AxiosResponse) => {
         const newData = await res.data.reverse()
-        setPosts(newData)
+        // setPosts(newData)
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
@@ -34,9 +34,14 @@ const Timeline = () => {
     <div className='w-full lg:w-1/2'>
       <CreatePost handlePost={handleFetch} />
       {error && <p>{error}</p>}
+      {posts.length === 0 && (
+        <div className='flex items-center justify-center'>
+          <div className="loading loading-ring loading-lg" />
+        </div>
+      )}
       <ul className='flex flex-col'>
         <Suspense fallback={<PostSkeleton />}>
-          {posts && posts.map((post: any) => (
+          {posts.map((post: any) => (
             <Post key={post.id} post={post} handleFetch={handleFetch} />
           )
           )}
