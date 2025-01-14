@@ -18,6 +18,7 @@ const Timeline = () => {
       .then(async (res: AxiosResponse) => {
         const newData = await res.data.reverse()
         setPosts(newData)
+
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
