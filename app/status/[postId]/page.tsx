@@ -36,7 +36,7 @@ const PostStatusPage = () => {
     <div className='flex flex-col items-center justify-center px-0 py-36 w-full'>
       {errorMessage && <p>{errorMessage}</p>}
       {!post && (
-        <div className="loading loading-ring loading-lg py-20"></div>
+        <div className="loading loading-ring loading-lg flex items-center justify-center" />
       )}
       <div className='w-full p-6 md:p-0 md:w-1/2'>
         {post && <Post post={post} handleFetch={handleFetch} />}
