@@ -11,20 +11,24 @@ import CreateComment from './createComment'
 
 const PostStatusPage = () => {
   const [post, setPost] = useState<any>(null)
+  const [isLoading, setLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState(null)
 
   const pathname = usePathname().split('/').pop();
 
   const handleFetch = async () => {
+    setLoading(true)
     apiClient
       .get(`/post/${pathname}`)
       .then((res: AxiosResponse) => {
         setPost(res.data)
+        setLoading(false)
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
         console.error(err)
         setErrorMessage(err.response?.data.error)
+        setLoading(false)
       })
   }
 
@@ -35,7 +39,7 @@ const PostStatusPage = () => {
   return (
     <div className='flex flex-col items-center justify-center px-0 py-36 w-full'>
       {errorMessage && <p>{errorMessage}</p>}
-      {!post && (
+      {isLoading && (
         <div className="loading loading-ring loading-lg flex items-center justify-center" />
       )}
       <div className='w-full p-6 md:p-0 md:w-1/2'>
