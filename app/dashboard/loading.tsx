@@ -2,7 +2,7 @@ import React from 'react'
 
 const LoadingPage = () => {
   return (
-    <div className='loading loading-ring loading-lg py-20' />
+    <div className="loading loading-ring loading-lg flex items-center justify-center" />
   )
 }
 
