@@ -23,6 +23,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
+  createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -45,6 +46,7 @@ model User {
   comments        Comment[]
   commentsReplies CommentReply[]
   likes           Like[]
+  createdAt DateTime  @default(now())
 }
 
 model Post {
