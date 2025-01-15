@@ -14,6 +14,8 @@ export async function DELETE(request: NextRequest,
     }
   })
 
+  if (!deletedPost) return NextResponse.json({ message: "Error deleting message." }, { status: 400 })
+
   //return post
   return NextResponse.json(deletedPost,
     // Status: 200 or 204 -> an object was deleted
