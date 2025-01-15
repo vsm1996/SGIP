@@ -29,6 +29,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
   return (
     <div className='card bg-neutral shadow-xl mb-5'>
       <div className='card-body'>
+
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>
             <div className='mb-4 flex items-center gap-1'>
