@@ -31,7 +31,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
       <div className='card-body'>
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>
-            <p className='text-left mb-4'> {post.user.name || post.user.username} &#183; {post.createdAt && timeAgo(post.createdAt)} </p>
+            <div className='mb-4 flex items-center gap-1'>
+              <p className='justify-self-start'> {post.user.name || post.user.username} </p>
+              <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
+            </div>
             <p> {post.message} </p>
           </div>
         </Link>

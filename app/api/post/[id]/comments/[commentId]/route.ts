@@ -38,8 +38,10 @@ export async function POST(request: NextRequest,
   const body = await request.json();
 
   const validation = schema.safeParse(body)
-  if (!validation.success) return NextResponse.json(validation.error.errors, { status: 400 })
-
+  if (!validation.success) {
+    const errorMessages = validation.error.errors.map(error => error.message)
+    return NextResponse.json(errorMessages, { status: 400 })
+  }
   const post = await prisma.comment.create({
     data: {
       message: body.message,

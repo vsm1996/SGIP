@@ -34,7 +34,10 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
   return (
     <div className='card bg-neutral shadow-xl'>
       <div className='card-body'>
-        <p className='text-left mb-4'> {comment.user.name || comment.user.username} &#183; {comment.createdAt && timeAgo(comment.createdAt)} </p>
+        <div className='mb-4 flex items-center gap-1'>
+          <p className='justify-self-start'> {comment.user.name || comment.user.username} </p>
+          <small className='text-xs opacity-45'> {timeAgo(comment.createdAt)} </small>
+        </div>
         <p> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
