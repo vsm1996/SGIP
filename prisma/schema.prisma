@@ -48,16 +48,18 @@ model User {
 }
 
 model Post {
-  id       String    @id @default(cuid())
-  message  String
-  userId   String
-  likes    Like[]
-  comments Comment[]
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  message   String
+  userId    String
+  likes     Like[]
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
   id             String         @id @default(cuid())
+  createdAt      DateTime       @default(now())
   message        String
   likes          Like[]
   userId         String
