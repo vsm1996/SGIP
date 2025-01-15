@@ -5,9 +5,9 @@ import apiClient from '@/app/services/api-client'
 import { CanceledError } from 'axios'
 import { useSession } from 'next-auth/react'
 import { Like } from '@prisma/client'
-import CommentLikeButton from '@/app/api/post/[id]/comments/button/comment-like'
-import PostDeleteButton from '@/app/api/post/[id]/comments/button/post-delete'
-import CommentDeleteButton from '@/app/api/post/[id]/comments/button/comment-delete'
+import CommentLikeButton from '@/app/components/button/comment-like'
+import PostDeleteButton from '@/app/components/button/post-delete'
+import CommentDeleteButton from '@/app/components/button/comment-delete'
 
 interface User {
   name: string,

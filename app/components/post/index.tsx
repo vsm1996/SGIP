@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Like } from '@prisma/client'
 import Link from 'next/link'
-import PostLikeButton from '@/app/api/post/[id]/comments/button/post-like'
-import PostDeleteButton from '@/app/api/post/[id]/comments/button/post-delete'
+import PostLikeButton from '@/app/components/button/post-like'
+import PostDeleteButton from '@/app/components/button/post-delete'
 
 interface PostProps {
   post: any,
