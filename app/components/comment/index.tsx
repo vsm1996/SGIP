@@ -32,7 +32,7 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
   }, [comment.likes, session])
 
   return (
-    <div className='card bg-neutral hover:bg-[#281b61] transition-all duration-200 shadow-xl ease-in-out'>
+    <div className='card bg-neutral hover:bg-neutral/55 transition-all duration-200 shadow-xl ease-in-out'>
       <div className='card-body'>
         <div className='mb-4 flex items-center gap-1'>
           <p className='justify-self-start'> {comment.user.name || comment.user.username} </p>
