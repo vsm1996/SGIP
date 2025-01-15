@@ -4,7 +4,7 @@ import Timeline from './timeline'
 
 const DashboardPage = () => {
   return (
-    <div className='flex flex-col items-center justify-center px-6 md:px-12 py-36'>
+    <div className='w-full flex flex-col items-center justify-center px-6 md:px-12'>
       <Timeline />
     </div>
   )

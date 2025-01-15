@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import AuthProvider from "./auth/Provider";
 import NavBar from "./components/navbar";
+import NichirenLibrary from "./components/nichiren-library";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,8 +27,8 @@ export default function RootLayout({
         <Analytics />
         <AuthProvider>
           <NavBar />
-          <main className="z-0 relative">
-            <Suspense fallback={<p>Looooader</p>}>
+          <main className="relative">
+            <Suspense fallback={<div className=" loading loading-ring loading-lg"></div>}>
               {children}
             </Suspense>
           </main>

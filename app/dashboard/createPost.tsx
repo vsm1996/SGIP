@@ -36,6 +36,7 @@ const CreatePost = ({ handlePost }: any) => {
       )}
       <form onSubmit={handleSubmit} className='flex flex-col items-end w-full mb-5'>
         <textarea
+          id='createPostField'
           ref={messageRef}
           placeholder="Anything to share?"
           className='w-full textarea textarea-bordered textarea-md mb-3'
