@@ -4,6 +4,7 @@ import apiClient from '@/app/services/api-client'
 import { useSession } from 'next-auth/react'
 import React, { FormEvent, useRef, useState } from 'react'
 import { CanceledError } from 'axios'
+import ErrorMessage from '@/app/components/errorMessage';
 
 const CreateComment = ({ handleComment, postId }: any) => {
   const [error, setErrorMessage] = useState<[] | null>(null)
@@ -14,28 +15,27 @@ const CreateComment = ({ handleComment, postId }: any) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
-    if (messageRef.current) {
-      setErrorMessage(null)
-      apiClient
-        .post(`/post/${session.sub}/comments/${postId}`, { message: messageRef.current.value })
-        .then(res => {
-          messageRef.current!.value = ""
-          handleComment()
-        })
-        .catch(err => {
-          if (err instanceof CanceledError) return
-          setErrorMessage(err.response.data)
-        })
-    }
+    const message = messageRef.current?.value;
+
+    if (!message) return;
+
+    setErrorMessage(null)
+    apiClient
+      .post(`/post/${session.sub}/comments/${postId}`, { message })
+      .then(res => {
+        messageRef.current!.value = ""
+        handleComment()
+      })
+      .catch(err => {
+        if (err instanceof CanceledError) return
+        setErrorMessage(err.response?.data || ['An unknown error occurred.'])
+      })
+
   }
 
   return (
     <>
-      {error && (
-        <div className='mb-4 w-full flex justify-center'>
-          {error.map((message, index) => <p key={index}> {message}</p>)}
-        </div>
-      )}
+      {error && <ErrorMessage error={error} />}
       <form onSubmit={handleSubmit} className='flex flex-col items-end w-full mb-5 mt-1'>
         <textarea
           ref={messageRef}
