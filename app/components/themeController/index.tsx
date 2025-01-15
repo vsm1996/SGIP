@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 const ThemeController = () => {
   const [theme, setTheme] = useState<string>('aqua');
@@ -10,12 +10,12 @@ const ThemeController = () => {
     document.documentElement.setAttribute('data-theme', selectedTheme);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const cachedTheme = localStorage.getItem('theme');
     setTheme(cachedTheme ? cachedTheme : theme)
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Apply the saved theme on component mount
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
