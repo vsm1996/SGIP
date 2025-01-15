@@ -11,10 +11,10 @@ const NichirenLibrary = ({ children }: Readonly<{
 
   return (
     <div className="drawer lg:drawer-open">
-      <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+      <input id="nichiren-library-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col items-center justify-center py-20 lg:py-36">
         {/* Page content here */}
-        <label htmlFor="my-drawer-2" className="btn btn-neutral-content drawer-button lg:hidden self-start mx-6 my-5">
+        <label htmlFor="nichiren-library-drawer" className="btn btn-neutral-content drawer-button lg:hidden self-start mx-6 my-5">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
@@ -23,7 +23,7 @@ const NichirenLibrary = ({ children }: Readonly<{
         {children}
       </div>
       <div className="drawer-side overflow-hidden">
-        <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
+        <label htmlFor="nichiren-library-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <ul className="menu bg-base-200 text-base-content min-h-full w-80 px-4 py-36">
           <li className='text-xl ml-3'>Nichiren Library</li>
           <div className="divider w-full" />
