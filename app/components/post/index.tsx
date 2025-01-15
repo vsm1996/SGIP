@@ -27,7 +27,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
   }, [session, post.likes])
 
   return (
-    <div className='card bg-neutral shadow-xl mb-5 hover:bg-[#281b61] transition-all duration-200 ease-in-out'>
+    <div className='card bg-neutral shadow-xl mb-5 hover:bg-neutral/55 transition-all duration-200 ease-in-out'>
       <div className='card-body'>
 
         <Link href={`/status/${post.id}`} className='mb-4'>
