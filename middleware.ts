@@ -21,6 +21,7 @@ export const config = {
   // ?: zero or one parameters ie (?)
   matcher: [
     '/dashboard/:path*',
+    '/status/:path*',
     '/change-password',
     '/'
   ]
