@@ -29,7 +29,7 @@ const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFe
         })) : (
       apiClient
         .post(`/post/${postId}/comments/${comment.id}/liked`, {
-          userId: session.userId
+          userId: session.sub
         })
         .then(res => {
           setLiked(true)
