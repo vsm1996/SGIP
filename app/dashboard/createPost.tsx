@@ -2,8 +2,13 @@ import apiClient from '@/app/services/api-client'
 import { useSession } from 'next-auth/react'
 import React, { FormEvent, useRef, useState } from 'react'
 import { CanceledError } from 'axios'
+import ErrorMessage from '../components/errorMessage';
 
-const CreatePost = ({ handlePost }: any) => {
+interface CreatePostProps {
+  handlePost: () => void;
+}
+
+const CreatePost = ({ handlePost }: CreatePostProps) => {
   const [error, setErrorMessage] = useState<[] | null>(null)
   const { data: session }: any = useSession()
   const messageRef = useRef<HTMLTextAreaElement>(null)
@@ -11,29 +16,28 @@ const CreatePost = ({ handlePost }: any) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
 
-    if (messageRef.current) {
-      setErrorMessage(null)
-      apiClient
-        .post(`/post/${session.sub}`, { message: messageRef.current.value })
-        .then(res => {
-          console.log('res????', res)
-          messageRef.current!.value = ""
-          handlePost()
-        })
-        .catch(err => {
-          if (err instanceof CanceledError) return
-          setErrorMessage(err.response.data)
-        })
-    }
+    const message = messageRef.current?.value;
+
+    if (!message) return;
+
+    setErrorMessage(null)
+    apiClient
+      .post(`/post/${session.sub}`, { message })
+      .then(res => {
+        messageRef.current!.value = ""
+        // refetch data
+        handlePost()
+      })
+      .catch(err => {
+        if (err instanceof CanceledError) return
+        setErrorMessage(err.response?.data || ['An unknown error occurred.'])
+      })
+
   }
 
   return (
     <>
-      {error && (
-        <div className='mb-4 w-full flex justify-center'>
-          {error.map((message, index) => <p key={index}> {message}</p>)}
-        </div>
-      )}
+      {error && <ErrorMessage error={error} />}
       <form onSubmit={handleSubmit} className='flex flex-col items-end w-full mb-5'>
         <textarea
           id='createPostField'

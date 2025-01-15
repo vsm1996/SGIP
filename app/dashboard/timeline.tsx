@@ -6,11 +6,13 @@ import { AxiosResponse, CanceledError } from 'axios';
 import Post from '../components/post';
 import CreatePost from './createPost';
 import PostSkeleton from '@/app/components/post/postSkeleton'
+import ErrorMessage from '../components/errorMessage';
+import Loading from '../components/loading';
 
 const Timeline = () => {
   const [posts, setPosts] = useState<any>([])
   const [isLoading, setLoading] = useState<boolean>(false)
-  const [error, setErrorMessage] = useState<any>()
+  const [error, setErrorMessage] = useState<[]>()
 
 
   const handleFetch = () => {
@@ -20,12 +22,12 @@ const Timeline = () => {
       .then(async (res: AxiosResponse) => {
         const newData = await res.data.reverse()
         setPosts(newData)
-        setLoading(false)
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
         console.log(err.response)
-        setErrorMessage(err.response?.data.error)
+        setErrorMessage(err.response?.data)
+      }).finally(() => {
         setLoading(false)
       })
   }
@@ -36,13 +38,9 @@ const Timeline = () => {
 
   return (
     <div className='w-full lg:w-1/2 flex-1'>
+      {error && <ErrorMessage error={error} />}
       <CreatePost handlePost={handleFetch} />
-      {error && <p>{error}</p>}
-      {isLoading && (
-        <div className='flex items-center justify-center'>
-          <div className="loading loading-ring loading-lg" />
-        </div>
-      )}
+      {isLoading && <Loading />}
       <ul className='flex flex-col'>
         <Suspense fallback={<PostSkeleton />}>
           {posts.map((post: any) => (
