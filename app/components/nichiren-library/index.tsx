@@ -7,8 +7,6 @@ const NichirenLibrary = ({ children }: Readonly<{
   children: React.ReactNode;
 }>) => {
 
-
-
   return (
     <div className="drawer md:drawer-open">
       <input id="nichiren-library-drawer" type="checkbox" className="drawer-toggle" />
@@ -59,7 +57,7 @@ const NichirenLibrary = ({ children }: Readonly<{
           </li>
           <li>
             <Link
-              href="https://www.nichirenlibrary.org/en/ott/toc/"
+              href="https://www.nichirenlibrary.org/en/lsoc/toc/"
               target="_blank"
               rel="noopener noreferrer"
               className="block text-md p-5 hover:underline text-balance"
