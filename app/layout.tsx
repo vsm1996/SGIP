@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="en" data-theme="aqua">
       <body className={inter.className}>
         <SpeedInsights />
+        <Analytics />
         <AuthProvider>
           <NavBar />
           <main className="z-0 relative">
