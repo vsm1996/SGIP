@@ -1,14 +1,17 @@
 export const timeAgo = (timestamp: string | Date): string => {
-  const now = new Date();
-  const time = new Date(timestamp);
-  const secondsAgo = Math.floor((now.getTime() - time.getTime()) / 1000);
+  const units = [
+    { name: 'year', seconds: 31536000 },
+    { name: 'month', seconds: 2628000 },
+    { name: 'week', seconds: 604800 },
+    { name: 'day', seconds: 86400 },
+    { name: 'hour', seconds: 3600 },
+    { name: 'minute', seconds: 60 },
+    { name: 'second', seconds: 1 },
+  ];
 
-  if (secondsAgo < 60) return `${secondsAgo} seconds ago`;
-  if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} minutes ago`;
-  if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} hours ago`;
-  if (secondsAgo < 604800) return `${Math.floor(secondsAgo / 86400)} days ago`;
-  if (secondsAgo < 2628000) return `${Math.floor(secondsAgo / 604800)} weeks ago`;
-  if (secondsAgo < 31536000) return `${Math.floor(secondsAgo / 2628000)} months ago`;
+  const secondsAgo = Math.floor((new Date().getTime() - new Date(timestamp).getTime()) / 1000);
+  const unit = units.find(u => secondsAgo >= u.seconds) || units[units.length - 1];
 
-  return `${Math.floor(secondsAgo / 31536000)} years ago`;
+  const value = Math.floor(secondsAgo / unit.seconds);
+  return `${value} ${unit.name}${value === 1 ? '' : 's'} ago`;
 };
