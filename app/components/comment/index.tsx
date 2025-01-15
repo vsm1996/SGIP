@@ -8,6 +8,7 @@ import { Like } from '@prisma/client'
 import CommentLikeButton from '@/app/components/button/comment-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
 import CommentDeleteButton from '@/app/components/button/comment-delete'
+import { timeAgo } from '@/app/utlis'
 
 interface User {
   name: string,
@@ -33,7 +34,7 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
   return (
     <div className='card bg-neutral shadow-xl'>
       <div className='card-body'>
-        <p className='text-left mb-4'> {comment.user.name || comment.user.username} </p>
+        <p className='text-left mb-4'> {comment.user.name || comment.user.username} &#183; {comment.createdAt && timeAgo(comment.createdAt)} </p>
         <p> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>

@@ -4,8 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Like } from '@prisma/client'
 import Link from 'next/link'
+
 import PostLikeButton from '@/app/components/button/post-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
+
+import { timeAgo } from '@/app/utlis'
 
 interface PostProps {
   post: any,
@@ -28,7 +31,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
       <div className='card-body'>
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>
-            <p className='text-left mb-4'> {post.user.name || post.user.username} </p>
+            <p className='text-left mb-4'> {post.user.name || post.user.username} &#183; {post.createdAt && timeAgo(post.createdAt)} </p>
             <p> {post.message} </p>
           </div>
         </Link>
