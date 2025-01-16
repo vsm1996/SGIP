@@ -35,10 +35,10 @@ const Comment = ({ comment, postId, handleFetch }: CommentProps) => {
     <div className='card bg-base-200 hover:bg-base-200/75 transition-all duration-200 shadow-xl ease-in-out text-base-content'>
       <div className='card-body'>
         <div className='mb-4 flex items-center gap-1'>
-          <p className='justify-self-start'> {comment.user.name || comment.user.username} </p>
+          <p className='justify-self-start font-semibold'> {comment.user.name || comment.user.username} </p>
           <small className='text-xs opacity-45'> {timeAgo(comment.createdAt)} </small>
         </div>
-        <p> {comment.message} </p>
+        <p className='font-extralight'> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
             <CommentLikeButton session={session} comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
