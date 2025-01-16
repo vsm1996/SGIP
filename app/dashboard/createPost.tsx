@@ -9,7 +9,7 @@ interface CreatePostProps {
 }
 
 const CreatePost = ({ handlePost }: CreatePostProps) => {
-  const [error, setErrorMessage] = useState<[] | null>(null)
+  const [error, setErrorMessage] = useState<string[] | null>(null)
   const { data: session }: any = useSession()
   const messageRef = useRef<HTMLTextAreaElement>(null)
 
@@ -30,7 +30,8 @@ const CreatePost = ({ handlePost }: CreatePostProps) => {
       })
       .catch(err => {
         if (err instanceof CanceledError) return
-        setErrorMessage(err.response?.data || ['An unknown error occurred.'])
+        // setErrorMessage(err.response?.data || ['An unknown error occurred.'])
+        setErrorMessage(err.response?.data || ['An error occurred while posting.'])
       })
 
   }

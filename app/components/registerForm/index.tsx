@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { CanceledError } from 'axios';
 
 import apiClient from '@/app/services/api-client';
+import ErrorMessage from '../errorMessage';
 
 const RegisterForm = () => {
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [error, setErrorMessage] = useState<string[] | null>(null)
 
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
@@ -35,17 +36,14 @@ const RegisterForm = () => {
       })
       .catch(err => {
         if (err instanceof CanceledError) return
-        console.log(err.response.data.error)
-        setErrorMessage(err.response.data.error)
+        console.log(err.response.data)
+        setErrorMessage(err.response?.data || ['An error occurred while posting.'])
       })
   }
 
   return (
     <div className='w-full lg:w-1/2'>
-      {errorMessage && (<div onClick={() => setErrorMessage(null)} role="alert" className="alert alert-error cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>{errorMessage}</span>
-      </div>)}
+      {error && <ErrorMessage error={error} />}
 
       <form onSubmit={handleSubmit}>
         <label htmlFor='firstName' className='input input-bordered flex items-center gap-2'>
