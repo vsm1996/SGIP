@@ -9,6 +9,7 @@ import PostLikeButton from '@/app/components/button/post-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
 
 import { timeAgo } from '@/app/utlis'
+import { nunito, raleway } from '@/app/utlis/font'
 
 interface PostProps {
   post: any,
@@ -33,10 +34,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>
             <div className='mb-4 flex items-center gap-1'>
-              <p className='justify-self-start font-semibold'> {post.user.name || post.user.username} </p>
+              <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.name || post.user.username} </p>
               <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
             </div>
-            <p className='font-extralight'> {post.message} </p>
+            <p className={`font-extralight ${nunito.className}`}> {post.message} </p>
           </div>
         </Link>
         <div className='flex justify-end gap-5'>

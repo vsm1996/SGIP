@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
-import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import AuthProvider from "./auth/Provider";
 import NavBar from "./components/navbar";
-import NichirenLibrary from "./components/nichiren-library";
+import { nunito, raleway } from "./utlis/font";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "SGip",
@@ -21,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="aqua">
-      <body className={inter.className}>
+    <html lang="en" data-theme="aqua" className={`${nunito.className, raleway.className}`}>
+      <body>
         <SpeedInsights />
         <Analytics />
         <AuthProvider>
