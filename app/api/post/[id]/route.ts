@@ -22,6 +22,36 @@ export async function DELETE(request: NextRequest,
     { status: 200 })
 }
 
+export async function PATCH(request: NextRequest,
+  { params: { id } }: { params: { id: string } }) {
+
+  const body = await request.json();
+
+  // Validate data
+  const validation = schema.safeParse(body)
+  if (!validation.success) {
+    const errorMessages = validation.error.errors.map(error => error.message)
+    return NextResponse.json(errorMessages, { status: 400 })
+  }
+
+  // else, update post
+  const updatedPost = await prisma.post.update({
+    where: {
+      id: id,
+    },
+    data: {
+      message: body.message
+    }
+  })
+
+  if (!updatedPost) return NextResponse.json({ message: "Error updating post." }, { status: 400 })
+
+  //return post
+  return NextResponse.json(updatedPost,
+    // Status: 200 or 204 -> an object was deleted
+    { status: 200 })
+}
+
 export async function POST(request: NextRequest,
   { params: { id } }: { params: { id: string } }) {
   const body = await request.json();
@@ -65,7 +95,8 @@ export async function GET(
       comments: {
         include: {
           user: true,
-          likes: true
+          likes: true,
+          commentReplies: true,
         }
       },
       likes: {

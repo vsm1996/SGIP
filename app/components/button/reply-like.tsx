@@ -1,23 +1,25 @@
 import apiClient from '@/app/services/api-client'
-import { Comment } from '@prisma/client'
+import { CommentReply } from '@prisma/client'
 import { CanceledError } from 'axios'
 import React, { Dispatch, MouseEvent, SetStateAction } from 'react'
 
-interface CommentLikeButtonProps {
+interface ReplyLikeButtonProps {
   session: any,
-  comment: Comment,
-  postId: string,
+  reply: any,
+  commentId: string,
   liked: boolean,
   setLiked: Dispatch<SetStateAction<boolean>>,
   handleFetch: () => void,
 }
 
-const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFetch, }: CommentLikeButtonProps) => {
+const ReplyLikeButton = ({ session, reply, commentId, liked, setLiked, handleFetch, }: ReplyLikeButtonProps) => {
+
+  console.log(reply)
 
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient
-        .post(`/post/${postId}/comment/${comment.id}/unliked`, {
+        .post(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}/unliked`, {
           userId: session.sub
         })
         .then(res => {
@@ -28,7 +30,7 @@ const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFe
           if (err instanceof CanceledError) return
         })) : (
       apiClient
-        .post(`/post/${postId}/comment/${comment.id}/liked`, {
+        .post(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}/liked`, {
           userId: session.sub
         })
         .then(res => {
@@ -49,4 +51,4 @@ const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFe
   )
 }
 
-export default CommentLikeButton
+export default ReplyLikeButton

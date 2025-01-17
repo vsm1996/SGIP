@@ -6,14 +6,14 @@ export const revalidate = 0
 
 export async function GET(request: NextRequest,
   { params: { id } }: { params: { id: string } }) {
-  const post = await prisma.post.findUnique({
+  const comment = await prisma.comment.findUnique({
     where: { id: id },
     include: {
       user: true,
-      comments: true,
+      commentReplies: true,
       likes: true
     },
   })
 
-  return NextResponse.json(post)
+  return NextResponse.json(comment)
 }

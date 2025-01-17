@@ -73,12 +73,13 @@ model Comment {
 
 model CommentReply {
   id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
   message   String   @db.Text
   likes     Like[]
   userId    String
+  commentId String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId String?
 }
 
 model Like {

@@ -26,11 +26,54 @@ export async function GET(request: NextRequest,
     where: { id: commentId },
     include: {
       user: true,
-      likes: true,
+      commentReplies: {
+        include: {
+          user: true,
+          likes: true,
+          comment: true,
+        }
+      },
+      likes: {
+        include: {
+          user: true
+        }
+      }
     },
   })
 
   return NextResponse.json(comment)
+}
+
+export async function PATCH(request: NextRequest,
+  { params: { commentId } }: { params: { commentId: string } }) {
+
+  const body = await request.json();
+
+  // Validate data
+  const validation = schema.safeParse(body)
+
+
+  if (!validation.success) {
+    const errorMessages = validation.error.errors.map(error => error.message)
+    return NextResponse.json(errorMessages, { status: 400 })
+  }
+
+  // else, update post
+  const updatedComment = await prisma.comment.update({
+    where: {
+      id: commentId,
+    },
+    data: {
+      message: body.message
+    }
+  })
+
+  if (!updatedComment) return NextResponse.json({ message: "Error updating comment." }, { status: 400 })
+
+  //return comment
+  return NextResponse.json(updatedComment,
+    // Status: 200 or 204 -> an object was deleted
+    { status: 200 })
 }
 
 export async function POST(request: NextRequest,

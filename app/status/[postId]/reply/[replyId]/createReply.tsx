@@ -6,7 +6,7 @@ import React, { FormEvent, useRef, useState } from 'react'
 import { CanceledError } from 'axios'
 import ErrorMessage from '@/app/components/errorMessage';
 
-const CreateComment = ({ handleComment, postId }: any) => {
+const CreateReply = ({ handleReply, postId, commentId }: any) => {
   const [error, setErrorMessage] = useState<string[] | null>(null)
   const { data: session }: any = useSession()
   const messageRef = useRef<HTMLTextAreaElement>(null)
@@ -21,10 +21,10 @@ const CreateComment = ({ handleComment, postId }: any) => {
 
     setErrorMessage(null)
     apiClient
-      .post(`/post/${session.sub}/comment/${postId}`, { message })
+      .post(`/post/${session.sub}/comment/${postId}/reply/${commentId}`, { message })
       .then(res => {
         messageRef.current!.value = ""
-        handleComment()
+        handleReply()
       })
       .catch(err => {
         if (err instanceof CanceledError) return
@@ -43,10 +43,10 @@ const CreateComment = ({ handleComment, postId }: any) => {
           placeholder="Anything to share?"
           className='w-full textarea textarea-bordered textarea-md mb-3'
         />
-        <button type='submit' className='btn btn-outline'> Comment </button>
+        <button type='submit' className='btn btn-outline'> Reply </button>
       </form>
     </>
   )
 }
 
-export default CreateComment
+export default CreateReply

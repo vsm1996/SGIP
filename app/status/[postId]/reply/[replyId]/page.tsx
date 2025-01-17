@@ -7,23 +7,31 @@ import apiClient from '@/app/services/api-client'
 
 import Post from '@/app/components/post'
 import Comment from '@/app/components/comment'
-import CreateComment from './createComment'
+import CreateReply from './createReply';
 import Loading from '@/app/components/loading';
+import Reply from '@/app/components/reply';
 import Link from 'next/link';
 
-const PostStatusPage = () => {
-  const [post, setPost] = useState<any>(null)
+const CommentStatusPage = () => {
+  const [comment, setComment] = useState<any>(null)
   const [isLoading, setLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState(null)
 
-  const pathname = usePathname().split('/').pop();
+  const url = usePathname();
+
+  const regex = /\/status\/([^/]+)\/reply\/([^/]+)/;
+
+  const match = url.match(regex);
+
+  const postId = match![1]; // First capture group
+  const commentId = match![2];   // Second capture group
 
   const handleFetch = async () => {
     setLoading(true)
     apiClient
-      .get(`/post/${pathname}`)
+      .get(`/post/${postId}/comment/${commentId}`)
       .then((res: AxiosResponse) => {
-        setPost(res.data)
+        setComment(res.data)
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
@@ -44,24 +52,24 @@ const PostStatusPage = () => {
       {errorMessage && <p>{errorMessage}</p>}
       {isLoading && <Loading />}
       <div className='w-full p-6 md:p-0 md:w-1/2'>
-        <Link href={`/dashboard`}>
+        <Link href={`/status/${postId}`}>
           <span className='w-fit flex items-center gap-2 mb-5 hover:border-b-2 transition-all duration-100 ease-in-out'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 inline-block">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
             </svg>
             <small>
-              Back to dashboard
+              Back to comment
             </small>
           </span>
         </Link>
-        {post && <Post post={post} handleFetch={handleFetch} />}
-        {post && <CreateComment handleComment={handleFetch} postId={post.id} />}
-        {post?.comments.length > 0 &&
+        {comment && <Post post={comment} handleFetch={handleFetch} />}
+        {comment && <CreateReply handleReply={handleFetch} postId={postId} commentId={comment.id} />}
+        {comment?.commentReplies?.length > 0 &&
           <div className='border border-base-300 rounded-lg p-4 md:p-5'>
-            {post.comments.map((comment: any) => (
-              <span key={comment.id}>
-                <Comment key={comment.id} postId={post.id} comment={comment} handleFetch={handleFetch} />
-                {post.comments.length > 1 && <div className="divider my-5"></div>}
+            {comment.commentReplies.map((reply: any) => (
+              <span key={reply.id}>
+                <Reply key={reply.id} commentId={comment.id} reply={reply} handleFetch={handleFetch} />
+                {comment.commentReplies.length > 1 && <div className="divider my-5"></div>}
               </span>
             ))}
           </div>
@@ -72,4 +80,4 @@ const PostStatusPage = () => {
   )
 }
 
-export default PostStatusPage
+export default CommentStatusPage

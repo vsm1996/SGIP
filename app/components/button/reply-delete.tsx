@@ -2,11 +2,11 @@ import apiClient from '@/app/services/api-client'
 import { CanceledError } from 'axios'
 import React from 'react'
 
-const CommentDeleteButton = ({ comment, handleFetch }: any) => {
+const ReplyDeleteButton = ({ reply, handleFetch }: any) => {
 
   const handleDelete = () => {
     apiClient
-      .delete(`/post/${comment.postId}/comment/${comment.id}`)
+      .delete(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}`)
       .then((res) => {
         handleFetch()
       })
@@ -22,4 +22,4 @@ const CommentDeleteButton = ({ comment, handleFetch }: any) => {
   )
 }
 
-export default CommentDeleteButton
+export default ReplyDeleteButton
