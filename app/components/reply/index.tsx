@@ -47,9 +47,7 @@ const Reply = ({ reply, commentId, handleFetch }: ReplyProps) => {
             <p> {reply.likes?.length || 0} </p>
           </div>
 
-          {session && reply.userId === session!.sub && (<div className='flex items-center'>
-            <ReplyDeleteButton reply={reply} handleFetch={handleFetch} />
-          </div>)}
+          {session && reply.userId === session!.sub && <ReplyDeleteButton reply={reply} handleFetch={handleFetch} />}
         </div>
       </div>
     </div>
