@@ -41,6 +41,12 @@ export async function POST(request: NextRequest,
     }
   })
 
+  if (!newpost) {
+    return NextResponse.json({ message: 'Error creating post' }, { status: 400 })
+  }
+
+
+
   //return post
   return NextResponse.json(newpost,
     // Status: 201 -> an object was created
