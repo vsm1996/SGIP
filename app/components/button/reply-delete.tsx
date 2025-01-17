@@ -1,14 +1,18 @@
 import apiClient from '@/app/services/api-client'
 import { CanceledError } from 'axios'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const ReplyDeleteButton = ({ reply, handleFetch }: any) => {
+
+  const router = useRouter()
 
   const handleDelete = () => {
     apiClient
       .delete(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}`)
       .then((res) => {
         handleFetch()
+        router.push(`/status/${reply.comment.postId}/reply/${reply.comment.id}`)
       })
       .catch((err) => {
         if (err instanceof CanceledError) return

@@ -1,14 +1,18 @@
 import apiClient from '@/app/services/api-client'
 import { CanceledError } from 'axios'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const PostDeleteButton = ({ postId, handleFetch }: any) => {
+
+  const router = useRouter();
 
   const handleDelete = () => {
     apiClient
       .delete(`/post/${postId}`)
       .then((res) => {
         handleFetch()
+        router.push('/dashboard')
       })
       .catch((err) => {
         if (err instanceof CanceledError) return
