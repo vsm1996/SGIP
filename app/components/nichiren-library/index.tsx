@@ -23,7 +23,16 @@ const NichirenLibrary = ({ children }: Readonly<{
       <div className="drawer-side overflow-hidden">
         <label htmlFor="nichiren-library-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <ul className="menu bg-base-200 text-base-content min-h-full w-80 px-4 py-36">
-          <li className='text-xl ml-3'>Nichiren Library</li>
+          <li>
+            <Link
+              href="https://www.nichirenlibrary.org/en/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-xl p-5 hover:underline text-balance"
+            >
+              Nichiren Library
+            </Link>
+          </li>
           <div className="divider w-full" />
           {/* Sidebar content here */}
           <li>
