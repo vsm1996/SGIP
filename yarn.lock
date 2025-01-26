@@ -1231,16 +1231,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-selector-tokenizer@npm:^0.8":
-  version: 0.8.0
-  resolution: "css-selector-tokenizer@npm:0.8.0"
-  dependencies:
-    cssesc: "npm:^3.0.0"
-    fastparse: "npm:^1.1.2"
-  checksum: 10c0/86f68cc666d41f9d153351677694002a9d00e2609e6abc66fcfd7f580be3d6ecc0929e46a06c621ab28da5febbb54567db9709b819414edae4a36d9ff9133e16
-  languageName: node
-  linkType: hard
-
 "cssesc@npm:^3.0.0":
   version: 3.0.0
   resolution: "cssesc@npm:3.0.0"
@@ -1257,22 +1247,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"culori@npm:^3":
-  version: 3.3.0
-  resolution: "culori@npm:3.3.0"
-  checksum: 10c0/acd330a8f940dc22f36650ba722c9302a4745fee3c8fb40a27ac27228767e2cba4221c2dc414fce652b82cb264d28f65d8b76d505df402ecf94dbb9e440319e1
-  languageName: node
-  linkType: hard
-
-"daisyui@npm:^4.6.2":
-  version: 4.6.2
-  resolution: "daisyui@npm:4.6.2"
-  dependencies:
-    css-selector-tokenizer: "npm:^0.8"
-    culori: "npm:^3"
-    picocolors: "npm:^1"
-    postcss-js: "npm:^4"
-  checksum: 10c0/70dc71fb27e0625fc4a2ff3205c04238bc0f0c8115ee8a239c9bc4940a544f305a595a782c68f0d4946fe415ce67b0006277efc2cc3a1739b03a33a07159b0ec
+"daisyui@npm:^5.0.0-beta.2":
+  version: 5.0.0-beta.2
+  resolution: "daisyui@npm:5.0.0-beta.2"
+  checksum: 10c0/d14b1797a4e1db2f77642062479a4cd348781eb71091b13aaa20bfec6dfdbde577f8c0fc667d486e8a2413b7351c405e250646c975a809d40f18187e4734f144
   languageName: node
   linkType: hard
 
@@ -1897,13 +1875,6 @@ __metadata:
   version: 3.4.0
   resolution: "fast-sort@npm:3.4.0"
   checksum: 10c0/241c4dfed2285559c4111ff4457bf02dee3b7abb375ceda2d1c236b1b1580de79dd5f14eb00cafef14e3471ba5babfba23ceb417fc3047ad4dd0edb38e49bdfc
-  languageName: node
-  linkType: hard
-
-"fastparse@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "fastparse@npm:1.1.2"
-  checksum: 10c0/c08d6e7ef10c0928426c1963dd4593e2baaf44d223ab1e5ba5d7b30470144b3a4ecb3605958b73754cea3f857ecef00b67c885f07ca2c312b38b67d9d88b84b5
   languageName: node
   linkType: hard
 
@@ -3581,7 +3552,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1, picocolors@npm:^1.0.0":
+"picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
   checksum: 10c0/20a5b249e331c14479d94ec6817a182fd7a5680debae82705747b2db7ec50009a5f6648d0621c561b0572703f84dbef0858abcbd5856d3c5511426afcb1961f7
@@ -3622,7 +3593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-js@npm:^4, postcss-js@npm:^4.0.1":
+"postcss-js@npm:^4.0.1":
   version: 4.0.1
   resolution: "postcss-js@npm:4.0.1"
   dependencies:
@@ -4109,7 +4080,7 @@ __metadata:
     axios: "npm:^1.6.7"
     bcrypt: "npm:^5.1.1"
     clsx: "npm:^2.1.1"
-    daisyui: "npm:^4.6.2"
+    daisyui: "npm:^5.0.0-beta.2"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.1.0"
     fast-sort: "npm:^3.4.0"
