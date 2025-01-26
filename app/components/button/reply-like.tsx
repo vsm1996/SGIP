@@ -14,8 +14,6 @@ interface ReplyLikeButtonProps {
 
 const ReplyLikeButton = ({ session, reply, commentId, liked, setLiked, handleFetch, }: ReplyLikeButtonProps) => {
 
-  console.log(reply)
-
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient

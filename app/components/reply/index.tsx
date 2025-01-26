@@ -24,8 +24,6 @@ const Reply = ({ reply, commentId, handleFetch }: ReplyProps) => {
   const { data: session } = useSession()
   const [liked, setLiked] = useState<boolean>(false)
 
-  console.log(reply)
-
   useEffect(() => {
     if (session && reply.likes) {
       let userLiked = reply.likes?.some((like: Like) => like!.userId === session.sub)
