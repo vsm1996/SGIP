@@ -4,8 +4,12 @@ import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
-export async function DELETE(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
 
   // delete from db
   const deletedComment = await prisma.commentReply.delete({
@@ -20,8 +24,13 @@ export async function DELETE(request: NextRequest,
     { status: 200 })
 }
 
-export async function GET(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const comment = await prisma.commentReply.findUnique({
     where: { id: id },
     include: {
@@ -33,8 +42,12 @@ export async function GET(request: NextRequest,
   return NextResponse.json(comment)
 }
 
-export async function PATCH(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
 
   const body = await request.json();
 

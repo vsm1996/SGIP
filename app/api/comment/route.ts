@@ -4,8 +4,13 @@ import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
-export async function GET(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const comment = await prisma.comment.findUnique({
     where: { id: id },
     include: {

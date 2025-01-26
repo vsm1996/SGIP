@@ -7,10 +7,13 @@ import prisma from '@/prisma/client'
 //   params: { id: number }
 // }
 
-export async function GET(
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   // Fetch data from a db
   const user = await prisma.user.findUnique({
     where: { id: id },
@@ -26,9 +29,13 @@ export async function GET(
   return NextResponse.json(user)
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const body = await request.json()
   // Validate request body
   // If invalid, return 400
@@ -55,9 +62,13 @@ export async function PUT(
   return NextResponse.json(updatedUser)
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   // Fetch user from db
   const user = await prisma.user.findUnique({
     where: { id: id }
