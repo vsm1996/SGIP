@@ -19,7 +19,6 @@ declare module "next-auth" {
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
-  debug: true,
   providers: [
     Google,
     Credentials({
@@ -66,7 +65,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return { ...session, ...token };
     },
     async redirect({ url, baseUrl }) {
-      return '/dashboard';  // Always redirect to the dashboard after login
+      return '/';  // Always redirect to the dashboard after login
     }
   }
 });

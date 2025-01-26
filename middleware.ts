@@ -39,28 +39,27 @@ export const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
-export default auth(async function middleware(req: NextRequest) {
+export default auth(async function middleware(req) {
   if (req.method === 'OPTIONS') {
     return NextResponse.json({}, { headers: corsHeaders })
   }
 
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
-  const pathname = req.nextUrl.pathname;
 
-  // Redirect signed-in users away from the homepage
-  if (token && pathname === '/') {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
-  }
-
-  // Allow unauthenticated users to access the homepage
-  if (!token) {
-    if (pathname === '/api/auth/signin') {
+  // Allow unauthenticated users to access he homepage
+  if (!req.auth) {
+    if (req.nextUrl.pathname === '/api/auth/signin') {
       return NextResponse.next(); // Allow access to the sign-in page
-    } else if (pathname === '/') {
+    } else if (req.nextUrl.pathname === '/') {
       return NextResponse.next(); // Proceed to homepage
     }
 
     return NextResponse.redirect(new URL('/api/auth/signin', req.url));
+  }
+
+
+  // Redirect signed-in users away from the homepage
+  if (req.auth && req.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
   // Allow authenticated users to access protected routes
