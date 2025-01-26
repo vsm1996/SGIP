@@ -52,37 +52,6 @@ export async function PATCH(request: NextRequest,
     { status: 200 })
 }
 
-export async function POST(request: NextRequest,
-  { params: { id } }: { params: { id: string } }) {
-  const body = await request.json();
-  // Validate data
-  const validation = schema.safeParse(body)
-  if (!validation.success) {
-    const errorMessages = validation.error.errors.map(error => error.message)
-    return NextResponse.json(errorMessages, { status: 400 })
-  }
-
-  // else, add post to db
-  const newpost = await prisma.post.create({
-    data: {
-      message: body.message,
-      userId: id,
-      // likes: {userId: id, postId: commentId}[]
-    }
-  })
-
-  if (!newpost) {
-    return NextResponse.json({ message: 'Error creating post' }, { status: 400 })
-  }
-
-
-
-  //return post
-  return NextResponse.json(newpost,
-    // Status: 201 -> an object was created
-    { status: 201 })
-}
-
 export async function GET(
   request: NextRequest,
   { params: { id } }: { params: { id: string } }

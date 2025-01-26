@@ -4,14 +4,14 @@ import prisma from "@/prisma/client";
 export const revalidate = 0
 
 export async function POST(request: NextRequest,
-  { params: { replyId } }: { params: { replyId: string } }) {
+  { params: { id } }: { params: { id: string } }) {
   const body = await request.json()
 
   const { userId } = body
 
-  // Check if the user has already liked this reply
+  // Check if the user has already liked this comment
   const existingLike = await prisma.like.findFirst({
-    where: { userId, commentReplyId: replyId },
+    where: { userId, commentId: id },
   });
 
   if (existingLike) {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest,
   const like = await prisma.like.create({
     data: {
       userId,
-      commentReplyId: replyId
+      commentId: id
     },
   })
 

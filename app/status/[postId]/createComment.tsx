@@ -21,7 +21,7 @@ const CreateComment = ({ handleComment, postId }: any) => {
 
     setErrorMessage(null)
     apiClient
-      .post(`/post/${session.sub}/comment/${postId}`, { message })
+      .post(`/comment`, { message, userId: session.sub, postId: postId })
       .then(res => {
         messageRef.current!.value = ""
         handleComment()

@@ -17,7 +17,7 @@ const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFe
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient
-        .post(`/post/${postId}/comment/${comment.id}/unliked`, {
+        .post(`/comment/${comment.id}/unliked`, {
           userId: session.sub
         })
         .then(res => {
@@ -28,7 +28,7 @@ const CommentLikeButton = ({ session, comment, postId, liked, setLiked, handleFe
           if (err instanceof CanceledError) return
         })) : (
       apiClient
-        .post(`/post/${postId}/comment/${comment.id}/liked`, {
+        .post(`/comment/${comment.id}/liked`, {
           userId: session.sub
         })
         .then(res => {

@@ -19,7 +19,7 @@ const ReplyLikeButton = ({ session, reply, commentId, liked, setLiked, handleFet
   const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     liked ? (
       apiClient
-        .post(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}/unliked`, {
+        .post(`/reply/${reply.id}/unliked`, {
           userId: session.sub
         })
         .then(res => {
@@ -30,7 +30,7 @@ const ReplyLikeButton = ({ session, reply, commentId, liked, setLiked, handleFet
           if (err instanceof CanceledError) return
         })) : (
       apiClient
-        .post(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}/liked`, {
+        .post(`/reply/${reply.id}/liked`, {
           userId: session.sub
         })
         .then(res => {

@@ -9,7 +9,7 @@ const ReplyDeleteButton = ({ reply, handleFetch }: any) => {
 
   const handleDelete = () => {
     apiClient
-      .delete(`/post/${reply.comment.postId}/comment/${reply.comment.id}/reply/${reply.id}`)
+      .delete(`/reply/${reply.id}`)
       .then((res) => {
         handleFetch()
         router.push(`/status/${reply.comment.postId}/reply/${reply.comment.id}`)

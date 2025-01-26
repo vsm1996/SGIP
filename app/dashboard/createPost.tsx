@@ -22,7 +22,7 @@ const CreatePost = ({ handlePost }: CreatePostProps) => {
 
     setErrorMessage(null)
     apiClient
-      .post(`/post/${session.sub}`, { message })
+      .post(`/post`, { message, userId: session.sub })
       .then(res => {
         messageRef.current!.value = ""
         // refetch data

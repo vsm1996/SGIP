@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 export const revalidate = 0
 
 export async function POST(request: NextRequest,
-  { params: { replyId } }: { params: { replyId: string } }) {
+  { params: { id } }: { params: { id: string } }) {
   const body = await request.json()
 
   const { userId } = body
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest,
   const deletedLike = await prisma.like.deleteMany({
     where: {
       userId,
-      commentReplyId: replyId,
+      commentReplyId: id,
     },
   });
 

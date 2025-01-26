@@ -29,7 +29,7 @@ const CommentStatusPage = () => {
   const handleFetch = async () => {
     setLoading(true)
     apiClient
-      .get(`/post/${postId}/comment/${commentId}`)
+      .get(`/comment/${commentId}`)
       .then((res: AxiosResponse) => {
         setComment(res.data)
       })
@@ -62,7 +62,7 @@ const CommentStatusPage = () => {
             </small>
           </span>
         </Link>
-        {comment && <Post post={comment} handleFetch={handleFetch} />}
+        {comment && <Comment type='post' comment={comment} postId={comment.postId} handleFetch={handleFetch} />}
         {comment && <CreateReply handleReply={handleFetch} postId={postId} commentId={comment.id} />}
         {comment?.commentReplies?.length > 0 &&
           <div className='border border-base-300 rounded-lg p-4 md:p-5'>

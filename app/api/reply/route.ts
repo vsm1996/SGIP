@@ -4,46 +4,38 @@ import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
-export async function GET(request: NextRequest) {
-  const posts = await prisma.post.findMany({
+export async function GET(request: NextRequest,
+  { params: { id } }: { params: { id: string } }) {
+  const reply = await prisma.commentReply.findUnique({
+    where: { id: id },
     include: {
       user: true,
-      comments: true,
-      likes: true,
+      likes: true
     },
   })
-  return NextResponse.json(posts)
+
+  return NextResponse.json(reply)
 }
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const { userId } = body
+  const { userId, commentId } = body
 
-  // Validate data
   const validation = schema.safeParse(body)
+
   if (!validation.success) {
     const errorMessages = validation.error.errors.map(error => error.message)
     return NextResponse.json(errorMessages, { status: 400 })
   }
 
-  // else, add post to db
-  const newpost = await prisma.post.create({
+  const post = await prisma.commentReply.create({
     data: {
       message: body.message,
       userId: userId,
-      // likes: {userId: id, postId: commentId}[]
+      commentId: commentId
     }
   })
 
-  if (!newpost) {
-    return NextResponse.json({ message: 'Error creating post' }, { status: 400 })
-  }
-
-
-
-  //return post
-  return NextResponse.json(newpost,
-    // Status: 201 -> an object was created
-    { status: 201 })
+  return NextResponse.json(post)
 }

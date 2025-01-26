@@ -21,7 +21,7 @@ const CreateReply = ({ handleReply, postId, commentId }: any) => {
 
     setErrorMessage(null)
     apiClient
-      .post(`/post/${session.sub}/comment/${postId}/reply/${commentId}`, { message })
+      .post(`/reply`, { message, userId: session.sub, commentId: commentId })
       .then(res => {
         messageRef.current!.value = ""
         handleReply()
