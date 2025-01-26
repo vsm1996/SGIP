@@ -1,13 +1,13 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 model Account {
@@ -28,25 +28,44 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
 
 model User {
-  id              String         @id @default(cuid())
+  id              String          @id @default(cuid())
   firstName       String?
   lastName        String?
   name            String?
-  username        String?        @unique
-  email           String?        @unique
+  username        String?         @unique
+  email           String?         @unique
   emailVerified   DateTime?
   hashedPassword  String?
   image           String?
   accounts        Account[]
+  // Optional for WebAuthn support
+  Authenticator   Authenticator[]
   sessions        Session[]
   posts           Post[]
   comments        Comment[]
   commentsReplies CommentReply[]
   likes           Like[]
-  createdAt       DateTime       @default(now())
+  createdAt       DateTime        @default(now())
 }
 
 model Post {

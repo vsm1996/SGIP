@@ -42,7 +42,7 @@ const RegisterForm = () => {
   }
 
   return (
-    <div className='w-full lg:w-1/4'>
+    <div className='w-full xl:w-1/2 xl:ml-8'>
       {error && <ErrorMessage error={error} />}
 
       <form onSubmit={handleSubmit}>

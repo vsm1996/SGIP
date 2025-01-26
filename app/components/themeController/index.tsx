@@ -1,3 +1,4 @@
+'use client'
 import React, { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react'
 
 const ThemeController = () => {

@@ -2,7 +2,11 @@ import { NextResponse, NextRequest } from "next/server";
 import { getToken } from 'next-auth/jwt';
 // import middleware from "next-auth/middleware";
 
-export { default } from "next-auth/middleware";
+import authConfig from "./auth.config"
+import NextAuth from "next-auth"
+// export { auth as middleware } from "@/auth"
+
+const { auth } = NextAuth(authConfig)
 
 // !! PROTECTED ROUTES !! //
 
@@ -35,12 +39,12 @@ export const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
-export async function middleware(req: NextRequest) {
+export default auth(async function middleware(req: NextRequest) {
   if (req.method === 'OPTIONS') {
     return NextResponse.json({}, { headers: corsHeaders })
   }
 
-  const token = await getToken({ req });
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
   const pathname = req.nextUrl.pathname;
 
   // Redirect signed-in users away from the homepage
@@ -61,4 +65,11 @@ export async function middleware(req: NextRequest) {
 
   // Allow authenticated users to access protected routes
   return NextResponse.next();
-}
+})
+
+// export default auth((req) => {
+//   if (!req.auth && req.nextUrl.pathname !== "/login") {
+//     const newUrl = new URL("/login", req.nextUrl.origin)
+//     return Response.redirect(newUrl)
+//   }
+// })
