@@ -44,8 +44,7 @@ export default auth(async function middleware(req) {
     return NextResponse.json({}, { headers: corsHeaders })
   }
 
-
-  // Allow unauthenticated users to access he homepage
+  // Allow unauthenticated users to access the homepage
   if (!req.auth) {
     if (req.nextUrl.pathname === '/api/auth/signin') {
       return NextResponse.next(); // Allow access to the sign-in page
@@ -56,7 +55,6 @@ export default auth(async function middleware(req) {
     return NextResponse.redirect(new URL('/api/auth/signin', req.url));
   }
 
-
   // Redirect signed-in users away from the homepage
   if (req.auth && req.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url));
@@ -65,10 +63,3 @@ export default auth(async function middleware(req) {
   // Allow authenticated users to access protected routes
   return NextResponse.next();
 })
-
-// export default auth((req) => {
-//   if (!req.auth && req.nextUrl.pathname !== "/login") {
-//     const newUrl = new URL("/login", req.nextUrl.origin)
-//     return Response.redirect(newUrl)
-//   }
-// })
