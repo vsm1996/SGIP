@@ -16,9 +16,12 @@ declare module "next-auth" {
   }
 }
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   providers: [
     Google,
     Credentials({
@@ -49,6 +52,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  debug: true,
   callbacks: {
     async session({ session, token }) {
       if (session?.user?.email) {
