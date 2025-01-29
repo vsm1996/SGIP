@@ -1,11 +1,12 @@
+'use client'
 import React from 'react'
 
+import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import ThemeController from '../themeController'
 
-import Authenticated from './authenticated'
-import Unauthenticated from './unauthenticated'
-
 const NavBar = () => {
+  const { status, data: session } = useSession()
 
   return (
     <nav className='p-5 navbar bg-base-300 z-10 fixed top-0 left-0 text-base-content'>
@@ -13,8 +14,21 @@ const NavBar = () => {
         <li className='mr-6 lg:mr-9'>
           <ThemeController />
         </li>
-        <Authenticated />
-        <Unauthenticated />
+        {status === 'authenticated' && (
+          <li className='flex justify-between items-center sm:w-full space-x-3'>
+            <span className='text-lg font-extrabold max-sm:hidden'>Welcome, {session.user!.firstName || session.user!.name}</span>
+            <span className='flex items-center'>
+              <Link tabIndex={-1} href='/dashboard' className='link link-hover mr-5'>Dashboard</Link>
+              <Link tabIndex={-1} href='/api/auth/signout' className='link link-hover text-nowrap'>Sign Out</Link>
+            </span>
+          </li>
+        )}
+        {status === 'unauthenticated' && (<li>
+          <Link tabIndex={-1} className='mr-3 link link-hover' href='/api/auth/signin'>
+            Sign In
+          </Link>
+        </li>
+        )}
       </ul>
     </nav>
   )
