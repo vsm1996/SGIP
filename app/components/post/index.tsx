@@ -37,7 +37,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
               <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.name || post.user.username} </p>
               <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
             </div>
-            <p className={`font-extralight ${nunito.className}`}> {post.message} </p>
+            <p className={`font-extralight ${nunito.className} text-lg`}> {post.message} </p>
           </div>
         </Link>
         <div className='flex justify-end gap-5'>

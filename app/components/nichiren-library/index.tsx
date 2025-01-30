@@ -40,7 +40,7 @@ const NichirenLibrary = ({ children }: Readonly<{
               href="https://www.nichirenlibrary.org/en/wnd-1/toc"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance"
+              className="block text-lg p-5 hover:underline text-balance mb-4"
             >
               The Writings of Nichiren Daishonin, Vol. 1
             </Link>
@@ -50,7 +50,7 @@ const NichirenLibrary = ({ children }: Readonly<{
               href="https://www.nichirenlibrary.org/en/wnd-2/toc"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance"
+              className="block text-lg p-5 hover:underline text-balance mb-4"
             >
               The Writings of Nichiren Daishonin, Vol. 2
             </Link>
@@ -60,7 +60,7 @@ const NichirenLibrary = ({ children }: Readonly<{
               href="https://www.nichirenlibrary.org/en/ott/toc/"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance"
+              className="block text-lg p-5 hover:underline text-balance mb-4"
             >
               The Record of The Orally Transmitted Teachings
             </Link>
@@ -70,7 +70,7 @@ const NichirenLibrary = ({ children }: Readonly<{
               href="https://www.nichirenlibrary.org/en/lsoc/toc/"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance"
+              className="block text-lg p-5 hover:underline text-balance mb-4"
             >
               The Lotus Sutra
             </Link>
@@ -80,7 +80,7 @@ const NichirenLibrary = ({ children }: Readonly<{
               href="https://www.nichirenlibrary.org/en/dic/toc/"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance"
+              className="block text-lg p-5 hover:underline text-balance mb-4"
             >
               The Soka Gakkai - Dictionary of Buddhism
             </Link>
