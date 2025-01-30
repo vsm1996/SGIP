@@ -6,7 +6,7 @@
 @plugin "daisyui" {
   themes:
     aqua --default,
-    synthwave --prefersdark;
+    luxury --prefersdark;
 }
 
 @theme {
