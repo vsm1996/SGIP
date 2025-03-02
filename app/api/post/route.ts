@@ -18,7 +18,22 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const { userId } = body
+  const { userId, message } = body
+
+  const mentionedUsernames = [...message.matchAll(/@(\w+)/g)].map((match) => match[1])
+
+  const mentionedUsers = await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          username: { in: mentionedUsernames }
+        },
+        {
+          name: { in: mentionedUsernames }
+        }
+      ]
+    }
+  });
 
   // Validate data
   const validation = schema.safeParse(body)
@@ -30,11 +45,14 @@ export async function POST(request: NextRequest) {
   // else, add post to db
   const newpost = await prisma.post.create({
     data: {
-      message: body.message,
-      userId: userId,
-      // likes: {userId: id, postId: commentId}[]
-    }
-  })
+      message,
+      userId,
+      mentions: {
+        connect: mentionedUsers.map(user => ({ id: user.id })),
+      },
+    },
+  });
+
 
   if (!newpost) {
     return NextResponse.json({ message: 'Error creating post' }, { status: 400 })

@@ -32,23 +32,39 @@ model Account {
 }
 
 model User {
-  id              String          @id @default(cuid())
-  firstName       String?
-  lastName        String?
-  name            String?
-  username        String?         @unique
-  email           String?         @unique
-  emailVerified   DateTime?
-  hashedPassword  String?
-  image           String?
-  accounts        Account[]
-  // Optional for WebAuthn support
-  sessions        Session[]
-  posts           Post[]
-  comments        Comment[]
-  commentsReplies CommentReply[]
-  likes           Like[]
-  createdAt       DateTime        @default(now())
+  id               String         @id @default(cuid())
+  firstName        String?
+  lastName         String?
+  name             String?
+  username         String?        @unique
+  email            String?        @unique
+  emailVerified    DateTime?
+  hashedPassword   String?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  posts            Post[]
+  comments         Comment[]
+  commentsReplies  CommentReply[]
+  discussions      Discussion[]
+  likes            Like[]
+  notifications    Notification[]
+  mentionsSent     Mention[]      @relation("mentionAuthor")
+  mentionsReceived Mention[]      @relation("mentionedUser")
+  createdAt        DateTime       @default(now())
+}
+
+model Discussion {
+  id        String    @id @default(uuid()) // Unique identifier
+  title     String    @db.Text // Title of the discussion
+  content   String    @db.Text // Main content of the discussion
+  userId    String // Author ID
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  Comment[] // Associated comments
+  likes     Like[] // Likes for the discussion
+  createdAt DateTime  @default(now()) // Timestamp
+  updatedAt DateTime  @updatedAt // Auto-updated timestamp
+  mentions  Mention[]
 }
 
 model Post {
@@ -56,9 +72,11 @@ model Post {
   createdAt DateTime  @default(now())
   message   String    @db.Text
   userId    String
+  sessionId String?
   likes     Like[]
   comments  Comment[]
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentions  Mention[]
 }
 
 model Comment {
@@ -71,22 +89,28 @@ model Comment {
   commentReplies CommentReply[]
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   post           Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  discussionId   String?
+  mentions       Mention[]
+  discussion     Discussion?    @relation(fields: [discussionId], references: [id], onDelete: Cascade)
 }
 
 model CommentReply {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  message   String   @db.Text
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  message   String    @db.Text
   likes     Like[]
   userId    String
   commentId String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentions  Mention[]
+  comment   Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 }
 
 model Like {
   id             String        @id @default(cuid())
   userId         String
+  discussionId   String? // Either a discussion or a comment can be liked
+  discussion     Discussion?   @relation(fields: [discussionId], references: [id], onDelete: Cascade)
   postId         String?
   commentId      String?
   commentReplyId String?
@@ -94,6 +118,33 @@ model Like {
   post           Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment        Comment?      @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentReply   CommentReply? @relation(fields: [commentReplyId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String // The user receiving the notification
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // 'mention', 'reply', 'like', etc.
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Mention {
+  id              String        @id @default(uuid())
+  userId          String        @unique
+  user            User          @relation(name: "mentionAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  mentionedUserId String        
+  mentionedUser   User          @relation(name: "mentionedUser", fields: [mentionedUserId], references: [id], onDelete: Cascade)
+  discussionId    String?
+  discussion      Discussion?   @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  postId          String?
+  post            Post?         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  commentId       String?
+  comment         Comment?      @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentReplyId  String?
+  commentReply    CommentReply? @relation(fields: [commentReplyId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
 }
 
 model Session {
