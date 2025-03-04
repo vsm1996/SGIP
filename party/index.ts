@@ -1,7 +1,27 @@
 import type * as Party from "partykit/server";
 
+import type { Discussion } from "@/app/types";
+
 export default class Server implements Party.Server {
   constructor(readonly room: Party.Room) { }
+
+  discussion: Discussion | undefined
+
+  async onRequest(req: Party.Request) {
+    if (req.method === "POST") {
+      const discussion = (await req.json()) as Discussion;
+      this.discussion = { ...discussion }
+    }
+
+    if (this.discussion) {
+      return new Response(JSON.stringify(this.discussion), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      })
+    }
+
+    return new Response("Not found", { status: 404 })
+  }
 
   onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     // A websocket just connected!
