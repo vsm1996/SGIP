@@ -42,15 +42,37 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-
       if (session?.user?.email) {
-
         const user = await prisma.user.findUnique({
           where: { email: session.user.email }
         })
 
-        session.user.firstName = user?.firstName!
-        session.user.lastName = user?.lastName!
+        if (user) {
+          // Generate username if it doesn't exist
+          if (!user.username) {
+            let username = session.user.email.split('@')[0]
+            let tempUsername = username
+            let counter = 1
+
+            // Ensure username uniqueness
+            while (await prisma.user.findUnique({ where: { username: tempUsername } })) {
+              tempUsername = `${username}${counter}`
+              counter++
+            }
+
+            // Update user with new username
+            await prisma.user.update({
+              where: { id: user.id },
+              data: { username: tempUsername }
+            })
+
+            user.username = tempUsername
+          }
+
+          session.user.firstName = user.firstName!
+          session.user.lastName = user.lastName!
+          session.user.username = user.username
+        }
       }
 
       return { ...session, ...token }

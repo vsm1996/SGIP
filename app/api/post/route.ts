@@ -22,35 +22,71 @@ export async function POST(request: NextRequest) {
 
   const mentionedUsernames = [...message.matchAll(/@(\w+)/g)].map((match) => match[1])
 
-  const mentionedUsers = await prisma.user.findMany({
-    where: {
-      OR: [
-        {
-          username: { in: mentionedUsernames }
-        },
-        {
-          name: { in: mentionedUsernames }
-        }
-      ]
-    }
-  });
-
-  // Validate data
+  // Validate data first
   const validation = schema.safeParse(body)
   if (!validation.success) {
     const errorMessages = validation.error.errors.map(error => error.message)
     return NextResponse.json(errorMessages, { status: 400 })
   }
 
-  // else, add post to db
-  const newpost = await prisma.post.create({
-    data: {
-      message,
-      userId,
-      mentions: {
-        connect: mentionedUsers.map(user => ({ id: user.id })),
-      },
+  // Find mentioned users efficiently
+  const mentionedUsers = await prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { in: mentionedUsernames } },
+        { name: { in: mentionedUsernames } }
+      ]
     },
+    select: {
+      id: true,
+      name: true,
+      username: true
+    }
+  });
+
+  if (mentionedUsernames.length > 0 && mentionedUsers.length === 0) {
+    return NextResponse.json({ message: 'One or more mentioned users not found' }, { status: 400 })
+  }
+
+  // Create post and related data in a transaction
+  const newpost = await prisma.$transaction(async (tx) => {
+    const post = await tx.post.create({
+      data: {
+        message,
+        userId
+      },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true
+          }
+        },
+        likes: true
+      }
+    });
+
+    if (mentionedUsers.length > 0) {
+      // Batch create mentions
+      await tx.mention.createMany({
+        data: mentionedUsers.map(user => ({
+          userId,
+          mentionedUserId: user.id,
+          postId: post.id
+        }))
+      });
+
+      // Batch create notifications
+      await tx.notification.createMany({
+        data: mentionedUsers.map(user => ({
+          userId: user.id,
+          type: 'mention',
+          message: `${post.user.name || post.user.username} mentioned you in a post`
+        }))
+      });
+    }
+
+    return post;
   });
 
 

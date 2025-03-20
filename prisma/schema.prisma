@@ -132,9 +132,9 @@ model Notification {
 
 model Mention {
   id              String        @id @default(uuid())
-  userId          String        @unique
+  userId          String
   user            User          @relation(name: "mentionAuthor", fields: [userId], references: [id], onDelete: Cascade)
-  mentionedUserId String        
+  mentionedUserId String
   mentionedUser   User          @relation(name: "mentionedUser", fields: [mentionedUserId], references: [id], onDelete: Cascade)
   discussionId    String?
   discussion      Discussion?   @relation(fields: [discussionId], references: [id], onDelete: Cascade)

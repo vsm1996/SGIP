@@ -1,15 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/prisma/client";
 
 export const revalidate = 0
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
-  const body = await request.json()
+export async function GET(request: NextRequest, props: { params: { id: string } }) {
+  const params = await props.params;
 
-  const { userId } = body
+  const { id } = params
 
-  const mentions = await prisma?.mention.findMany({
-    select: {
-      userId
+  const mentions = await prisma.mention.findMany({
+    where: {
+      userId: id
+    },
+    include: {
+      user: true,
+      post: {
+        include: {
+          user: true,
+          comments: {
+            include: {
+              user: true,
+              likes: true,
+              commentReplies: {
+                include: {
+                  user: true,
+                  likes: true
+                }
+              }
+            }
+          },
+          likes: {
+            include: {
+              user: true
+            }
+          }
+        }
+      }
     }
   })
 

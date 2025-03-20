@@ -34,7 +34,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>
             <div className='mb-4 flex items-center gap-1'>
-              <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.name || post.user.username} </p>
+              <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.username || post.user.firstName || post.user.name} </p>
               <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
             </div>
             <p className={`font-extralight ${nunito.className} text-lg`}> {post.message} </p>
