@@ -88,3 +88,13 @@
     border-color: var(--color-gray-200, currentColor);
   }
 }
+
+@layer components {
+  .nav-link {
+    @apply link link-hover font-medium transition-colors duration-200;
+  }
+
+  .nav-link:hover {
+    @apply text-primary;
+  }
+}

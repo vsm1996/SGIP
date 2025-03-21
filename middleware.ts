@@ -1,8 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getToken } from 'next-auth/jwt';
+import { corsHeaders } from './app/utils/cors';
 // import middleware from "next-auth/middleware";
 
-export { default } from "next-auth/middleware";
+// export { default } from "next-auth/middleware";
 
 // !! PROTECTED ROUTES !! //
 
@@ -26,13 +27,6 @@ export const config = {
     '/'
   ]
   // matcher: ['/users/:id*']
-}
-
-
-export const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 }
 
 export async function middleware(req: NextRequest) {

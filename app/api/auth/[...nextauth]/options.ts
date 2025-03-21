@@ -24,11 +24,21 @@ const authOptions: NextAuthOptions = {
           where: { email: credentials.email }
         })
 
-        if (!user) return null;
+        if (!user || !user.email) return null;
 
         const passwordsMatch = await bcrypt.compare(credentials.password, user.hashedPassword!)
 
-        return passwordsMatch ? user : null;
+        if (!passwordsMatch) return null;
+
+        return {
+          id: user.id,
+          name: user.name || user.firstName || user.username || user.email.split('@')[0],
+          email: user.email,
+          image: user.image || null,
+          firstName: user.firstName || undefined,
+          lastName: user.lastName || undefined,
+          username: user.username || undefined
+        }
       }
     }),
     GoogleProvider({
@@ -44,7 +54,16 @@ const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session?.user?.email) {
         const user = await prisma.user.findUnique({
-          where: { email: session.user.email }
+          where: { email: session.user.email },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            firstName: true,
+            lastName: true,
+            username: true
+          }
         })
 
         if (user) {
@@ -69,13 +88,21 @@ const authOptions: NextAuthOptions = {
             user.username = tempUsername
           }
 
-          session.user.firstName = user.firstName!
-          session.user.lastName = user.lastName!
-          session.user.username = user.username
+          // Ensure all required fields are present
+          session.user = {
+            id: user.id,
+            name: user.name || user.firstName || user.username || session.user.email.split('@')[0],
+            email: user.email || session.user.email,
+            image: user.image || '/default-avatar.png',
+            firstName: user.firstName || undefined,
+            lastName: user.lastName || undefined,
+            username: user.username
+          }
+          session.sub = user.id
         }
       }
 
-      return { ...session, ...token }
+      return session
     },
     async redirect({ url, baseUrl }) {
       return Promise.resolve('/dashboard')

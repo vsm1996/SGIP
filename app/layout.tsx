@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import AuthProvider from "./auth/Provider";
 import NavBar from "./components/navbar";
-import { nunito, raleway } from "./utlis/font";
+import { nunito, raleway } from "./utils/font";
 
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="aqua" className={`${nunito.className, raleway.className}`}>
+    <html lang="en" data-theme="aqua" className={`${nunito.className} ${raleway.className}`}>
       <body>
         <SpeedInsights />
         <Analytics />

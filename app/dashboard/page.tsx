@@ -1,15 +1,29 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Timeline from './timeline'
-import NotifcationsBar from '../components/notifications'
+import CreatePost from './createPost'
 
+export default function DashboardPage() {
+  const [key, setKey] = useState(0)
 
-const DashboardPage = () => {
+  const handlePost = () => {
+    setKey(prev => prev + 1)
+  }
+
   return (
-    <div className='w-full flex flex-col items-center justify-center px-6 md:px-12'>
-      <NotifcationsBar />
-      <Timeline />
+    <div className='container mx-auto px-4 py-8 max-w-5xl'>
+      <div className='space-y-6'>
+        <div className='bg-base-200 rounded-lg p-4'>
+          <h2 className='text-lg font-semibold mb-4'>Create Post</h2>
+          <CreatePost handlePost={handlePost} />
+        </div>
+
+        <div className='bg-base-200 rounded-lg p-4'>
+          <h2 className='text-lg font-semibold mb-4'>Recent Posts</h2>
+          <Timeline key={key} />
+        </div>
+      </div>
     </div>
   )
 }
-
-export default DashboardPage

@@ -1,62 +1,172 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { Like } from '@prisma/client'
-import Link from 'next/link'
-
-import PostLikeButton from '@/app/components/button/post-like'
-import PostDeleteButton from '@/app/components/button/post-delete'
-
-import { timeAgo } from '@/app/utlis'
-import { nunito, raleway } from '@/app/utlis/font'
+import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid'
+import apiClient from '@/app/services/api-client'
+import Comments from './comments'
+import { formatDistanceToNow } from 'date-fns'
+import ErrorMessage from '../errorMessage'
+import { useRouter } from 'next/navigation'
 
 interface PostProps {
-  post: any,
-  handleFetch: () => void,
+  post: {
+    id: string
+    message: string
+    createdAt: string
+    userId: string
+    user: {
+      id: string
+      name: string
+      username: string
+      firstName: string
+      image: string | null
+    }
+    likes: Array<{
+      userId: string
+    }>
+    comments: Array<{
+      id: string
+    }>
+    mentionContext?: {
+      type: string
+      message: string
+      user: {
+        username: string
+        firstName: string
+        name: string
+      }
+    }
+  }
+  handleFetch: () => void
 }
 
 const Post = ({ post, handleFetch }: PostProps) => {
   const { data: session } = useSession()
-  const [liked, setLiked] = useState<boolean>(false)
+  const [showComments, setShowComments] = useState(false)
+  const [error, setError] = useState<string[]>([])
+  const router = useRouter()
 
-  useEffect(() => {
-    if (session && post.likes) {
-      let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
-      if (userLiked) setLiked(true)
+  const likes = post?.likes || []
+  const comments = post?.comments || []
+  const isLiked = likes.some(like => like.userId === session?.sub)
+  const likesCount = likes.length
+  const commentsCount = comments.length
+
+  if (!post?.id || !post?.user) {
+    return (
+      <div className="alert alert-error">
+        <span>Invalid post data</span>
+      </div>
+    )
+  }
+
+  const handleDelete = async () => {
+    if (!session?.sub) {
+      setError(['Please sign in to delete posts'])
+      return
     }
-  }, [session, post.likes])
+
+    if (!window.confirm('Are you sure you want to delete this post?')) return
+
+    try {
+      await apiClient.delete(`/post/${post.id}`)
+      handleFetch()
+    } catch (err: any) {
+      console.error('Error deleting post:', err)
+      setError([err.response?.data?.message || 'Failed to delete post'])
+    }
+  }
+
+  const handleLike = async () => {
+    if (!session?.sub) {
+      setError(['Please sign in to like posts'])
+      return
+    }
+
+    try {
+      if (isLiked) {
+        await apiClient.delete(`/post/${post.id}/like/${session.sub}`)
+      } else {
+        await apiClient.post(`/post/${post.id}/like`, { userId: session.sub })
+      }
+      handleFetch()
+    } catch (err: any) {
+      console.error('Error liking post:', err)
+      setError([err.response?.data?.message || 'Failed to like post'])
+    }
+  }
 
   return (
-    <div className='card bg-neutral/65 shadow-xl mb-5 hover:bg-neutral transition-all duration-200 ease-in-out text-base-content'>
-      <div className='card-body'>
+    <div className='space-y-4'>
+      {error.length > 0 && <ErrorMessage error={error} />}
 
-        <Link href={`/status/${post.id}`} className='mb-4'>
-          <div className='mb-3'>
-            <div className='mb-4 flex items-center gap-1'>
-              <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.username || post.user.firstName || post.user.name} </p>
-              <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
+      <div className='flex items-start gap-3'>
+        <img
+          src={post.user.image || '/default-avatar.png'}
+          alt={post.user.name}
+          className='w-10 h-10 rounded-full'
+        />
+        <div className='flex-1'>
+          <div className='flex items-center gap-2'>
+            <span className='font-semibold'>{post.user.name}</span>
+            <span className='text-base-content/60 text-sm'>
+              {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+            </span>
+          </div>
+
+          {post.mentionContext && (
+            <div className='mt-2 p-3 bg-base-300 rounded-lg text-sm'>
+              <p className='text-base-content/70 mb-1'>
+                Replying to @{post.mentionContext.user.username}
+              </p>
+              <p>{post.mentionContext.message}</p>
             </div>
-            <p className={`font-extralight ${nunito.className} text-lg`}> {post.message} </p>
+          )}
+
+          <p className='mt-2'>{post.message}</p>
+
+          <div className='mt-4 flex items-center gap-6'>
+            <button
+              onClick={handleLike}
+              className='btn btn-ghost btn-sm gap-2'
+              disabled={!session?.sub}
+            >
+              {isLiked ? (
+                <HeartIconSolid className='w-5 h-5 text-error' />
+              ) : (
+                <HeartIcon className='w-5 h-5' />
+              )}
+              <span>{likesCount}</span>
+            </button>
+
+            <button
+              onClick={() => setShowComments(!showComments)}
+              className='btn btn-ghost btn-sm gap-2'
+            >
+              <span>Comments</span>
+              <span>{commentsCount}</span>
+            </button>
+
+            {session?.user?.id === post.userId && (
+              <button
+                onClick={handleDelete}
+                className='btn btn-ghost btn-sm text-error'
+                title='Delete post'
+              >
+                <TrashIcon className='w-5 h-5' />
+              </button>
+            )}
           </div>
-        </Link>
-        <div className='flex justify-end gap-5'>
-          <div className='flex items-center gap-1'>
-            <PostLikeButton session={session} post={post} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
-            <p> {post.likes?.length || 0} </p>
-          </div>
-          <div className='flex items-center gap-1'>
-            <Link href={`/status/${post.id}`}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 hover:fill-current">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
-              </svg>
-            </Link>
-            {post?.comments?.length || 0}
-          </div>
-          {session && post.userId === session!.sub && <PostDeleteButton postId={post.id} handleFetch={handleFetch} />
-          }
         </div>
       </div>
+
+      {showComments && (
+        <div className='mt-4 pl-12'>
+          <Comments postId={post.id} />
+        </div>
+      )}
     </div>
   )
 }

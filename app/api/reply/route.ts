@@ -25,7 +25,9 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const { userId, commentId } = body
+  const { userId, commentId, message } = body
+
+  const mentionedUsernames = [...message.matchAll(/@(\w+)/g)].map((match) => match[1])
 
   const validation = schema.safeParse(body)
 
@@ -34,13 +36,61 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(errorMessages, { status: 400 })
   }
 
-  const post = await prisma.commentReply.create({
-    data: {
-      message: body.message,
-      userId: userId,
-      commentId: commentId
+  const mentionedUsers = await prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { in: mentionedUsernames } },
+        { name: { in: mentionedUsernames } }
+      ]
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true
     }
-  })
+  });
 
-  return NextResponse.json(post)
+  if (mentionedUsernames.length > 0 && mentionedUsers.length === 0) {
+    return NextResponse.json({ message: 'One or more mentioned users not found' }, { status: 400 })
+  }
+
+  const newreply = await prisma.$transaction(async (tx) => {
+    const reply = await tx.commentReply.create({
+      data: {
+        message,
+        userId,
+        commentId
+      },
+      include: {
+        user: true,
+        likes: true
+      }
+    });
+
+    if (mentionedUsers.length > 0) {
+      await tx.mention.createMany({
+        data: mentionedUsers.map(user => ({
+          userId,
+          mentionedUserId: user.id,
+          commentReplyId: reply.id
+        }))
+      });
+
+      await tx.notification.createMany({
+        data: mentionedUsers.map(user => ({
+          userId: user.id,
+          type: 'mention',
+          message: `${reply.user.name || reply.user.username} mentioned you in a reply`
+        }))
+      });
+    }
+
+    return reply;
+  });
+
+  if (!newreply) {
+    return NextResponse.json({ message: 'Error creating reply' }, { status: 400 })
+  }
+
+  return NextResponse.json(newreply)
 }
