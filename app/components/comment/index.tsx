@@ -9,10 +9,12 @@ import { timeAgo } from '@/app/utils'
 import { nunito, raleway } from '@/app/utils/font'
 import Link from 'next/link'
 import { CommentProps } from '@/app/types/components'
+import CreateReply from '../reply/create-reply'
 
 const Comment = ({ comment, type = 'comment', postId, handleFetch }: CommentProps) => {
   const { data: session } = useSession()
   const [liked, setLiked] = useState<boolean>(false)
+  const [showReplyForm, setShowReplyForm] = useState(false)
 
   useEffect(() => {
     if (session?.sub && comment?.likes) {
@@ -31,19 +33,58 @@ const Comment = ({ comment, type = 'comment', postId, handleFetch }: CommentProp
         <p className={`font-extralight ${nunito.className}`}> {comment.message} </p>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
-            <CommentLikeButton session={session} comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
+            <CommentLikeButton
+              session={session}
+              comment={{ ...comment, discussionId: null }}
+              postId={postId}
+              liked={liked}
+              setLiked={setLiked}
+              handleFetch={handleFetch}
+            />
             <p> {comment.likes?.length || 0} </p>
           </div>
           <div className='flex items-center gap-1'>
-            <Link href={`/status/${postId}/reply/${comment.id}`}>
+            <button
+              onClick={() => setShowReplyForm(!showReplyForm)}
+              className="flex items-center gap-1 hover:text-primary transition-colors"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 hover:fill-current">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
               </svg>
-            </Link>
-            {comment?.commentReplies?.length || 0}
+              <span>{comment?.commentReplies?.length || 0} Replies</span>
+            </button>
           </div>
           {session && comment.userId === session!.sub && <CommentDeleteButton comment={comment} handleFetch={handleFetch} />}
         </div>
+        {showReplyForm && (
+          <div className="mt-4">
+            <CreateReply
+              commentId={comment.id}
+              postId={postId}
+              onReplyCreated={() => {
+                setShowReplyForm(false);
+                handleFetch();
+              }}
+            />
+          </div>
+        )}
+        {comment.commentReplies && comment.commentReplies.length > 0 && (
+          <div className="mt-4 space-y-4 pl-6 border-l-2 border-base-300">
+            {comment.commentReplies.map((reply) => (
+              <div key={reply.id} className="card bg-base-300 shadow-sm">
+                <div className="card-body py-3 px-4">
+                  <div className="flex items-center gap-1 mb-2">
+                    <p className={`font-semibold ${raleway.className}`}>
+                      {reply.user.username || reply.user.firstName || reply.user.name}
+                    </p>
+                    <small className="text-xs opacity-45">{timeAgo(reply.createdAt)}</small>
+                  </div>
+                  <p className={`font-extralight ${nunito.className}`}>{reply.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   ) : (
@@ -61,16 +102,26 @@ const Comment = ({ comment, type = 'comment', postId, handleFetch }: CommentProp
         </Link>
         <div className='flex justify-end gap-5'>
           <div className='flex items-center gap-1'>
-            <CommentLikeButton session={session} comment={comment} postId={postId} liked={liked} setLiked={setLiked} handleFetch={handleFetch} />
+            <CommentLikeButton
+              session={session}
+              comment={{ ...comment, discussionId: null }}
+              postId={postId}
+              liked={liked}
+              setLiked={setLiked}
+              handleFetch={handleFetch}
+            />
             <p> {comment.likes?.length || 0} </p>
           </div>
           <div className='flex items-center gap-1'>
-            <Link href={`/status/${postId}/reply/${comment.id}`}>
+            <button
+              onClick={() => setShowReplyForm(!showReplyForm)}
+              className="flex items-center gap-1 hover:text-primary transition-colors"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6 hover:fill-current">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
               </svg>
-            </Link>
-            {comment?.commentReplies?.length || 0}
+              <span>{comment?.commentReplies?.length || 0} Replies</span>
+            </button>
           </div>
           {session && comment.userId === session!.sub && <CommentDeleteButton comment={comment} handleFetch={handleFetch} />
           }

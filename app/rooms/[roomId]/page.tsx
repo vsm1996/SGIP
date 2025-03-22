@@ -2,14 +2,16 @@
 
 import { useSession } from 'next-auth/react'
 import ChatRoom from '@/app/components/discussion/ChatRoom'
+import { use } from 'react'
 
 interface RoomPageProps {
-  params: {
+  params: Promise<{
     roomId: string
-  }
+  }>
 }
 
 export default function RoomPage({ params }: RoomPageProps) {
+  const { roomId } = use(params)
   const { data: session } = useSession()
 
   if (!session) {
@@ -23,7 +25,7 @@ export default function RoomPage({ params }: RoomPageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <ChatRoom roomId={params.roomId} />
+      <ChatRoom roomId={roomId} />
     </div>
   )
-} 
+}

@@ -74,16 +74,6 @@ const Timeline = () => {
 
   return (
     <div className='space-y-6'>
-      {/* Create Post Section */}
-      <div className='bg-base-200 rounded-lg shadow-sm overflow-hidden'>
-        <div className='p-4 border-b border-base-300'>
-          <h2 className='text-lg font-semibold'>Create Post</h2>
-        </div>
-        <div className='p-4'>
-          <CreatePost handlePost={handleFetch} />
-        </div>
-      </div>
-
       {/* Posts Timeline */}
       <div className='bg-base-200 rounded-lg shadow-sm overflow-hidden'>
         <div className='p-4 border-b border-base-300 flex justify-between items-center'>

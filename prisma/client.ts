@@ -1,18 +1,45 @@
-// npm install @prisma/client
-// npx prisma generate  
-// these lines make the client work
-import { PrismaClient } from '@prisma/client'
+// Custom Prisma client implementation that works with Yarn PnP
+import { PrismaClient } from '@prisma/client';
 
-const prismaClientSingleton = () => {
-  return new PrismaClient()
-}
-
+// Define a type for the global object with our Prisma client
 declare global {
-  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
+  var prisma: PrismaClient | undefined;
 }
 
-const prisma = globalThis.prisma ?? prismaClientSingleton()
+// Create a singleton function that initializes the Prisma client
+const prismaClientSingleton = async () => {
+  try {
+    // Create a new PrismaClient instance with connection handling
+    const prisma = new PrismaClient({
+      log: ['error', 'warn'],
+      errorFormat: 'pretty'
+    });
 
-export default prisma
+    // Test the connection
+    await prisma.$connect();
+    return prisma;
+  } catch (error) {
+    console.error('Failed to initialize Prisma client:', error);
+    throw error;
+  }
+};
 
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma
+// Initialize the client if it doesn't exist in the global object
+let prismaPromise: Promise<PrismaClient>;
+
+if (!globalThis.prisma) {
+  prismaPromise = prismaClientSingleton().then(client => {
+    // Store the client in the global object for reuse
+    globalThis.prisma = client;
+    return client;
+  }).catch(error => {
+    console.error('Error initializing Prisma client:', error);
+    throw error;
+  });
+} else {
+  // If we already have a client instance in the global object, use it
+  prismaPromise = Promise.resolve(globalThis.prisma);
+}
+
+// Export the promise that resolves to the Prisma client
+export default await prismaPromise;

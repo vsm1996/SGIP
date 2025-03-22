@@ -35,7 +35,8 @@ const Comments = ({ postId }: CommentsProps) => {
   const fetchComments = async () => {
     try {
       const response = await apiClient.get(`/post/${postId}/comments`)
-      setComments(response.data)
+      // Ensure comments is always an array
+      setComments(Array.isArray(response.data) ? response.data : [])
     } catch (err: any) {
       console.error('Error fetching comments:', err)
       setError([err.response?.data?.message || 'Failed to load comments'])
@@ -139,4 +140,4 @@ const Comments = ({ postId }: CommentsProps) => {
   )
 }
 
-export default Comments 
+export default Comments

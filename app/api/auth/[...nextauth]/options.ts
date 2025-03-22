@@ -6,7 +6,7 @@ import { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcrypt'
 
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   //when using an adapter, NextAuth changes the session strategy from JWT to database
   // At the time of 2/9/24, you can't use db sessions with OAuth providers / Social Logins
   adapter: PrismaAdapter(prisma),

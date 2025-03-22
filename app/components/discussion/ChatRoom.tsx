@@ -52,6 +52,9 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
     console.log('Current session:', session)
   }, [formattedHost, roomId, session])
 
+  // Add connection status tracking
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error'>('connecting')
+
   const socket = usePartySocket({
     host: formattedHost,
     room: roomId,
@@ -69,6 +72,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       setError(null)
       setIsConnecting(false)
       setConnectionAttempts(0)
+      setConnectionStatus('connected')
     },
     onClose: (event: CloseEvent) => {
       console.log('WebSocket disconnected:', {
@@ -80,6 +84,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       setConnectionAttempts(prev => prev + 1)
       setError(`Connection closed (attempt ${connectionAttempts + 1}/5). ${event.reason || 'Attempting to reconnect...'}`)
       setIsConnecting(true)
+      setConnectionStatus('disconnected')
     },
     onError: (error: Event) => {
       console.error('WebSocket error details:', {
@@ -87,7 +92,9 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
         type: error.type,
         timestamp: new Date().toISOString(),
         target: error.target,
-        currentTarget: error.currentTarget
+        currentTarget: error.currentTarget,
+        message: error instanceof ErrorEvent ? error.message : 'Unknown error',
+        isTrusted: error.isTrusted
       })
 
       let errorMessage = 'Unknown error'
@@ -99,8 +106,8 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
 
       setError(`Connection error (attempt ${connectionAttempts + 1}/5): ${errorMessage}`)
       setIsConnecting(true)
+      setConnectionStatus('error')
     },
-    // Remove protocols as they might be causing issues
     reconnectBackoffMs: (retryCount: number) => Math.min(1000 * Math.pow(2, retryCount), 10000),
     reconnectMaxAttempts: 5
   } as PartySocketOptions)
@@ -111,12 +118,19 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       if (socket.readyState === WebSocket.CLOSED) {
         console.log('Socket is closed, attempting to reconnect...')
         socket.reconnect()
+      } else if (socket.readyState === WebSocket.CONNECTING && connectionStatus !== 'connecting') {
+        setConnectionStatus('connecting')
+        setIsConnecting(true)
+      } else if (socket.readyState === WebSocket.OPEN && connectionStatus !== 'connected') {
+        setConnectionStatus('connected')
+        setIsConnecting(false)
+        setError(null)
       }
     }
 
     const interval = setInterval(checkConnection, 5000)
     return () => clearInterval(interval)
-  }, [socket])
+  }, [socket, connectionStatus])
 
   useEffect(() => {
     // Scroll to bottom when messages update
@@ -185,13 +199,21 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
         <div className="alert alert-error shadow-lg m-4">
           <div>
             <span>{error}</span>
+            {connectionStatus === 'error' && (
+              <button
+                className="btn btn-xs btn-outline ml-2"
+                onClick={() => socket.reconnect()}
+              >
+                Retry
+              </button>
+            )}
           </div>
         </div>
       )}
       {isConnecting && (
         <div className="alert alert-warning shadow-lg m-4">
           <div>
-            <span>Connecting to chat server...</span>
+            <span>Connecting to chat server... {connectionAttempts > 0 ? `(Attempt ${connectionAttempts}/5)` : ''}</span>
           </div>
         </div>
       )}
@@ -238,4 +260,4 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   )
 }
 
-export default ChatRoom 
+export default ChatRoom

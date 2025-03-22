@@ -115,6 +115,9 @@ const NavBar = () => {
                 <Link href='/dashboard' className='nav-link'>
                   Dashboard
                 </Link>
+                <Link href='/rooms' className='nav-link'>
+                  Rooms
+                </Link>
                 <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link'>
                   Video Lectures
                 </Link>

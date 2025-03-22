@@ -1,7 +1,4 @@
 import type * as Party from "partykit/server";
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 interface Message {
   id: string;
@@ -19,118 +16,56 @@ interface RoomData {
   creatorId: string;
 }
 
+class ChatRoomError extends Error {
+  constructor(message: string, public code?: string) {
+    super(message);
+    this.name = 'ChatRoomError';
+  }
+}
+
 export default class ChatRoom implements Party.Server {
-  roomData: RoomData | null = null;
-  messages: Message[] = [];
+  private messages: Message[] = [];
+  private roomData: RoomData | null = null;
+  private storageKey = "messages";
 
   constructor(readonly party: Party.Party) { }
 
-  async onStart() {
+  private async loadMessages() {
     try {
-      // Load room data and messages from database
-      const room = await prisma.discussionRoom.findUnique({
-        where: { id: this.party.id },
-        include: {
-          messages: {
-            include: {
-              author: true
-            },
-            orderBy: {
-              createdAt: 'asc'
-            }
-          }
-        }
-      });
-
-      if (room) {
-        this.roomData = {
-          id: room.id,
-          title: room.title,
-          createdAt: room.createdAt,
-          creatorId: room.creatorId
-        };
-
-        this.messages = room.messages.map(msg => ({
-          id: msg.id,
-          text: msg.text,
-          userId: msg.authorId,
-          username: msg.author.username || undefined,
-          firstName: msg.author.firstName || undefined,
-          createdAt: msg.createdAt.getTime()
-        }));
+      const storedMessages = await this.party.storage.get<Message[]>(this.storageKey);
+      if (storedMessages) {
+        this.messages = storedMessages;
       }
     } catch (error) {
-      console.error('Error loading room data:', error);
+      console.error('Error loading messages from storage:', error);
+      this.messages = [];
     }
+  }
+
+  async onStart() {
+    await this.loadMessages();
   }
 
   async onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     try {
-      // Get room data
-      const roomData = await prisma.discussionRoom.findUnique({
-        where: { id: this.party.id },
-        include: {
-          messages: {
-            include: {
-              author: true
-            },
-            orderBy: {
-              createdAt: 'asc'
-            }
-          }
-        }
-      });
-
-      if (!roomData) {
-        conn.send(JSON.stringify({
-          type: "error",
-          message: "Room not found"
-        }));
-        return;
+      // Load room data from request headers
+      const roomDataStr = ctx.request.headers.get('X-Room-Data');
+      if (roomDataStr) {
+        this.roomData = JSON.parse(roomDataStr);
       }
 
-      // Get user ID from headers
-      const userId = ctx.request.headers.get('X-User-ID');
-      if (userId) {
-        // Add user to participants if not already present
-        await prisma.discussionRoom.update({
-          where: { id: this.party.id },
-          data: {
-            participants: {
-              connect: {
-                id: userId
-              }
-            }
-          }
-        });
-      }
-
-      // Format messages
-      const messages = roomData.messages.map(msg => ({
-        id: msg.id,
-        text: msg.text,
-        userId: msg.authorId,
-        username: msg.author.username || undefined,
-        firstName: msg.author.firstName || undefined,
-        createdAt: msg.createdAt.getTime()
-      }));
-
-      // Send initial data
+      // Send current state to the connecting client
       conn.send(JSON.stringify({
         type: "sync",
-        roomData: {
-          id: roomData.id,
-          title: roomData.title,
-          createdAt: roomData.createdAt
-        },
-        messages
+        roomData: this.roomData,
+        messages: this.messages
       }));
 
     } catch (error) {
       console.error('Error in onConnect:', error);
       conn.send(JSON.stringify({
         type: "error",
-        message: "Failed to initialize room"
+        message: error instanceof ChatRoomError ? error.message : "Failed to initialize connection"
       }));
     }
   }
@@ -138,47 +73,31 @@ export default class ChatRoom implements Party.Server {
   async onMessage(message: string | ArrayBuffer | ArrayBufferView, sender: Party.Connection) {
     try {
       if (typeof message !== 'string') {
-        throw new Error('Message must be a string');
+        throw new ChatRoomError('Message must be a string', 'INVALID_MESSAGE_TYPE');
       }
 
       const data = JSON.parse(message);
 
       if (data.type === "message") {
-        const userId = data.userId;
-        if (!userId) {
-          throw new Error('User ID is required');
+        if (!data.userId || !data.text?.trim()) {
+          throw new ChatRoomError('Invalid message data', 'INVALID_MESSAGE_DATA');
         }
 
-        // Get user data
-        const user = await prisma.user.findUnique({
-          where: { id: userId }
-        });
-
-        if (!user) {
-          throw new Error('User not found');
-        }
-
-        // Save message to database
-        const savedMessage = await prisma.message.create({
-          data: {
-            text: data.text,
-            authorId: userId,
-            roomId: this.party.id
-          },
-          include: {
-            author: true
-          }
-        });
-
-        // Format message for broadcast
-        const newMessage = {
-          id: savedMessage.id,
-          text: savedMessage.text,
-          userId: savedMessage.authorId,
-          username: user.username || undefined,
-          firstName: user.firstName || undefined,
-          createdAt: savedMessage.createdAt.getTime()
+        // Create a new message object
+        const newMessage: Message = {
+          id: crypto.randomUUID(),
+          text: data.text.trim(),
+          userId: data.userId,
+          username: data.username,
+          firstName: data.firstName,
+          createdAt: Date.now()
         };
+
+        // Keep only the last 100 messages
+        this.messages = [...this.messages, newMessage].slice(-100);
+
+        // Save to PartyKit storage
+        await this.party.storage.put(this.storageKey, this.messages);
 
         // Broadcast to all connections
         this.party.broadcast(JSON.stringify({
@@ -190,7 +109,7 @@ export default class ChatRoom implements Party.Server {
       console.error("Error processing message:", error);
       sender.send(JSON.stringify({
         type: "error",
-        message: "Failed to process message"
+        message: error instanceof ChatRoomError ? error.message : "Failed to process message"
       }));
     }
   }
