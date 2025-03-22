@@ -7,6 +7,8 @@ interface Message {
   username?: string;
   firstName?: string;
   createdAt: number;
+  replyTo?: string;
+  replyToMessage?: Message;
 }
 
 interface RoomData {
@@ -83,6 +85,15 @@ export default class ChatRoom implements Party.Server {
           throw new ChatRoomError('Invalid message data', 'INVALID_MESSAGE_DATA');
         }
 
+        // If this is a reply, validate and find the parent message
+        let replyToMessage: Message | undefined;
+        if (data.replyTo) {
+          replyToMessage = this.messages.find(m => m.id === data.replyTo);
+          if (!replyToMessage) {
+            throw new ChatRoomError('Reply target message not found', 'INVALID_REPLY_TARGET');
+          }
+        }
+
         // Create a new message object
         const newMessage: Message = {
           id: crypto.randomUUID(),
@@ -90,7 +101,9 @@ export default class ChatRoom implements Party.Server {
           userId: data.userId,
           username: data.username,
           firstName: data.firstName,
-          createdAt: Date.now()
+          createdAt: Date.now(),
+          replyTo: data.replyTo,
+          replyToMessage: replyToMessage
         };
 
         // Keep only the last 100 messages
