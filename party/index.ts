@@ -6,6 +6,8 @@ interface Message {
   userId: string;
   username?: string;
   firstName?: string;
+  name?: string;
+  image?: string;
   createdAt: number;
   replyTo?: string;
   replyToMessage?: Message;

@@ -12,6 +12,7 @@ interface Message {
   userId: string
   username?: string
   firstName?: string
+  name?: string
   createdAt: number
 }
 
@@ -173,7 +174,10 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       socket.send(JSON.stringify({
         type: 'message',
         text: newMessage.trim(),
-        userId: session.sub
+        userId: session.sub,
+        username: session.user.username || session.user.name,
+        name: session.user.name,
+        firstName: session.user.firstName || session.user.name
       }))
 
       setNewMessage('')
@@ -184,7 +188,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   }
 
   const getDisplayName = (message: Message) => {
-    return message.username || message.firstName || 'Anonymous'
+    return message.username || message.name || message.firstName || 'Anonymous'
   }
 
   return (
