@@ -13,7 +13,7 @@ interface Message {
   username?: string
   firstName?: string
   name?: string
-  createdAt: number
+  createdAt: Date
 }
 
 interface RoomData {
@@ -196,7 +196,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       {roomData && (
         <div className="bg-base-300 p-4 rounded-t-lg">
           <h2 className="text-xl font-bold">{roomData.title}</h2>
-          <p className="text-sm opacity-70">Created {timeAgo(roomData.createdAt.getTime())}</p>
+          <p className="text-sm opacity-70">Created {timeAgo(roomData.createdAt)}</p>
         </div>
       )}
       {error && (
