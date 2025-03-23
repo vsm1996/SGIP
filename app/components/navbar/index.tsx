@@ -114,7 +114,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className='px-4 py-3 navbar bg-base-300 z-10 fixed top-0 left-0 right-0 shadow-md max-lg:text-sm'>
+      <nav className='px-4 py-3 navbar bg-base-200/95 backdrop-blur-sm z-10 fixed top-0 left-0 right-0 shadow-lg max-lg:text-sm border-b border-base-300'>
         <div className='container mx-auto'>
           <div className='flex justify-between items-center w-full'>
             {/* Left section */}
@@ -123,7 +123,7 @@ const NavBar = () => {
               {status === 'authenticated' && (
                 <div className='hidden md:flex items-center space-x-2'>
                   <UserCircleIcon className="w-5 h-5" />
-                  <span className='font-medium'>{displayName}</span>
+                  <span className='text-sm'>{displayName}</span>
                 </div>
               )}
             </div>
@@ -131,8 +131,11 @@ const NavBar = () => {
             {/* Center section - main navigation */}
             {status === 'authenticated' && (
               <div className='flex items-center space-x-6 '>
-                <Link href='/dashboard' className='nav-link'>
+                <Link href='/dashboard' className='nav-link max-lg:hidden inline-block'>
                   Dashboard
+                </Link>
+                <Link href='/dashboard' className='nav-link max-lg:inline-block hidden'>
+                  Dash
                 </Link>
                 <Link href='/rooms' className='nav-link'>
                   Rooms
@@ -145,7 +148,7 @@ const NavBar = () => {
                 </Link>
                 <button
                   onClick={() => setShowCreateRoom(true)}
-                  className="btn btn-primary btn-sm normal-case flex items-center gap-2"
+                  className="btn btn-primary btn-sm normal-case flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200"
                   aria-label='create discussion room'
                 >
                   <ChatBubbleLeftRightIcon className="w-4 h-4" />
@@ -160,7 +163,7 @@ const NavBar = () => {
                 <>
                   <Link
                     href="/mentions"
-                    className="btn btn-ghost btn-circle "
+                    className="btn btn-ghost btn-circle hover:bg-base-300/50"
                     aria-label='notifications'
                   >
                     <div className='relative'>

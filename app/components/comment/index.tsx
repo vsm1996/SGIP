@@ -35,7 +35,7 @@ const Comment = ({ comment, type = 'comment', postId, handleFetch }: CommentProp
   }, [comment.likes, session])
 
   return type === 'comment' ? (
-    <div className='card bg-base-200 hover:bg-base-200/75 transition-all duration-200 shadow-xl ease-in-out text-base-content'>
+    <div className='card bg-base-200/95 backdrop-blur-sm shadow-xl hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
       <div className='card-body'>
         <div className='mb-4 flex items-center gap-1'>
           <p className={`justify-self-start font-semibold ${raleway.className}`}> {comment.user.username || comment.user.name} </p>
@@ -60,7 +60,7 @@ const Comment = ({ comment, type = 'comment', postId, handleFetch }: CommentProp
       </div>
     </div>
   ) : (
-    <div className='card bg-base-300 shadow-xl mb-5 hover:bg-base-300/65 transition-all duration-200 ease-in-out text-base-content'>
+    <div className='card bg-base-300/90 backdrop-blur-sm shadow-xl mb-5 hover:bg-base-300/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
       <div className='card-body'>
 
         <Link href={`/status/${postId}/reply/${comment.id}`} className='mb-4'>

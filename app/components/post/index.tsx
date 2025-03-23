@@ -28,10 +28,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
   }, [session, post.likes])
 
   return (
-    <div className='card bg-neutral/65 shadow-xl mb-5 hover:bg-neutral transition-all duration-200 ease-in-out text-base-content'>
+    <div className='card bg-base-200/95 backdrop-blur-sm shadow-xl mb-5 hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
       <div className='card-body'>
         {post.mentionContext && (
-          <div className='bg-base-300/50 p-3 rounded-lg mb-4'>
+          <div className='bg-base-300/90 p-3 rounded-lg mb-4 border border-base-300/50'>
             <div className='flex items-center gap-2 mb-2'>
               <span className='badge badge-sm'>{post.mentionContext.type}</span>
               <p className='text-sm opacity-70'>Mentioned by {post.mentionContext.user.username || post.mentionContext.user.name}</p>

@@ -4,21 +4,37 @@ import Link from "next/link";
 
 export default function Home() {
   return (
+    <main className="flex min-w-dvw min-h-dvh items-center justify-center max-lg:flex-col px-8 md:px-16 py-16 bg-gradient-to-b from-base-100 to-base-200">
+      <div className="max-lg:mb-10 xl:w-1/2 text-pretty text-base-content group backdrop-blur-sm bg-base-100/30 p-8 rounded-xl shadow-lg border border-base-300 animate-fade-in">
+        <div className="flex items-center mb-6">
+          <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
+            <span className="inline-block text-3xl group-hover:animate-wiggle">🦁</span>
+          </div>
+          <h1 className="text-4xl font-bold text-neutral-content">
+            Welcome to SGip
+          </h1>
+        </div>
 
-    <main className="flex min-w-dvw min-h-dvh items-center justify-center prose prose-slate lg:prose-md max-lg:flex-col px-16 pt-36 pb-16">
-      <div className="max-lg:mb-6 xl:w-1/2 text-pretty text-base-content group">
-        <h1 className=" mb-8">
-          Welcome to SGip <span className="inline-block group-hover:animate-wiggle">🦁 </span> <br /> &mdash; an online Buddhist practice group, dedicated to the teachings of Nichiren Daishonin.
-        </h1>
-        <h2 className="group-hover:underline mb-8">
-          The purpose of this group is to provide an open and inclusive community to facilitate the propagation of Nam-Myoho-Renge-Kyo in the Latter Day of the law.
-        </h2>
-        <h3 className="group-hover:underline">
-          Each of us possesses an inherent Buddha nature awaiting to be realized to its fullest potential. As such we hope to encourage the propagation of Nichiren's Daimoku for this purpose.
-        </h3>
+        <div className="prose prose-slate lg:prose-lg">
+          <h2 className="mb-6 text-xl font-medium leading-relaxed">
+            An online Buddhist practice group, dedicated to the teachings of Nichiren Daishonin.
+          </h2>
+
+          <p className="mb-6 group-hover:text-secondary-content transition-colors duration-300">
+            The purpose of this group is to provide an open and inclusive community to facilitate the propagation of Nam-Myoho-Renge-Kyo in the Latter Day of the law.
+          </p>
+
+          <p className="group-hover:text-secondary-content transition-colors duration-300">
+            Each of us possesses an inherent Buddha nature awaiting to be realized to its fullest potential. As such we hope to encourage the propagation of Nichiren's Daimoku for this purpose.
+          </p>
+        </div>
       </div>
-      <div className="divider lg:divider-horizontal max-lg:mb-10" />
-      <RegisterForm />
+
+      <div className="divider lg:divider-horizontal max-lg:my-8 animate-fade-in-up" />
+
+      <div className="xl:w-1/2 animate-fade-in-right">
+        <RegisterForm />
+      </div>
     </main>
   );
 }
