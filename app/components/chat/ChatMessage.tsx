@@ -10,7 +10,7 @@ interface Message {
   userId: string;
   username?: string;
   firstName?: string;
-  createdAt: number;
+  createdAt: Date;
   replyTo?: string;
   replyToMessage?: Message;
 }
