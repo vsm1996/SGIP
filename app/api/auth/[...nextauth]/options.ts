@@ -6,7 +6,7 @@ import { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcrypt'
 
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   //when using an adapter, NextAuth changes the session strategy from JWT to database
   // At the time of 2/9/24, you can't use db sessions with OAuth providers / Social Logins
   adapter: PrismaAdapter(prisma),
@@ -24,11 +24,21 @@ const authOptions: NextAuthOptions = {
           where: { email: credentials.email }
         })
 
-        if (!user) return null;
+        if (!user || !user.email) return null;
 
         const passwordsMatch = await bcrypt.compare(credentials.password, user.hashedPassword!)
 
-        return passwordsMatch ? user : null;
+        if (!passwordsMatch) return null;
+
+        return {
+          id: user.id,
+          name: user.name || user.firstName || user.username || user.email.split('@')[0],
+          email: user.email,
+          image: user.image || null,
+          firstName: user.firstName || undefined,
+          lastName: user.lastName || undefined,
+          username: user.username || undefined
+        }
       }
     }),
     GoogleProvider({
@@ -42,18 +52,56 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-
       if (session?.user?.email) {
-
         const user = await prisma.user.findUnique({
-          where: { email: session.user.email }
+          where: { email: session.user.email },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            firstName: true,
+            lastName: true,
+            username: true
+          }
         })
 
-        session.user.firstName = user?.firstName!
-        session.user.lastName = user?.lastName!
+        if (user) {
+          // Generate username if it doesn't exist
+          if (!user.username) {
+            let username = session.user.email.split('@')[0]
+            let tempUsername = username
+            let counter = 1
+
+            // Ensure username uniqueness
+            while (await prisma.user.findUnique({ where: { username: tempUsername } })) {
+              tempUsername = `${username}${counter}`
+              counter++
+            }
+
+            // Update user with new username
+            await prisma.user.update({
+              where: { id: user.id },
+              data: { username: tempUsername }
+            })
+
+            user.username = tempUsername
+          }
+
+          // Ensure all required fields are present
+          session.user = {
+            name: user.name || user.firstName || user.username || session.user.email.split('@')[0],
+            email: user.email || session.user.email,
+            image: user.image || '/default-avatar.png',
+            firstName: user.firstName || undefined,
+            lastName: user.lastName || undefined,
+            username: user.username
+          }
+          session.sub = user.id
+        }
       }
 
-      return { ...session, ...token }
+      return session
     },
     async redirect({ url, baseUrl }) {
       return Promise.resolve('/dashboard')

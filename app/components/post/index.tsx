@@ -8,8 +8,8 @@ import Link from 'next/link'
 import PostLikeButton from '@/app/components/button/post-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
 
-import { timeAgo } from '@/app/utlis'
-import { nunito, raleway } from '@/app/utlis/font'
+import { timeAgo } from '@/app/utils'
+import { nunito, raleway } from '@/app/utils/font'
 
 interface PostProps {
   post: any,
@@ -30,6 +30,15 @@ const Post = ({ post, handleFetch }: PostProps) => {
   return (
     <div className='card bg-neutral/65 shadow-xl mb-5 hover:bg-neutral transition-all duration-200 ease-in-out text-base-content'>
       <div className='card-body'>
+        {post.mentionContext && (
+          <div className='bg-base-300/50 p-3 rounded-lg mb-4'>
+            <div className='flex items-center gap-2 mb-2'>
+              <span className='badge badge-sm'>{post.mentionContext.type}</span>
+              <p className='text-sm opacity-70'>Mentioned by {post.mentionContext.user.name || post.mentionContext.user.username}</p>
+            </div>
+            <p className={`text-sm ${nunito.className}`}>{post.mentionContext.message}</p>
+          </div>
+        )}
 
         <Link href={`/status/${post.id}`} className='mb-4'>
           <div className='mb-3'>

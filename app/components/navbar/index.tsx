@@ -1,37 +1,237 @@
 'use client'
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { BellAlertIcon, ChatBubbleLeftRightIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import ThemeController from '../themeController'
+import apiClient from '@/app/services/api-client'
+
+interface Mention {
+  id: string
+  unread: boolean
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string
+    }
+  }
+  message?: string
+}
 
 const NavBar = () => {
   const { status, data: session } = useSession()
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [showCreateRoom, setShowCreateRoom] = useState(false)
+  const [roomName, setRoomName] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
+
+  const displayName = session?.user?.username ||
+    session?.user?.firstName ||
+    session?.user?.name ||
+    'User'
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const fetchUnreadMentions = async () => {
+      if (session?.sub) {
+        try {
+          const response = await apiClient.get(`/mentions/${session.sub}`, {
+            signal: controller.signal
+          })
+          const mentions = response.data?.mentions || []
+          const unreadMentions = mentions.filter((mention: Mention) => mention.unread)
+          setUnreadCount(unreadMentions.length)
+        } catch (error) {
+          // Ignore canceled requests
+          if (!error || Object.keys(error).length === 0) {
+            return;
+          }
+          console.error('Error fetching mentions:', error)
+        }
+      }
+    }
+
+    fetchUnreadMentions()
+    const interval = setInterval(fetchUnreadMentions, 30000) // Poll every 30 seconds
+
+    return () => {
+      clearInterval(interval)
+      controller.abort()
+    }
+  }, [session])
+
+  const handleCreateRoom = (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+
+    const trimmedName = roomName.trim()
+
+    if (!trimmedName) {
+      setError('Room name cannot be empty')
+      return
+    }
+
+    if (trimmedName.length < 3) {
+      setError('Room name must be at least 3 characters long')
+      return
+    }
+
+    if (trimmedName.length > 50) {
+      setError('Room name must be less than 50 characters')
+      return
+    }
+
+    // Create a URL-friendly room ID from the name
+    const roomId = encodeURIComponent(trimmedName.toLowerCase().replace(/[^a-z0-9]+/g, '-'))
+    setShowCreateRoom(false)
+    setRoomName('')
+    router.push(`/discussion/${roomId}`)
+  }
 
   return (
-    <nav className='p-5 navbar bg-base-300 z-10 fixed top-0 left-0 text-base-content'>
-      <ul className='w-full flex items-center max-sm:justify-between'>
-        <li className='mr-6 lg:mr-9'>
-          <ThemeController />
-        </li>
-        {status === 'authenticated' && (
-          <li className='flex justify-between items-center sm:w-full space-x-3'>
-            <span className='text-lg font-extrabold max-sm:hidden'>Welcome, {session.user!.firstName || session.user!.name}</span>
-            <span className='flex items-center'>
-              <Link tabIndex={-1} href='/dashboard' className='link link-hover mr-5'>Dashboard</Link>
-              <Link tabIndex={-1} href='/api/auth/signout' className='link link-hover text-nowrap'>Sign Out</Link>
-            </span>
-          </li>
-        )}
-        {status === 'unauthenticated' && (<li>
-          <Link tabIndex={-1} className='mr-3 link link-hover' href='/api/auth/signin'>
-            Sign In
-          </Link>
-        </li>
-        )}
-      </ul>
-    </nav>
+    <>
+      <nav className='px-4 py-3 navbar bg-base-300 z-10 fixed top-0 left-0 right-0 shadow-md'>
+        <div className='container mx-auto'>
+          <div className='flex justify-between items-center w-full'>
+            {/* Left section */}
+            <div className='flex items-center space-x-4'>
+              <ThemeController />
+              {status === 'authenticated' && (
+                <div className='hidden md:flex items-center space-x-2'>
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span className='font-medium'>{displayName}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Center section - main navigation */}
+            {status === 'authenticated' && (
+              <div className='flex items-center space-x-6'>
+                <Link href='/dashboard' className='nav-link'>
+                  Dashboard
+                </Link>
+                <Link href='/rooms' className='nav-link'>
+                  Rooms
+                </Link>
+                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link'>
+                  Video Lectures
+                </Link>
+                <button
+                  onClick={() => setShowCreateRoom(true)}
+                  className="btn btn-primary btn-sm normal-case flex items-center gap-2"
+                  aria-label='create discussion room'
+                >
+                  <ChatBubbleLeftRightIcon className="w-4 h-4" />
+                  <span className="hidden sm:inline">Create Room</span>
+                </button>
+              </div>
+            )}
+
+            {/* Right section - user actions */}
+            <div className='flex items-center space-x-4'>
+              {status === 'authenticated' ? (
+                <>
+                  <Link
+                    href="/mentions"
+                    className="btn btn-ghost btn-circle"
+                    aria-label='notifications'
+                  >
+                    <div className='relative'>
+                      <BellAlertIcon className='w-5 h-5' />
+                      {unreadCount > 0 && (
+                        <span className="badge badge-sm badge-primary badge-ping absolute -top-1 -right-1">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                  <div className="divider divider-horizontal mx-0"></div>
+                  <Link href='/api/auth/signout' className='btn btn-ghost btn-sm'>
+                    Sign Out
+                  </Link>
+                </>
+              ) : (
+                <Link href='/api/auth/signin' className='btn btn-primary btn-sm'>
+                  Sign In
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Create Room Modal */}
+      {showCreateRoom && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-md">
+            <h3 className="font-bold text-lg mb-4">Create Discussion Room</h3>
+            <form onSubmit={handleCreateRoom}>
+              <div className="form-control">
+                <input
+                  type="text"
+                  value={roomName}
+                  onChange={(e) => {
+                    setRoomName(e.target.value)
+                    setError(null)
+                  }}
+                  placeholder="Enter room name"
+                  className={`input input-bordered w-full ${error ? 'input-error' : ''}`}
+                  maxLength={50}
+                  autoFocus
+                  required
+                />
+                {error && (
+                  <label className="label">
+                    <span className="label-text-alt text-error">{error}</span>
+                  </label>
+                )}
+              </div>
+              <div className="modal-action">
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    setShowCreateRoom(false)
+                    setRoomName('')
+                    setError(null)
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Create Room
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="modal-backdrop" onClick={() => {
+            setShowCreateRoom(false)
+            setRoomName('')
+            setError(null)
+          }}></div>
+        </div>
+      )}
+
+      {/* Add some padding to account for fixed navbar */}
+      <div className="h-16"></div>
+    </>
   )
 }
 
 export default NavBar
+
+// Add this to your global CSS file
+const styles = `
+.nav-link {
+  @apply link link-hover font-medium transition-colors duration-200;
+}
+
+.nav-link:hover {
+  @apply text-primary;
+}
+`

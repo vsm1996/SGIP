@@ -26,7 +26,9 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const { userId, postId } = body
+  const { userId, postId, message } = body
+
+  const mentionedUsernames = [...message.matchAll(/@([^\s]+)/g)].map((match) => match[1])
 
   const validation = schema.safeParse(body)
 
@@ -35,13 +37,62 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(errorMessages, { status: 400 })
   }
 
-  const post = await prisma.comment.create({
-    data: {
-      message: body.message,
-      userId,
-      postId
+  const mentionedUsers = await prisma.user.findMany({
+    where: {
+      OR: [
+        { username: { in: mentionedUsernames } },
+        { name: { in: mentionedUsernames } }
+      ]
+    },
+    select: {
+      id: true,
+      name: true,
+      username: true
     }
-  })
+  });
 
-  return NextResponse.json(post)
+  if (mentionedUsernames.length > 0 && mentionedUsers.length === 0) {
+    return NextResponse.json({ message: 'One or more mentioned users not found' }, { status: 400 })
+  }
+
+  const newcomment = await prisma.$transaction(async (tx) => {
+    const comment = await tx.comment.create({
+      data: {
+        message,
+        userId,
+        postId
+      },
+      include: {
+        user: true,
+        commentReplies: true,
+        likes: true
+      }
+    });
+
+    if (mentionedUsers.length > 0) {
+      await tx.mention.createMany({
+        data: mentionedUsers.map(user => ({
+          userId,
+          mentionedUserId: user.id,
+          commentId: comment.id
+        }))
+      });
+
+      await tx.notification.createMany({
+        data: mentionedUsers.map(user => ({
+          userId: user.id,
+          type: 'mention',
+          message: `${comment.user.name || comment.user.username} mentioned you in a comment`
+        }))
+      });
+    }
+
+    return comment;
+  });
+
+  if (!newcomment) {
+    return NextResponse.json({ message: 'Error creating comment' }, { status: 400 })
+  }
+
+  return NextResponse.json(newcomment)
 }

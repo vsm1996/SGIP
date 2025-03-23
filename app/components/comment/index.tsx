@@ -8,8 +8,8 @@ import { Like } from '@prisma/client'
 import CommentLikeButton from '@/app/components/button/comment-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
 import CommentDeleteButton from '@/app/components/button/comment-delete'
-import { timeAgo } from '@/app/utlis'
-import { nunito, raleway } from '@/app/utlis/font'
+import { timeAgo } from '@/app/utils'
+import { nunito, raleway } from '@/app/utils/font'
 import Link from 'next/link'
 
 interface User {

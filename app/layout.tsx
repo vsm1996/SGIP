@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import AuthProvider from "./auth/Provider";
 import NavBar from "./components/navbar";
-import { nunito, raleway } from "./utlis/font";
+import { nunito, raleway } from "./utils/font";
 
 
 export const metadata: Metadata = {
