@@ -114,7 +114,7 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className='px-4 py-3 navbar bg-base-300 z-10 fixed top-0 left-0 right-0 shadow-md'>
+      <nav className='px-4 py-3 navbar bg-base-300 z-10 fixed top-0 left-0 right-0 shadow-md max-lg:text-sm'>
         <div className='container mx-auto'>
           <div className='flex justify-between items-center w-full'>
             {/* Left section */}
@@ -130,15 +130,18 @@ const NavBar = () => {
 
             {/* Center section - main navigation */}
             {status === 'authenticated' && (
-              <div className='flex items-center space-x-6'>
+              <div className='flex items-center space-x-6 '>
                 <Link href='/dashboard' className='nav-link'>
                   Dashboard
                 </Link>
                 <Link href='/rooms' className='nav-link'>
                   Rooms
                 </Link>
-                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link'>
+                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:hidden inline-block'>
                   Video Lectures
+                </Link>
+                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:inline-block hidden'>
+                  Lectures
                 </Link>
                 <button
                   onClick={() => setShowCreateRoom(true)}
@@ -152,12 +155,12 @@ const NavBar = () => {
             )}
 
             {/* Right section - user actions */}
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-4 '>
               {status === 'authenticated' ? (
                 <>
                   <Link
                     href="/mentions"
-                    className="btn btn-ghost btn-circle"
+                    className="btn btn-ghost btn-circle "
                     aria-label='notifications'
                   >
                     <div className='relative'>
