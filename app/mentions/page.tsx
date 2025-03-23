@@ -51,7 +51,7 @@ const MentionsPage = () => {
 
   const handleFetch = async () => {
     if (!session?.sub) {
-      console.log('No user sub found in session:', session)
+      // console.log('No user sub found in session:', session)
       return
     }
 
@@ -59,9 +59,9 @@ const MentionsPage = () => {
     setError([])
 
     try {
-      console.log('Fetching mentions for user:', session.sub)
+      // console.log('Fetching mentions for user:', session.sub)
       const res = await apiClient.get(`/mentions/${session.sub}`)
-      console.log('API response:', res.data)
+      // console.log('API response:', res.data)
 
       if (!res.data.mentions) {
         throw new Error('No mentions data received')
@@ -70,7 +70,7 @@ const MentionsPage = () => {
       const validMentions = res.data.mentions.filter(
         (mention: Mention) => mention && (mention.post || mention.comment || mention.commentReply)
       )
-      console.log('Valid mentions:', validMentions)
+      // console.log('Valid mentions:', validMentions)
       setMentions(validMentions)
     } catch (err) {
       console.error('Error fetching mentions:', err)
@@ -92,10 +92,10 @@ const MentionsPage = () => {
 
   useEffect(() => {
     if (status === 'authenticated' && session?.sub) {
-      console.log('Session authenticated, user sub:', session.sub)
+      // console.log('Session authenticated, user sub:', session.sub)
       handleFetch()
     } else {
-      console.log('Session status:', status, 'Session:', session)
+      // console.log('Session status:', status, 'Session:', session)
     }
   }, [status, session?.sub])
 
@@ -116,6 +116,14 @@ const MentionsPage = () => {
     }
 
     if (mention.commentReply) {
+      // console.log({
+      //   ...mention.commentReply.comment,
+      //   mentionContext: {
+      //     type: 'reply',
+      //     message: mention.commentReply.message,
+      //     user: mention.commentReply.user
+      //   }
+      // })
       return {
         ...mention.commentReply.comment.post,
         mentionContext: {

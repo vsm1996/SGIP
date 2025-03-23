@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
   const mentionedUsernames = [...message.matchAll(/@([^\s]+)/g)].map((match) => match[1])
 
-  console.log(mentionedUsernames)
+  // console.log(mentionedUsernames)
 
   // Validate data first
   const validation = schema.safeParse(body)

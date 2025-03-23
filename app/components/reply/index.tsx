@@ -35,7 +35,7 @@ const Reply = ({ reply, commentId, handleFetch }: ReplyProps) => {
     <div className='card bg-base-200 hover:bg-base-200/75 transition-all duration-200 shadow-xl ease-in-out text-base-content'>
       <div className='card-body'>
         <div className='mb-4 flex items-center gap-1'>
-          <p className={`justify-self-start font-semibold ${raleway.className}`}> {reply.user.name || reply.user.username} </p>
+          <p className={`justify-self-start font-semibold ${raleway.className}`}> {reply.user.username || reply.user.name} </p>
           <small className='text-xs opacity-45'> {timeAgo(reply.createdAt)} </small>
         </div>
         <p className={`font-extralight ${nunito.className}`}> {reply.message} </p>

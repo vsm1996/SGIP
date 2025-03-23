@@ -48,9 +48,9 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
     : host || 'localhost:1999'
 
   useEffect(() => {
-    console.log('Initializing chat for room:', roomId)
-    console.log('Using PartyKit host:', formattedHost)
-    console.log('Current session:', session)
+    // console.log('Initializing chat for room:', roomId)
+    // console.log('Using PartyKit host:', formattedHost)
+    // console.log('Current session:', session)
   }, [formattedHost, roomId, session])
 
   // Add connection status tracking
@@ -64,24 +64,24 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       'X-User-ID': session.sub
     } : undefined,
     onOpen: () => {
-      console.log(`WebSocket connected to ${formattedHost} for room ${roomId}`)
-      console.log('Connection details:', {
-        host: formattedHost,
-        room: roomId,
-        party: 'room'
-      })
+      // console.log(`WebSocket connected to ${formattedHost} for room ${roomId}`)
+      // console.log('Connection details:', {
+      //   host: formattedHost,
+      //   room: roomId,
+      //   party: 'room'
+      // })
       setError(null)
       setIsConnecting(false)
       setConnectionAttempts(0)
       setConnectionStatus('connected')
     },
     onClose: (event: CloseEvent) => {
-      console.log('WebSocket disconnected:', {
-        code: event.code,
-        reason: event.reason,
-        wasClean: event.wasClean,
-        timestamp: new Date().toISOString()
-      })
+      // console.log('WebSocket disconnected:', {
+      //   code: event.code,
+      //   reason: event.reason,
+      //   wasClean: event.wasClean,
+      //   timestamp: new Date().toISOString()
+      // })
       setConnectionAttempts(prev => prev + 1)
       setError(`Connection closed (attempt ${connectionAttempts + 1}/5). ${event.reason || 'Attempting to reconnect...'}`)
       setIsConnecting(true)
@@ -117,7 +117,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   useEffect(() => {
     const checkConnection = () => {
       if (socket.readyState === WebSocket.CLOSED) {
-        console.log('Socket is closed, attempting to reconnect...')
+        // console.log('Socket is closed, attempting to reconnect...')
         socket.reconnect()
       } else if (socket.readyState === WebSocket.CONNECTING && connectionStatus !== 'connecting') {
         setConnectionStatus('connecting')
@@ -141,16 +141,16 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       try {
-        console.log('Received message:', event.data)
+        // console.log('Received message:', event.data)
         const data = JSON.parse(event.data)
         if (data.type === 'sync') {
-          console.log('Syncing messages:', data.messages?.length || 0, 'messages')
+          // console.log('Syncing messages:', data.messages?.length || 0, 'messages')
           setMessages(data.messages || [])
           if (data.roomData) {
             setRoomData(data.roomData)
           }
         } else if (data.type === 'message') {
-          console.log('New message received:', data.message)
+          // console.log('New message received:', data.message)
           setMessages(prev => [...prev, data.message])
         } else if (data.type === 'error') {
           console.error('Server error:', data.message)
