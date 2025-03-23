@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex min-w-dvw min-h-dvh items-center justify-center max-lg:flex-col px-8 md:px-16 pt-36 pb-16 bg-gradient-to-b from-base-100 to-base-200">
+    <main className="flex min-w-dvw min-h-dvh items-center justify-center max-lg:flex-col px-8 md:px-16 py-16 bg-gradient-to-b from-base-100 to-base-200">
       <div className="max-lg:mb-10 xl:w-1/2 text-pretty text-base-content group backdrop-blur-sm bg-base-100/30 p-8 rounded-xl shadow-lg border border-base-300 animate-fade-in">
         <div className="flex items-center mb-6">
           <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mr-4">
@@ -30,7 +30,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="divider lg:divider-horizontal max-lg:my-8" />
+      <div className="divider lg:divider-horizontal max-lg:my-8 animate-fade-in-up" />
 
       <div className="xl:w-1/2 animate-fade-in-right">
         <RegisterForm />
