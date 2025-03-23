@@ -65,7 +65,7 @@ const NavBar = () => {
     }
   }, [session])
 
-  const handleCreateRoom = (e: React.FormEvent) => {
+  const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
 
@@ -86,11 +86,30 @@ const NavBar = () => {
       return
     }
 
-    // Create a URL-friendly room ID from the name
-    const roomId = encodeURIComponent(trimmedName.toLowerCase().replace(/[^a-z0-9]+/g, '-'))
-    setShowCreateRoom(false)
-    setRoomName('')
-    router.push(`/discussion/${roomId}`)
+    try {
+      // Save the room to the database
+      const response = await fetch('/api/rooms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: trimmedName }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to create room')
+      }
+
+      const room = await response.json()
+      setShowCreateRoom(false)
+      setRoomName('')
+
+      // Navigate to the room page
+      router.push(`/rooms/${room.id}`)
+    } catch (err) {
+      console.error('Error creating room:', err)
+      setError('Failed to create discussion room')
+    }
   }
 
   return (
