@@ -192,9 +192,9 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
   }
 
   return (
-    <div className="flex flex-col h-[600px] bg-base-200 rounded-lg">
+    <div className="flex flex-col h-[600px] bg-base-200/95 backdrop-blur-sm rounded-lg shadow-lg border border-base-300">
       {roomData && (
-        <div className="bg-base-300 p-4 rounded-t-lg">
+        <div className="bg-base-300/90 p-4 rounded-t-lg border-b border-base-300">
           <h2 className="text-xl font-bold">{roomData.title}</h2>
           <p className="text-sm opacity-70">Created {timeAgo(roomData.createdAt)}</p>
         </div>
@@ -233,7 +233,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
                 {timeAgo(message.createdAt)}
               </time>
             </div>
-            <div className={`chat-bubble ${message.userId === session?.sub ? 'chat-bubble-primary' : ''}`}>
+            <div className={`chat-bubble transition-colors duration-200 ${message.userId === session?.sub ? 'chat-bubble-primary' : ''}`}>
               {message.text}
             </div>
           </div>
@@ -241,7 +241,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 bg-base-300 rounded-b-lg">
+      <form onSubmit={handleSubmit} className="p-4 bg-base-300/90 rounded-b-lg border-t border-base-300">
         <div className="flex gap-2">
           <input
             type="text"
@@ -253,7 +253,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
           />
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary shadow-md hover:shadow-lg transition-all duration-200"
             disabled={!session || !newMessage.trim() || isConnecting}
           >
             Send
