@@ -123,7 +123,7 @@ const NavBar = () => {
               {status === 'authenticated' && (
                 <div className='hidden md:flex items-center space-x-2'>
                   <UserCircleIcon className="w-5 h-5" />
-                  <span className='font-medium'>{displayName}</span>
+                  <span className='text-sm'>{displayName}</span>
                 </div>
               )}
             </div>
@@ -131,8 +131,11 @@ const NavBar = () => {
             {/* Center section - main navigation */}
             {status === 'authenticated' && (
               <div className='flex items-center space-x-6 '>
-                <Link href='/dashboard' className='nav-link'>
+                <Link href='/dashboard' className='nav-link max-lg:hidden inline-block'>
                   Dashboard
+                </Link>
+                <Link href='/dashboard' className='nav-link max-lg:inline-block hidden'>
+                  Dash
                 </Link>
                 <Link href='/rooms' className='nav-link'>
                   Rooms
