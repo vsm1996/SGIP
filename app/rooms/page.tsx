@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { timeAgo } from '@/app/utils'
+import RoomCard from '@/app/components/discussion/RoomCard'
 
 interface User {
   id: string
@@ -138,29 +139,10 @@ export default function RoomsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {rooms.map(room => (
-            <Link
-              key={room.id}
-              href={`/rooms/${room.id}`}
-              className="card bg-base-200 hover:bg-base-300 transition-colors"
-            >
-              <div className="card-body">
-                <h2 className="card-title">{room.title}</h2>
-                <p className="text-sm opacity-70">
-                  Created by {getDisplayName(room.createdBy)} {timeAgo(room.createdAt)}
-                </p>
-                <div className="flex justify-between items-center mt-4">
-                  <span className="text-sm">
-                    {room._count.messages} messages
-                  </span>
-                  <span className="text-sm">
-                    {room.participants.length} participants
-                  </span>
-                </div>
-              </div>
-            </Link>
+            <RoomCard key={room.id} room={room} />
           ))}
         </div>
       )}
     </div>
   )
-} 
+}

@@ -21,6 +21,7 @@ export default function DiscussionPage() {
 
   return (
     <div className="container mx-auto p-4">
+      {/* Display the room name by decoding the URI-encoded roomId and replacing hyphens with spaces */}
       <h1 className="text-2xl font-bold mb-4">
         Discussion: {decodeURIComponent(roomId).replace(/-/g, ' ')}
       </h1>

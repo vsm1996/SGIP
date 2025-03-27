@@ -131,19 +131,19 @@ const NavBar = () => {
             {/* Center section - main navigation */}
             {status === 'authenticated' && (
               <div className='flex items-center space-x-6 '>
-                <Link href='/dashboard' className='nav-link max-lg:hidden inline-block'>
+                <Link href='/dashboard' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Dashboard
                 </Link>
-                <Link href='/dashboard' className='nav-link max-lg:inline-block hidden'>
+                <Link href='/dashboard' className='nav-link max-lg:inline-block hidden hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Dash
                 </Link>
-                <Link href='/rooms' className='nav-link'>
+                <Link href='/rooms' className='nav-link hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Rooms
                 </Link>
-                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:hidden inline-block'>
+                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Video Lectures
                 </Link>
-                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:inline-block hidden'>
+                <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:inline-block hidden hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Lectures
                 </Link>
                 <button
@@ -163,7 +163,7 @@ const NavBar = () => {
                 <>
                   <Link
                     href="/mentions"
-                    className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                    className="btn btn-ghost btn-circle hover:bg-base-300/50 m-0 md:m-[initial]"
                     aria-label='notifications'
                   >
                     <div className='relative'>
@@ -175,13 +175,13 @@ const NavBar = () => {
                       )}
                     </div>
                   </Link>
-                  <div className="divider divider-horizontal mx-0"></div>
-                  <Link href='/api/auth/signout' className='btn btn-ghost btn-sm'>
+                  <div className="divider divider-horizontal m-0 md:m-[initial]"></div>
+                  <Link href='/api/auth/signout' className='btn btn-ghost btn-sm hover:border-b-2 transition-all duration-100 ease-in-out m-0 md:m-[initial]'>
                     Sign Out
                   </Link>
                 </>
               ) : (
-                <Link href='/api/auth/signin' className='btn btn-primary btn-sm'>
+                <Link href='/api/auth/signin' className='btn btn-primary btn-sm hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Sign In
                 </Link>
               )}

@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="aqua" className={`${nunito.className, raleway.className}`}>
+    <html lang="en" data-theme="corporate" className={`${nunito.className, raleway.className}`}>
       <body>
         <SpeedInsights />
         <Analytics />
