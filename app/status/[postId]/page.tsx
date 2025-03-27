@@ -40,7 +40,7 @@ const PostStatusPage = () => {
   }, [])
 
   return (
-    <div className='flex flex-col items-center justify-center px-0 py-20 md:py-36 w-full'>
+    <div className='flex flex-col items-center justify-center px-0 py-6 md:py-10 w-full'>
       {errorMessage && <p>{errorMessage}</p>}
       {isLoading && <Loading />}
       <div className='w-full p-6 md:p-0 md:w-1/2'>

@@ -5,21 +5,61 @@
 
 @plugin "daisyui" {
   themes:
-    aqua --default,
+    corporate --default,
     luxury --prefersdark;
 }
 
+
+@plugin "daisyui/theme" {
+  name: "highkeydream";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(97% 0.013 236.62);
+  --color-base-200: oklch(95% 0.026 236.824);
+  --color-base-300: oklch(90% 0.058 230.902);
+  --color-base-content: oklch(39% 0.09 240.876);
+  --color-primary: oklch(70% 0.183 293.541);
+  --color-primary-content: oklch(28% 0.141 291.089);
+  --color-secondary: oklch(70% 0.191 22.216);
+  --color-secondary-content: oklch(25% 0.092 26.042);
+  --color-accent: oklch(77% 0.152 181.912);
+  --color-accent-content: oklch(27% 0.046 192.524);
+  --color-neutral: oklch(29% 0.066 243.157);
+  --color-neutral-content: oklch(97% 0.013 236.62);
+  --color-info: oklch(60% 0.126 221.723);
+  --color-info-content: oklch(98% 0.019 200.873);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(98% 0.018 155.826);
+  --color-warning: oklch(68% 0.162 75.834);
+  --color-warning-content: oklch(98% 0.026 102.212);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
+  --radius-selector: 0.5rem;
+  --radius-field: 0.25rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
+}
+
+/* GRADIENTS */
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
   --background-image-gradient-conic: conic-gradient(
     from 180deg at 50% 50%,
     var(--tw-gradient-stops)
   );
+}
 
-  --animate-wiggle: wiggle 0.9s ease-in-out infinite;
-  --animate-fade-in: fadeIn 0.9s ease-out forwards;
-  --animate-fade-in-up: fadeInUp 0.9s ease-out forwards;
-  --animate-fade-in-right: fadeInRight 0.9s ease-out forwards;
+/* ANIMATIONS */
+@theme {
+  --animate-wiggle: wiggle 1.11s ease-in-out infinite;
+  --animate-fade-in: fadeIn 2.22s ease-out forwards;
+  --animate-fade-in-up: fadeInUp 2.22s ease-out forwards;
+  --animate-fade-in-right: fadeInRight 2.22s ease-out forwards;
 
   @keyframes fadeIn {
     0% {
@@ -43,7 +83,7 @@
   @keyframes fadeInUp {
     0% {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(33px);
     }
     100% {
       opacity: 1;
@@ -53,7 +93,7 @@
   @keyframes fadeInRight {
     0% {
       opacity: 0;
-      transform: translateX(-35px);
+      transform: translateX(-33px);
     }
     100% {
       opacity: 1;
@@ -63,10 +103,10 @@
   @keyframes wiggle {
     0%,
     100% {
-      transform: rotate(-10deg);
+      transform: rotate(-11deg);
     }
     50% {
-      transform: rotate(10deg);
+      transform: rotate(11deg);
     }
   }
 }
