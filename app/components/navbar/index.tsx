@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { BellAlertIcon, ChatBubbleLeftRightIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { BellAlertIcon, BookmarkIcon, ChatBubbleLeftRightIcon, UserCircleIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import ThemeController from '../themeController'
 import apiClient from '@/app/services/api-client'
 
@@ -27,6 +27,7 @@ const NavBar = () => {
   const [showCreateRoom, setShowCreateRoom] = useState(false)
   const [roomName, setRoomName] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
 
   const displayName = session?.user?.username ||
@@ -128,9 +129,22 @@ const NavBar = () => {
               )}
             </div>
 
-            {/* Center section - main navigation */}
+            {/* Mobile menu button - only visible on small screens */}
+            <button
+              className="md:hidden btn btn-ghost btn-circle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <XMarkIcon className="w-6 h-6" />
+              ) : (
+                <Bars3Icon className="w-6 h-6" />
+              )}
+            </button>
+
+            {/* Center section - main navigation - hidden on mobile */}
             {status === 'authenticated' && (
-              <div className='flex items-center space-x-6 '>
+              <div className='hidden md:flex items-center space-x-6'>
                 <Link href='/dashboard' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Dashboard
                 </Link>
@@ -152,18 +166,25 @@ const NavBar = () => {
                   aria-label='create discussion room'
                 >
                   <ChatBubbleLeftRightIcon className="w-4 h-4" />
-                  <span className="hidden sm:inline">Create Room</span>
+                  <span className="inline">Create Room</span>
                 </button>
               </div>
             )}
 
             {/* Right section - user actions */}
-            <div className='flex items-center space-x-4 '>
+            <div className='hidden md:flex items-center space-x-4'>
               {status === 'authenticated' ? (
                 <>
                   <Link
+                    href="/bookmarks"
+                    className="btn btn-ghost btn-circle hover:bg-base-300/50 m-0"
+                    aria-label='bookmarks'
+                  >
+                    <BookmarkIcon className='w-5 h-5' />
+                  </Link>
+                  <Link
                     href="/mentions"
-                    className="btn btn-ghost btn-circle hover:bg-base-300/50 m-0 md:m-[initial]"
+                    className="btn btn-ghost btn-circle hover:bg-base-300/50"
                     aria-label='notifications'
                   >
                     <div className='relative'>
@@ -175,8 +196,8 @@ const NavBar = () => {
                       )}
                     </div>
                   </Link>
-                  <div className="divider divider-horizontal m-0 md:m-[initial]"></div>
-                  <Link href='/api/auth/signout' className='btn btn-ghost btn-sm hover:border-b-2 transition-all duration-100 ease-in-out m-0 md:m-[initial]'>
+                  <div className="divider divider-horizontal"></div>
+                  <Link href='/api/auth/signout' className='btn btn-ghost btn-sm hover:border-b-2 transition-all duration-100 ease-in-out'>
                     Sign Out
                   </Link>
                 </>
@@ -189,6 +210,82 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
+
+      {/* Mobile menu - slide down when open */}
+      {mobileMenuOpen && status === 'authenticated' && (
+        <div className="fixed top-16 left-0 right-0 bg-base-200/95 backdrop-blur-sm z-10 shadow-lg border-b border-base-300 md:hidden">
+          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <Link
+              href='/dashboard'
+              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href='/rooms'
+              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Rooms
+            </Link>
+            <Link
+              target="_blank"
+              href='https://www.youtube.com/@george128306'
+              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Lectures
+            </Link>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false)
+                setShowCreateRoom(true)
+              }}
+              className="btn btn-primary btn-sm normal-case flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 w-full justify-center"
+              aria-label='create discussion room'
+            >
+              <ChatBubbleLeftRightIcon className="w-4 h-4" />
+              <span>Create Room</span>
+            </button>
+
+            <div className="flex justify-between items-center pt-2 border-t border-base-300">
+              <div className="flex space-x-4">
+                <Link
+                  href="/bookmarks"
+                  className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                  aria-label='bookmarks'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <BookmarkIcon className='w-5 h-5' />
+                </Link>
+                <Link
+                  href="/mentions"
+                  className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                  aria-label='notifications'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className='relative'>
+                    <BellAlertIcon className='w-5 h-5' />
+                    {unreadCount > 0 && (
+                      <span className="badge badge-sm badge-primary badge-ping absolute -top-1 -right-1">
+                        {unreadCount}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              </div>
+              <Link
+                href='/api/auth/signout'
+                className='btn btn-ghost btn-sm'
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Sign Out
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Create Room Modal */}
       {showCreateRoom && (

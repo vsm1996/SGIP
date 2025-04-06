@@ -7,6 +7,9 @@ import { AxiosError } from 'axios'
 import Post from '../components/post'
 import Loading from '../components/loading'
 import ErrorMessage from '../components/errorMessage'
+import dynamic from 'next/dynamic'
+
+const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
 
 interface User {
   id: string
@@ -38,7 +41,10 @@ interface Mention {
     message: string
     user: User
     comment: {
-      post: Post
+      id: string
+      post: Post,
+      message: string,
+      user: User
     }
   }
 }
@@ -116,20 +122,46 @@ const MentionsPage = () => {
     }
 
     if (mention.commentReply) {
-      // console.log({
-      //   ...mention.commentReply.comment,
-      //   mentionContext: {
-      //     type: 'reply',
-      //     message: mention.commentReply.message,
-      //     user: mention.commentReply.user
-      //   }
-      // })
+      // Include both the comment reply and the parent comment information
+      // First, ensure we have all the required data
+      if (!mention.commentReply.comment) {
+        console.error('Invalid comment reply structure - missing comment:', mention.commentReply);
+        return null;
+      }
+
+      const comment = mention.commentReply.comment;
+
+      console.log(comment)
+
+      // Check if post exists in the comment
+      if (!comment.post) {
+        console.error('Invalid comment reply structure - missing post:', comment);
+        return null;
+      }
+
+      // Safely access nested properties
+      const commentId = comment.id;
+      const commentMessage = comment.message;
+      const commentUser = comment.user;
+
+      if (!commentId || !commentUser) {
+        console.error('Missing required comment data:', comment);
+        return null;
+      }
+
       return {
-        ...mention.commentReply.comment.post,
+        ...comment,
         mentionContext: {
           type: 'reply',
           message: mention.commentReply.message,
-          user: mention.commentReply.user
+          user: mention.commentReply.user,
+          commentId: commentId, // Add the comment ID to properly link to the comment
+          parentComment: {
+            id: commentId,
+            // The API now includes the message property, but we still need to handle cases where it might be undefined
+            message: commentMessage ?? 'Original comment',
+            user: commentUser
+          }
         }
       }
     }
@@ -188,7 +220,7 @@ const MentionsPage = () => {
             const post = getPostFromMention(mention)
             return post ? (
               <div key={mention.id} className='bg-base-200 rounded-lg p-4'>
-                <Post post={post} handleFetch={handleFetch} />
+                <DynamicPost post={post} handleFetch={handleFetch} />
               </div>
             ) : null
           })

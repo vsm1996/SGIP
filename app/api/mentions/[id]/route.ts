@@ -61,7 +61,11 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
         }
       },
       comment: {
-        include: {
+        select: {
+          id: true,
+          userId: true,
+          createdAt: true,
+          message: true,
           user: {
             select: {
               id: true,
@@ -97,7 +101,8 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
         }
       },
       commentReply: {
-        include: {
+        select: {
+          message: true,
           user: {
             select: {
               id: true,
@@ -113,7 +118,17 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
             }
           },
           comment: {
-            include: {
+            select: {
+              id: true,
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  username: true,
+                  image: true
+                }
+              },
+              message: true,
               post: {
                 include: {
                   user: {

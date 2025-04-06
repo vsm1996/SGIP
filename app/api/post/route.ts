@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const { userId, message } = body
+  const { userId, message, content, isRichText = false } = body
 
   const mentionedUsernames = [...message.matchAll(/@([^\s]+)/g)].map((match) => match[1])
 
@@ -56,6 +56,8 @@ export async function POST(request: NextRequest) {
     const post = await tx.post.create({
       data: {
         message,
+        content,
+        isRichText,
         userId
       },
       include: {
