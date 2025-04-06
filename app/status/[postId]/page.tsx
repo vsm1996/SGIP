@@ -10,6 +10,9 @@ import Comment from '@/app/components/comment'
 import CreateComment from './createComment'
 import Loading from '@/app/components/loading';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const DynamicPost = dynamic(() => import('@/app/components/post'), { ssr: false })
 
 const PostStatusPage = () => {
   const [post, setPost] = useState<any>(null)
@@ -54,7 +57,7 @@ const PostStatusPage = () => {
             </small>
           </span>
         </Link>
-        {post && <Post post={post} handleFetch={handleFetch} />}
+        {post && <DynamicPost post={post} handleFetch={handleFetch} />}
         {post && <CreateComment handleComment={handleFetch} postId={post.id} />}
         {post?.comments.length > 0 &&
           <div className='border border-base-300 rounded-lg p-4 md:p-5'>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface PostShareButtonProps {
   postId: string;
@@ -10,10 +10,16 @@ interface PostShareButtonProps {
 const PostShareButton = ({ postId, postUrl }: PostShareButtonProps) => {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
 
-
+  // Set isBrowser to true once component mounts (client-side only)
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   const handleCopyLink = () => {
+    if (!isBrowser || !postUrl) return;
+
     navigator.clipboard.writeText(postUrl);
     setCopied(true);
 
@@ -21,6 +27,8 @@ const PostShareButton = ({ postId, postUrl }: PostShareButtonProps) => {
   };
 
   const handleShare = (platform: string) => {
+    if (!isBrowser || !postUrl) return;
+
     let shareUrl = '';
     const encodedUrl = encodeURIComponent(postUrl);
     const encodedText = encodeURIComponent('Check out this post!');
@@ -41,11 +49,14 @@ const PostShareButton = ({ postId, postUrl }: PostShareButtonProps) => {
         return;
     }
 
-    const anchor = document.createElement('a');
-    anchor.href = shareUrl;
-    anchor.target = '_blank';
-    anchor.rel = 'noopener noreferrer';
-    anchor.click();
+    // Only create and click anchor element if in browser environment
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const anchor = document.createElement('a');
+      anchor.href = shareUrl;
+      anchor.target = '_blank';
+      anchor.rel = 'noopener noreferrer';
+      anchor.click();
+    }
 
     setShowShareOptions(false);
   };

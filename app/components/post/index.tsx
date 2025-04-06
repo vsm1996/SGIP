@@ -38,7 +38,11 @@ const Post = ({ post, handleFetch }: PostProps) => {
 
     // Set the post URL only after component is mounted (client-side)
     if (typeof window !== 'undefined') {
-      setPostUrl(`${window.location.origin}/status/${post.id}`)
+      if (process.env.NODE_ENV === 'production') {
+        setPostUrl(`https://sgip-dev.vercel.app/status/${post.id}`)
+      } else {
+        setPostUrl(`${window.location.origin}/status/${post.id}`)
+      }
     }
   }, [session, post.likes, post.id])
 
@@ -97,7 +101,8 @@ const Post = ({ post, handleFetch }: PostProps) => {
           {/* Right side - Actions */}
           <div className='flex items-center gap-3'>
             {session && <PostBookmarkButton session={session} postId={post.id} />}
-            <PostShareButton postId={post.id} postUrl={postUrl} />
+            {/* Only render PostShareButton on client-side when postUrl is available */}
+            {typeof window !== 'undefined' && <PostShareButton postId={post.id} postUrl={postUrl || `${window.location.origin}/status/${post.id}`} />}
             {session && post.userId === session!.sub && (
               <PostDeleteButton postId={post.id} handleFetch={handleFetch} />
             )}

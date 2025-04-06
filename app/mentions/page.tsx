@@ -7,6 +7,9 @@ import { AxiosError } from 'axios'
 import Post from '../components/post'
 import Loading from '../components/loading'
 import ErrorMessage from '../components/errorMessage'
+import dynamic from 'next/dynamic'
+
+const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
 
 interface User {
   id: string
@@ -217,7 +220,7 @@ const MentionsPage = () => {
             const post = getPostFromMention(mention)
             return post ? (
               <div key={mention.id} className='bg-base-200 rounded-lg p-4'>
-                <Post post={post} handleFetch={handleFetch} />
+                <DynamicPost post={post} handleFetch={handleFetch} />
               </div>
             ) : null
           })

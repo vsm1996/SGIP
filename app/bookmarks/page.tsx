@@ -8,6 +8,9 @@ import Post from '../components/post';
 import Loading from '../components/loading';
 import ErrorMessage from '../components/errorMessage';
 import { BookmarkIcon } from '@heroicons/react/24/outline';
+import dynamic from "next/dynamic";
+
+const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
 
 interface BookmarkedPost {
   id: string;
@@ -110,7 +113,7 @@ const BookmarksPage = () => {
             <div className="space-y-4">
               {bookmarks.map((bookmark) => (
                 <div key={bookmark.id} className="bg-base-200 rounded-lg p-4">
-                  <Post key={bookmark.id} post={bookmark.post} handleFetch={handleFetch} />
+                  <DynamicPost key={bookmark.id} post={bookmark.post} handleFetch={handleFetch} />
                 </div>
               ))}
             </div>

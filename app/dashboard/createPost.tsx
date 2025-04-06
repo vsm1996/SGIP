@@ -5,10 +5,13 @@ import { useSession } from 'next-auth/react'
 import apiClient from '@/app/services/api-client'
 import ErrorMessage from '@/app/components/errorMessage'
 import RichTextEditor from '@/app/components/post/rich-text-editor'
+import dynamic from 'next/dynamic'
 
 interface CreatePostProps {
   handlePost: () => void;
 }
+
+const DynamicEditor = dynamic(() => import('@/app/components/post/rich-text-editor'), { ssr: false })
 
 const CreatePost = ({ handlePost }: CreatePostProps) => {
   const { data: session } = useSession()
@@ -67,7 +70,7 @@ const CreatePost = ({ handlePost }: CreatePostProps) => {
           </div>
 
           {useRichText ? (
-            <RichTextEditor
+            <DynamicEditor
               onChange={handleRichTextChange}
               placeholder="What's on your mind?"
             />
