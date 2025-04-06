@@ -13,6 +13,7 @@ import PostShareButton from '@/app/components/button/post-share'
 
 import { timeAgo } from '@/app/utils'
 import { nunito, raleway } from '@/app/utils/font'
+import { usePathname } from 'next/navigation'
 
 interface PostProps {
   post: any,
@@ -25,6 +26,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
   const [showRichContent, setShowRichContent] = useState<boolean>(false)
   const [postUrl, setPostUrl] = useState<string>('')
 
+  const pathname = usePathname()
+
+  console.log(pathname)
+
   useEffect(() => {
     if (session && post.likes) {
       let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
@@ -32,7 +37,9 @@ const Post = ({ post, handleFetch }: PostProps) => {
     }
 
     // Set the post URL only after component is mounted (client-side)
-    setPostUrl(`${window.location.origin}/status/${post.id}`)
+    if (typeof window !== 'undefined') {
+      setPostUrl(`${window.location.origin}/status/${post.id}`)
+    }
   }, [session, post.likes, post.id])
 
   return (

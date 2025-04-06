@@ -41,7 +41,11 @@ const PostShareButton = ({ postId, postUrl }: PostShareButtonProps) => {
         return;
     }
 
-    window.open(shareUrl, '_blank');
+    const anchor = document.createElement('a');
+    anchor.href = shareUrl;
+    anchor.target = '_blank';
+    anchor.rel = 'noopener noreferrer';
+    anchor.click();
 
     setShowShareOptions(false);
   };
