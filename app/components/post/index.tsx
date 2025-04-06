@@ -23,13 +23,17 @@ const Post = ({ post, handleFetch }: PostProps) => {
   const { data: session } = useSession()
   const [liked, setLiked] = useState<boolean>(false)
   const [showRichContent, setShowRichContent] = useState<boolean>(false)
+  const [postUrl, setPostUrl] = useState<string>('')
 
   useEffect(() => {
     if (session && post.likes) {
       let userLiked = session && post.likes?.some((like: Like) => like!.userId === session!.sub)
       if (userLiked) setLiked(true)
     }
-  }, [session, post.likes])
+
+    // Set the post URL only after component is mounted (client-side)
+    setPostUrl(`${window.location.origin}/status/${post.id}`)
+  }, [session, post.likes, post.id])
 
   return (
     <div className='card bg-base-200/95 backdrop-blur-sm shadow-xl mb-5 hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
@@ -86,7 +90,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
           {/* Right side - Actions */}
           <div className='flex items-center gap-3'>
             {session && <PostBookmarkButton session={session} postId={post.id} />}
-            <PostShareButton postId={post.id} postUrl={`${window.location.origin}/status/${post.id}`} />
+            <PostShareButton postId={post.id} postUrl={postUrl} />
             {session && post.userId === session!.sub && (
               <PostDeleteButton postId={post.id} handleFetch={handleFetch} />
             )}

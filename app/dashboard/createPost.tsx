@@ -28,7 +28,7 @@ const CreatePost = ({ handlePost }: CreatePostProps) => {
       .post(`/post`, {
         message,
         userId: session.sub,
-        content: useRichText ? content : null,
+        content: content || "",
         isRichText: useRichText
       })
       .then(res => {
