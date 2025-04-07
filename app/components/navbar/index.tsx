@@ -212,77 +212,101 @@ const NavBar = () => {
       </nav>
 
       {/* Mobile menu - slide down when open */}
-      {mobileMenuOpen && status === 'authenticated' && (
-        <div className="fixed top-16 left-0 right-0 bg-base-200/95 backdrop-blur-sm z-10 shadow-lg border-b border-base-300 md:hidden">
+      {mobileMenuOpen && (
+        <div className="fixed top-16 left-0 right-0 bg-base-200/95 backdrop-blur-sm z-50 shadow-lg border-b border-base-300 md:hidden">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link
-              href='/dashboard'
-              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Dashboard
-            </Link>
-            <Link
-              href='/rooms'
-              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Rooms
-            </Link>
-            <Link
-              target="_blank"
-              href='https://www.youtube.com/@george128306'
-              className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Lectures
-            </Link>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false)
-                setShowCreateRoom(true)
-              }}
-              className="btn btn-primary btn-sm normal-case flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 w-full justify-center"
-              aria-label='create discussion room'
-            >
-              <ChatBubbleLeftRightIcon className="w-4 h-4" />
-              <span>Create Room</span>
-            </button>
+            {status === 'authenticated' ? (
+              <>
+                <Link
+                  href='/dashboard'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href='/rooms'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Rooms
+                </Link>
+                <Link
+                  target="_blank"
+                  href='https://www.youtube.com/@george128306'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Lectures
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    setShowCreateRoom(true)
+                  }}
+                  className="btn btn-primary btn-sm normal-case flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-200 w-full justify-center"
+                  aria-label='create discussion room'
+                >
+                  <ChatBubbleLeftRightIcon className="w-4 h-4" />
+                  <span>Create Room</span>
+                </button>
 
-            <div className="flex justify-between items-center pt-2 border-t border-base-300">
-              <div className="flex space-x-4">
-                <Link
-                  href="/bookmarks"
-                  className="btn btn-ghost btn-circle hover:bg-base-300/50"
-                  aria-label='bookmarks'
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <BookmarkIcon className='w-5 h-5' />
-                </Link>
-                <Link
-                  href="/mentions"
-                  className="btn btn-ghost btn-circle hover:bg-base-300/50"
-                  aria-label='notifications'
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <div className='relative'>
-                    <BellAlertIcon className='w-5 h-5' />
-                    {unreadCount > 0 && (
-                      <span className="badge badge-sm badge-primary badge-ping absolute -top-1 -right-1">
-                        {unreadCount}
-                      </span>
-                    )}
+                <div className="flex justify-between items-center pt-2 border-t border-base-300">
+                  <div className="flex space-x-4">
+                    <Link
+                      href="/bookmarks"
+                      className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                      aria-label='bookmarks'
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <BookmarkIcon className='w-5 h-5' />
+                    </Link>
+                    <Link
+                      href="/mentions"
+                      className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                      aria-label='notifications'
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <div className='relative'>
+                        <BellAlertIcon className='w-5 h-5' />
+                        {unreadCount > 0 && (
+                          <span className="badge badge-sm badge-primary badge-ping absolute -top-1 -right-1">
+                            {unreadCount}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
                   </div>
+                  <Link
+                    href='/api/auth/signout'
+                    className='btn btn-ghost btn-sm'
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign Out
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  target="_blank"
+                  href='https://www.youtube.com/@george128306'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Video Lectures
                 </Link>
-              </div>
-              <Link
-                href='/api/auth/signout'
-                className='btn btn-ghost btn-sm'
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Sign Out
-              </Link>
-            </div>
+                <div className="pt-2 border-t border-base-300">
+                  <Link
+                    href='/api/auth/signin'
+                    className='btn btn-primary btn-sm w-full justify-center'
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

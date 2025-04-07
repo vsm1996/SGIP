@@ -32,7 +32,7 @@ export default function Home() {
 
       <div className="divider lg:divider-horizontal max-lg:my-8 animate-fade-in-up" />
 
-      <div className="xl:w-1/2 animate-fade-in-right">
+      <div className="w-full xl:w-1/2 animate-fade-in-right">
         <RegisterForm />
       </div>
     </main>
