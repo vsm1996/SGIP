@@ -10,7 +10,7 @@ const NichirenLibrary = ({ children }: Readonly<{
   return (
     <div className="drawer md:drawer-open">
       <input id="nichiren-library-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center py-10 md:py-10">
+      <div className="drawer-content flex flex-col items-center md:py-10">
         {/* Page content here */}
         <label htmlFor="nichiren-library-drawer" className="btn btn-neutral-content drawer-button md:hidden self-start mx-6 my-5">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
