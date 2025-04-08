@@ -22,7 +22,7 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
   return NextResponse.json(reply)
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   const body = await request.json();
 
   const { userId, commentId, message } = body

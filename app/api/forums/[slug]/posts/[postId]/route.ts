@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import prisma from "@/prisma/client";
+
+import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: Promise<{ slug: string, postId: string }> }
 ) {
-  const { slug } = await props.params;
   try {
+    const { slug, postId } = await props.params;
+
     const forum = await prisma.forum.findUnique({
       where: { slug },
     });
@@ -20,12 +22,12 @@ export async function GET(
       );
     }
 
-    const posts = await prisma.post.findMany({
-      where: { forumId: forum.id },
-      orderBy: { createdAt: 'desc' },
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
       include: {
         user: {
           select: {
+            id: true,
             username: true,
             name: true,
           },
@@ -39,21 +41,27 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(posts);
+    if (!post || post.forumId !== forum.id) {
+      return NextResponse.json(
+        { error: 'Post not found in this forum' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(post);
   } catch (error) {
-    console.error('Error fetching forum posts:', error);
+    console.error('Error fetching forum post:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch forum posts' },
+      { error: 'Failed to fetch post' },
       { status: 500 }
     );
   }
 }
 
-export async function POST(
+export async function DELETE(
   request: NextRequest,
-  props: { params: Promise<{ slug: string }> }
+  props: { params: Promise<{ slug: string, postId: string }> }
 ) {
-  const { slug } = await props.params;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.sub) {
@@ -63,6 +71,8 @@ export async function POST(
       );
     }
 
+    const { slug, postId } = await props.params;
+
     const forum = await prisma.forum.findUnique({
       where: { slug },
     });
@@ -74,44 +84,34 @@ export async function POST(
       );
     }
 
-    const { title, content } = await request.json();
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      include: { user: true },
+    });
 
-    if (!title?.trim() || !content?.trim()) {
+    if (!post || post.forumId !== forum.id) {
       return NextResponse.json(
-        { error: 'Title and content are required' },
-        { status: 400 }
+        { error: 'Post not found in this forum' },
+        { status: 404 }
       );
     }
 
-    const post = await prisma.post.create({
-      data: {
-        message: title,
-        content,
-        isRichText: true,
-        userId: session.sub,
-        forumId: forum.id,
-      },
-      include: {
-        user: {
-          select: {
-            username: true,
-            name: true,
-          },
-        },
-        _count: {
-          select: {
-            comments: true,
-            likes: true,
-          },
-        },
-      },
+    if (post.userId !== session.sub) {
+      return NextResponse.json(
+        { error: 'Unauthorized to delete this post' },
+        { status: 403 }
+      );
+    }
+
+    await prisma.post.delete({
+      where: { id: postId },
     });
 
-    return NextResponse.json(post);
+    return NextResponse.json({ message: 'Post deleted successfully' });
   } catch (error) {
-    console.error('Error creating forum post:', error);
+    console.error('Error deleting forum post:', error);
     return NextResponse.json(
-      { error: 'Failed to create post' },
+      { error: 'Failed to delete post' },
       { status: 500 }
     );
   }

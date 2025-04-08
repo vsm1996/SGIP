@@ -24,7 +24,7 @@ const Timeline = () => {
     apiClient
       .get('/post')
       .then(async (res: AxiosResponse) => {
-        const newData = await res.data.reverse()
+        const newData = await res.data
         setPosts(newData)
       })
       .catch((err) => {

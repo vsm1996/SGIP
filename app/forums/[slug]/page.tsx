@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import ForumPost from '@/app/components/post/forum-post';
 
 interface Forum {
   id: string;
@@ -23,7 +24,9 @@ interface Post {
   message: string;
   content: string;
   createdAt: string;
+  userId: string;
   user: {
+    id: string;
     username: string;
     name: string;
   };
@@ -144,9 +147,12 @@ export default function ForumPage() {
           <Link href="/forums" className="btn btn-ghost btn-sm">
             ← Back to Forums
           </Link>
-          <h1 className="text-3xl font-bold">{forum.title}</h1>
         </div>
-        <p className="text-neutral-content/70">{forum.description}</p>
+        <div className='flex flex-col items-center justify-center'>
+
+          <h1 className="text-3xl font-bold uppercase">{forum.title}</h1>
+          <p className="text-neutral-content/70">{forum.description}</p>
+        </div>
       </div>
 
       <div className="mb-8">
@@ -198,19 +204,11 @@ export default function ForumPage() {
           </div>
         ) : (
           posts.map(post => (
-            <div key={post.id} className="card bg-base-200">
-              <div className="card-body">
-                <h3 className="card-title">{post.message}</h3>
-                <p className="whitespace-pre-wrap">{post.content}</p>
-                <div className="flex justify-between items-center mt-4 text-sm text-neutral-content/60">
-                  <span>Posted by {post.user.username || post.user.name}</span>
-                  <div className="flex items-center gap-4">
-                    <span>{post._count.comments} comments</span>
-                    <span>{post._count.likes} likes</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ForumPost
+              key={post.id}
+              post={post}
+              forumSlug={params.slug as string}
+            />
           ))
         )}
       </div>

@@ -3,11 +3,12 @@ import prisma from "@/prisma/client";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  props: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await props.params;
     const forum = await prisma.forum.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
       include: {
         creator: {
           select: {
