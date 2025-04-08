@@ -6,11 +6,35 @@ export const revalidate = 0
 
 export async function GET(request: NextRequest) {
   const posts = await prisma.post.findMany({
-    include: {
-      user: true,
-      comments: true,
-      likes: true,
+    where: {
+      forumId: null // Only fetch non-forum posts
     },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          username: true,
+        }
+      },
+      comments: {
+        include: {
+          user: true,
+          commentReplies: true,
+          likes: true
+        }
+      },
+      likes: true,
+      _count: {
+        select: {
+          comments: true,
+          likes: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
   })
   return NextResponse.json(posts)
 }
@@ -58,7 +82,8 @@ export async function POST(request: NextRequest) {
         message,
         content,
         isRichText,
-        userId
+        userId,
+        forumId: null // Making forumId explicitly null for non-forum posts
       },
       include: {
         user: true,

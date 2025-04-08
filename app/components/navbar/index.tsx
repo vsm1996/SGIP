@@ -154,6 +154,9 @@ const NavBar = () => {
                 <Link href='/rooms' className='nav-link hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Rooms
                 </Link>
+                <Link href='/forums' className='nav-link hover:border-b-2 transition-all duration-100 ease-in-out'>
+                  Forums
+                </Link>
                 <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Video Lectures
                 </Link>
@@ -230,6 +233,13 @@ const NavBar = () => {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Rooms
+                </Link>
+                <Link
+                  href='/forums'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Forums
                 </Link>
                 <Link
                   target="_blank"
