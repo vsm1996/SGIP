@@ -48,6 +48,8 @@ model User {
   likes             Like[]
   mentionsReceived  Mention[]        @relation("mentionedUser")
   mentionsSent      Mention[]        @relation("mentionAuthor")
+  createdForums     Forum[]          @relation("ForumCreator")
+  moderatedForums   ForumModerator[]
   notifications     Notification[]
   posts             Post[]
   reactions         Reaction[]
@@ -74,21 +76,51 @@ model Discussion {
 }
 
 model Post {
-  id           String         @id @default(cuid())
-  createdAt    DateTime       @default(now())
-  message      String         @db.Text
-  content      String?        @db.Text
-  isRichText   Boolean        @default(false)
-  userId       String
-  sessionId    String?
-  comments     Comment[]
-  likes        Like[]
-  mentions     Mention[]
-  reactions    Reaction[]
-  bookmarks    Bookmark[]
-  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String     @id @default(cuid())
+  createdAt  DateTime   @default(now())
+  message    String     @db.Text
+  content    String?    @db.Text
+  isRichText Boolean    @default(false)
+  userId     String
+  sessionId  String?
+  forumId    String?
+  comments   Comment[]
+  likes      Like[]
+  mentions   Mention[]
+  reactions  Reaction[]
+  bookmarks  Bookmark[]
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forum      Forum?     @relation(fields: [forumId], references: [id])
 
   @@index([userId], map: "Post_userId_fkey")
+  @@index([forumId])
+}
+
+model Forum {
+  id          String           @id @default(cuid())
+  title       String           @db.Text
+  description String           @db.Text
+  slug        String           @unique
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  creatorId   String
+  creator     User             @relation("ForumCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  moderators  ForumModerator[]
+  posts       Post[]
+
+  @@index([creatorId])
+}
+
+model ForumModerator {
+  id        String   @id @default(cuid())
+  forumId   String
+  userId    String
+  createdAt DateTime @default(now())
+  forum     Forum    @relation(fields: [forumId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([forumId])
+  @@index([userId])
 }
 
 model Comment {
@@ -112,13 +144,13 @@ model Comment {
 }
 
 model CommentReply {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  message   String    @db.Text
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  message   String     @db.Text
   userId    String
   commentId String?
-  comment   Comment?  @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment?   @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes     Like[]
   mentions  Mention[]
   reactions Reaction[] @relation("CommentReplyReactions")
@@ -238,8 +270,6 @@ model Bookmark {
   @@index([postId], map: "Bookmark_postId_fkey")
   @@index([discussionId], map: "Bookmark_discussionId_fkey")
 }
-
-
 
 model DiscussionRoom {
   id           String    @id @default(cuid())

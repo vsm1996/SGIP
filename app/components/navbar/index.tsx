@@ -47,9 +47,9 @@ const NavBar = () => {
           const mentions = response.data?.mentions || []
           const unreadMentions = mentions.filter((mention: Mention) => mention.unread)
           setUnreadCount(unreadMentions.length)
-        } catch (error) {
-          // Ignore canceled requests
-          if (!error || Object.keys(error).length === 0) {
+        } catch (error: any) {
+          // Ignore AbortError (caused by component unmount)
+          if (error.name === 'CanceledError' || error.name === 'AbortError') {
             return;
           }
           console.error('Error fetching mentions:', error)
@@ -122,7 +122,7 @@ const NavBar = () => {
             <div className='flex items-center space-x-4'>
               <ThemeController />
               {status === 'authenticated' && (
-                <div className='hidden md:flex items-center space-x-2'>
+                <div className='hidden lg:flex items-center space-x-2'>
                   <UserCircleIcon className="w-5 h-5" />
                   <span className='text-sm'>{displayName}</span>
                 </div>
@@ -131,7 +131,7 @@ const NavBar = () => {
 
             {/* Mobile menu button - only visible on small screens */}
             <button
-              className="md:hidden btn btn-ghost btn-circle"
+              className="lg:hidden btn btn-ghost btn-circle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -144,7 +144,7 @@ const NavBar = () => {
 
             {/* Center section - main navigation - hidden on mobile */}
             {status === 'authenticated' && (
-              <div className='hidden md:flex items-center space-x-6'>
+              <div className='hidden lg:flex items-center space-x-6'>
                 <Link href='/dashboard' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Dashboard
                 </Link>
@@ -153,6 +153,9 @@ const NavBar = () => {
                 </Link>
                 <Link href='/rooms' className='nav-link hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Rooms
+                </Link>
+                <Link href='/forums' className='nav-link hover:border-b-2 transition-all duration-100 ease-in-out'>
+                  Forums
                 </Link>
                 <Link target="_blank" href='https://www.youtube.com/@george128306' className='nav-link max-lg:hidden inline-block hover:border-b-2 transition-all duration-100 ease-in-out'>
                   Video Lectures
@@ -172,7 +175,7 @@ const NavBar = () => {
             )}
 
             {/* Right section - user actions */}
-            <div className='hidden md:flex items-center space-x-4'>
+            <div className='hidden lg:flex items-center space-x-4'>
               {status === 'authenticated' ? (
                 <>
                   <Link
@@ -232,6 +235,13 @@ const NavBar = () => {
                   Rooms
                 </Link>
                 <Link
+                  href='/forums'
+                  className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Forums
+                </Link>
+                <Link
                   target="_blank"
                   href='https://www.youtube.com/@george128306'
                   className='nav-link py-2 block hover:bg-base-300/50 px-3 rounded-md'
@@ -255,7 +265,7 @@ const NavBar = () => {
                   <div className="flex space-x-4">
                     <Link
                       href="/bookmarks"
-                      className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                      className="btn btn-ghost btn-circle hover:bg-base-300/50 m-0"
                       aria-label='bookmarks'
                       onClick={() => setMobileMenuOpen(false)}
                     >

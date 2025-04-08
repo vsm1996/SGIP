@@ -90,6 +90,7 @@ export const authOptions: NextAuthOptions = {
 
           // Ensure all required fields are present
           session.user = {
+            id: user.id,
             name: user.name || user.firstName || user.username || session.user.email.split('@')[0],
             email: user.email || session.user.email,
             image: user.image || '/default-avatar.png',
