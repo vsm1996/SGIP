@@ -74,6 +74,8 @@ const ForumComment = ({ comment, forumSlug, postId, onDelete }: CommentProps) =>
     }
   }
 
+  console.log(session?.sub, comment.user.id)
+
   return (
     <div className="p-4 bg-base-300/50 rounded-lg mb-2 border border-base-300/30">
       <div className="flex items-center gap-2 mb-2">
@@ -114,7 +116,7 @@ const ForumComment = ({ comment, forumSlug, postId, onDelete }: CommentProps) =>
           </button>
         </div>
 
-        {session?.user?.id === comment.user.id && (
+        {session?.sub === comment.user.id && (
           <button
             onClick={handleDelete}
             className="text-sm text-error flex items-center gap-1"

@@ -44,6 +44,7 @@ export async function GET(
             username: true,
             name: true,
             image: true,
+            id: true,
           },
         },
         commentReplies: {
