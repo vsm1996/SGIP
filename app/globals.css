@@ -37,6 +37,92 @@
   --color-error-content: oklch(96% 0.015 12.422);
 }
 
+/* NATURE THEME COLORS */
+@plugin "daisyui/theme" {
+  name: "nature";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+
+  /* Sky and Water */
+  --color-sky-blue-clear-day: oklch(0.78 0.24 230);
+  --color-ocean-blue-deep-ocean: oklch(0.48 0.27 210);
+  --color-river-blue-mountain-streams: oklch(0.62 0.36 210);
+  --color-sea-foam-green-ocean-foamy-waves: oklch(0.82 0.28 170);
+  --color-cobalt-blue-cobalt-crystals: oklch(0.46 0.50 230);
+  --color-slate-blue-mountain-range: oklch(0.52 0.20 220);
+  --color-fog-white-morning-fog: oklch(0.92 0.04 210);
+
+  /* Greens */
+  --color-grass-green-fresh-spring: oklch(0.72 0.42 135);
+  --color-leaf-green-fresh-leaves: oklch(0.75 0.50 125);
+  --color-apple-green-green-apples: oklch(0.76 0.40 115);
+  --color-moss-green-forest-floor: oklch(0.50 0.35 140);
+  --color-moss-green-mossy-rocks: oklch(0.48 0.30 125);
+  --color-pine-green-pine-trees: oklch(0.43 0.35 150);
+  --color-rainforest-green-dense-forest: oklch(0.42 0.48 140);
+  --color-olive-green-olive-trees: oklch(0.56 0.32 95);
+
+  /* Browns and Earth Tones */
+  --color-earth-brown-soil: oklch(0.40 0.15 60);        /* less saturated, less red */
+  --color-bark-brown-tree-bark: oklch(0.38 0.12 50);    /* deeper, cooler brown */
+  --color-earthy-ochre-clay-soil: oklch(0.58 0.25 65);  /* yellowish brown, like dry clay */
+  --color-sand-beige-desert-sand: oklch(0.80 0.10 80);  /* light neutral tan */
+  --color-desert-tan-dry-desert-soil: oklch(0.75 0.14 70); /* muted sandy tone */
+  --color-stone-grey-rocks-mountains: oklch(0.60 0.06 250); /* cooler, greyish tone */
+  --color-chocolate-brown-chocolate: oklch(0.36 0.18 45);  /* rich dark brown */
+
+
+  /* Warm Colors */
+  --color-sunset-orange-golden-hour: oklch(0.65 0.45 40);
+  --color-autumn-leaf-red-maple-leaves: oklch(0.58 0.58 25);
+  --color-leaf-yellow-autumn-foliage: oklch(0.72 0.36 80);
+  --color-wheat-yellow-wheat-fields: oklch(0.74 0.28 85);
+  --color-honey-yellow-honeycomb: oklch(0.78 0.40 75);
+  --color-lemon-yellow-lemon-zest: oklch(0.88 0.45 95);
+  --color-firebrick-red-volcanic-rocks: oklch(0.55 0.52 20);
+
+  /* Reds and Pinks */
+  --color-raspberry-red-summer-fruit: oklch(0.60 0.55 10);
+  --color-cranberry-red-cranberries: oklch(0.62 0.42 5);
+  --color-coral-pink-tropical-coral-reefs: oklch(0.78 0.38 15);
+  --color-cherry-blossom-pink-spring-blooms: oklch(0.87 0.25 15);
+  --color-wildflower-pink-meadow-flowers: oklch(0.82 0.34 330);
+
+  /* Purples */
+  --color-sky-purple-twilight: oklch(0.44 0.25 270);
+  --color-lavender-lavender-fields: oklch(0.72 0.30 280);
+  --color-plum-purple-ripe-plums: oklch(0.44 0.38 280);
+
+  /* Whites */
+  --color-snow-white-fresh-snow: oklch(1.00 0.01 0);
+  --color-birch-white-birch-tree-bark: oklch(0.91 0.07 25);
+
+  /* Ocean */
+  --color-ocean-blue-deep: oklch(0.50 0.50 190);
+  --color-wave-foam-white: oklch(0.92 0.08 220);
+  --color-kelp-green: oklch(0.40 0.30 140);
+  --color-coral-orange: oklch(0.68 0.48 25);
+  --color-abyssal-blue: oklch(0.30 0.25 200);
+  --color-sea-glass-green: oklch(0.75 0.30 160);
+
+  /* Forest */
+  --color-pine-green: oklch(0.45 0.65 140);
+  --color-fern-green: oklch(0.55 0.45 135);
+  --color-tree-bark-brown: oklch(0.35 0.28 40);
+  --color-mushroom-cap-beige: oklch(0.70 0.15 80);
+  --color-canopy-green: oklch(0.60 0.50 120);
+  --color-forest-shadow: oklch(0.25 0.20 130);
+
+  /* Night Sky */
+  --color-starlight-white: oklch(0.95 0.04 250);
+  --color-midnight-blue: oklch(0.20 0.12 260);
+  --color-nebula-purple: oklch(0.50 0.40 290);
+  --color-moonlight-silver: oklch(0.85 0.10 240);
+  --color-twilight-indigo: oklch(0.35 0.30 270);
+  --color-cosmic-dust-grey: oklch(0.50 0.18 250);
+}
+
 /* GRADIENTS */
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
@@ -46,9 +132,9 @@
   );
 }
 
-/* FIB */
+/* FIBONACCI */
 @theme {
-    --radius-selector: 0.5rem;
+  --radius-selector: 0.5rem;
   --radius-field: 0.25rem;
   --radius-box: 1rem;
   --size-selector: 0.25rem;
@@ -64,7 +150,7 @@
   --animate-fade-in: fadeIn 2.22s ease-out forwards;
   --animate-fade-in-up: fadeInUp 2.22s ease-out forwards;
   --animate-fade-in-right: fadeInRight 2.22s ease-out forwards;
-
+  
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -73,6 +159,7 @@
       opacity: 1;
     }
   }
+
   @keyframes fadeInAndOut {
     0% {
       opacity: 0;
@@ -112,6 +199,266 @@
     50% {
       transform: rotate(11deg);
     }
+  }
+
+  /* Vortex Reveal (Slow like the earth's pulse) */
+  --animate-vortex-reveal: vortexAnim 4.44s cubic-bezier(0.4, 0.0, 0.6, 1) forwards; /* Smooth, organic growth */
+
+  /* Helix Rise (Energizing, like a plant sprouting) */
+  --animate-helix-rise: helixAnim 4.44s ease-out forwards; /* Gradual and uplifting */
+
+
+  /* Sacred Fade (Slow and steady, like a flower blooming) */
+  --animate-sacred-fade: sacredFadeAnim 4.44s ease-in-out forwards; /* Slow, deep, transformative */
+
+  /* Spiral In (Dynamic, like a whirlwind) */
+  --animate-spiral-in: spiralAnim 4.44s cubic-bezier(0.75, 0.2, 0.5, 1) forwards; /* Spirals in with rapid energy */
+
+
+  /* Pulsing (Heartbeat rhythm) */
+  --animate-pulse: pulseAnim 4.44s infinite ease-in-out; /* Slow, rhythmic pulse */
+
+
+  /* Vibrating (Energy in rapid motion) */
+  --animate-vibrate: vibrateAnim 1.11s infinite linear; /* Quick, constant vibration */
+
+
+  /* Morph Fade In (Slow morph, like a liquid transforming) */
+  --animate-morph-fade-in: morphFadeAnim 4.44s ease-in-out forwards; /* Organic transformation */
+
+
+  /* Waving (Subtle, like a gentle breeze) */
+  --animate-wave: waveAnim 4.44s infinite ease-in-out; /* Soft, rhythmic undulation */
+
+
+  /* Breathing (Slow and steady, like the earth's breath) */
+  --animate-breathe: breatheAnim 7.77s ease-in-out infinite; /* Slow, natural breath */
+
+
+  /* Falling (Descending, like a rain drop) */
+  --animate-fall: fallAnim 4.44s ease-in-out infinite; /* Flowing, slow rise and fall */
+
+
+  /* Floating (Gentle, like a cloud drifting) */
+  --animate-float: floatAnim 4.44s ease-in-out infinite; /* Flowing, slow rise and fall */
+
+
+  --animate-floatWave: floatWaveAnim 4.44s ease-in-out infinite; /* Flowing, slow rise and fall */
+
+
+  /* Blooming (Slow, like the opening of a flower) */
+  --animate-bloom: bloomAnim 7.77s ease-in-out forwards; /* Gradual unfolding */
+
+
+  /* Pulsing Color Shift (Smooth, like the ocean's waves) */
+  --animate-pulse-color-shift: pulseColorShiftAnim 4.44s infinite ease-in-out; /* Slow ebb and flow of color */
+
+
+  /* Swelling (Gradual, like the ocean's tide) */
+  --animate-swelling: swellingAnim 4.44s ease-in-out infinite; /* Slow swelling effect */
+
+
+  /* Hover Effects with Nature-Based Timing */
+  --animate-hover-spin: hoverSpinAnim 1.11s ease-out;
+  --animate-hover-lift: hoverLiftAnim 0.55s ease-out forwards;
+  --animate-hover-fade: hoverFadeAnim 1.11s ease-in-out forwards;
+  --animate-hover-pulse: hoverPulseAnim 0.55s infinite ease-in-out;
+  --animate-hover-expand: hoverExpandAnim 0.55s ease-in-out forwards;
+
+/* Fade In */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* FadeInAndOut */
+  @keyframes fadeInAndOut {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Fade Up */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(33px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Fade In Right */
+  @keyframes fadeInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-33px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Wiggle  */
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-11deg);
+    }
+    50% {
+      transform: rotate(11deg);
+    }
+  }
+
+  /* Vortex */
+  @keyframes vortexAnim {
+    0% { transform: scale(0.8) rotate(20deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+  
+  /* Helix */
+  @keyframes helixAnim {
+    0% { transform: translateY(50px) rotate(10deg); opacity: 0; }
+    100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  }
+
+  /* Sacred Fade */
+  @keyframes sacredFadeAnim {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  /* Spiral */
+  @keyframes spiralAnim {
+    0% { transform: translate(-30px, 30px) rotate(-12deg); opacity: 0; }
+    100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  }
+  
+  /* Pulse */
+  @keyframes pulseAnim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+  }
+  
+  /* Vibrate */
+  @keyframes vibrateAnim {
+    0% { transform: translate(0); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, -1px); }
+    75% { transform: translate(-1px, 1px); }
+    100% { transform: translate(0); }
+  }
+  
+  /* Morph Fade */
+  @keyframes morphFadeAnim {
+    0% {
+      opacity: 0;
+      border-radius: 50% 30% 70% 50% / 50% 70% 30% 50%;
+      transform: scale(0.8);
+    }
+    50% {
+      border-radius: 30% 50% 50% 70% / 70% 50% 50% 30%;
+    }
+    100% {
+      opacity: 1;
+      border-radius: 1rem;
+      transform: scale(1);
+    }
+  }
+  
+  /* Wave */
+  @keyframes waveAnim {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+  }
+  
+  /* Breathe */
+  @keyframes breatheAnim {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  
+  /* Fall */
+  @keyframes fallAnim {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  /* Float */
+  @keyframes floatAnim {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  /* Float */
+  @keyframes floatWaveAnim {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-22px); }
+    100%  { transform: translateY(0); }
+  }
+
+  /* Bloom */
+  @keyframes bloomAnim {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  /* Pulse Color Shift */
+  @keyframes pulseColorShiftAnim {
+    0%, 100% { background: #10b981; }
+    50% { background: #ef4444; }
+  }
+  
+  /* Swelling */
+  @keyframes swellingAnim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+  
+    /* Hover Spin */
+  @keyframes hoverSpinAnim {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Hover Lift */
+  @keyframes hoverLiftAnim {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-10px); }
+  }
+  
+  /* Hover Fade */
+  @keyframes hoverFadeAnim {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  
+  /* Hover Pulse */
+  @keyframes hoverPulseAnim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+  
+  /* Hover Expand */
+  @keyframes hoverExpandAnim {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
   }
 }
 
