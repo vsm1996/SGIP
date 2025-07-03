@@ -273,7 +273,7 @@ const NavBar = () => {
                     </Link>
                     <Link
                       href="/mentions"
-                      className="btn btn-ghost btn-circle hover:bg-base-300/50"
+                      className="btn btn-ghost btn-circle hover:bg-base-300/50 m-0"
                       aria-label='notifications'
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -285,6 +285,14 @@ const NavBar = () => {
                           </span>
                         )}
                       </div>
+                    </Link>
+                    <Link
+                      href='/settings'
+                      className='btn btn-ghost btn-circle hover:hover:bg-base-300/50 m-0'
+                      aria-label='profile settings'
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <UserCircleIcon className="w-5 h-5" />
                     </Link>
                   </div>
                   <Link
