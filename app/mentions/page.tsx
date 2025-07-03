@@ -131,8 +131,6 @@ const MentionsPage = () => {
 
       const comment = mention.commentReply.comment;
 
-      console.log(comment)
-
       // Check if post exists in the comment
       if (!comment.post) {
         console.error('Invalid comment reply structure - missing post:', comment);

@@ -74,8 +74,6 @@ const ForumComment = ({ comment, forumSlug, postId, onDelete }: CommentProps) =>
     }
   }
 
-  console.log(session?.sub, comment.user.id)
-
   return (
     <div className="p-4 bg-base-300/50 rounded-lg mb-2 border border-base-300/30">
       <div className="flex items-center gap-2 mb-2">

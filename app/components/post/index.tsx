@@ -30,7 +30,6 @@ const Post = ({ post, handleFetch }: PostProps) => {
 
   const pathname = usePathname()
 
-  console.log(pathname)
 
   useEffect(() => {
     if (session && post.likes) {

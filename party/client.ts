@@ -11,5 +11,5 @@ partySocket.send("Hello everyone");
 
 // print each incoming message from the server to console
 partySocket.addEventListener("message", (e) => {
-  console.log(e.data);
+  // console.log(e.data);
 });

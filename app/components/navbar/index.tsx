@@ -122,10 +122,10 @@ const NavBar = () => {
             <div className='flex items-center space-x-4'>
               <ThemeController />
               {status === 'authenticated' && (
-                <div className='hidden lg:flex items-center space-x-2'>
+                <Link href='/settings' className='hidden lg:flex btn btn-ghost btn-sm items-center space-x-2 hover:hover:bg-base-300/50'>
                   <UserCircleIcon className="w-5 h-5" />
                   <span className='text-sm'>{displayName}</span>
-                </div>
+                </Link>
               )}
             </div>
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
 import prisma from '@/prisma/client'
+import bcrypt from 'bcrypt'
 
 //Defined the shape of propert inline below
 // interface Props {
@@ -50,14 +51,22 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
   // IF user doesn't exist, return 404 not found
   if (!existingUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
+  const hashedPassword = body.newPassword && await bcrypt.hash(body.newPassword, 10)
+
+  const password = !hashedPassword ? existingUser.hashedPassword : hashedPassword
+
   // Else, update the user
   const updatedUser = await prisma.user.update({
     where: { id: id },
     data: {
-      name: body.name,
-      email: body.email
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      username: body.username,
+      hashedPassword: password,
     }
   })
+
   // Return the update user
   return NextResponse.json(updatedUser)
 }
