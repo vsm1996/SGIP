@@ -143,6 +143,7 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
       try {
         // console.log('Received message:', event.data)
         const data = JSON.parse(event.data)
+
         if (data.type === 'sync') {
           // console.log('Syncing messages:', data.messages?.length || 0, 'messages')
           setMessages(data.messages || [])
@@ -179,6 +180,8 @@ const ChatRoom = ({ roomId }: ChatRoomProps) => {
         name: session.user.name,
         firstName: session.user.firstName || session.user.name
       }))
+
+
 
       setNewMessage('')
     } catch (err) {

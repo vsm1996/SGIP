@@ -28,9 +28,15 @@ export async function GET() {
             image: true
           }
         },
-        _count: {
+        messages: {
           select: {
-            messages: true
+            id: true,
+            room: true,
+            roomId: true,
+            author: true,
+            authorId: true,
+            text: true,
+            createdAt: true,
           }
         }
       },

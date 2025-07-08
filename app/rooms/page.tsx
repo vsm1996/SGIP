@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { timeAgo } from '@/app/utils'
 import RoomCard from '@/app/components/discussion/RoomCard'
 
 interface User {
@@ -14,15 +12,23 @@ interface User {
   image?: string
 }
 
+interface Message {
+  id: String
+  text: String
+  createdAt: Date
+  room: Room
+  roomId: String
+  author: User
+  authorId: String
+}
+
 interface Room {
   id: string
   title: string
   createdAt: string
   createdBy: User
   participants: User[]
-  _count: {
-    messages: number
-  }
+  messages: Message[]
 }
 
 export default function RoomsPage() {

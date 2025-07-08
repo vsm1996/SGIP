@@ -10,15 +10,23 @@ interface User {
   image?: string
 }
 
+interface Message {
+  id: String
+  text: String
+  createdAt: Date
+  room: Room
+  roomId: String
+  author: User
+  authorId: String
+}
+
 interface Room {
   id: string
   title: string
   createdAt: string
   createdBy: User
   participants: User[]
-  _count: {
-    messages: number
-  }
+  messages: Message[]
 }
 
 interface RoomCardProps {
@@ -29,6 +37,7 @@ export default function RoomCard({ room }: RoomCardProps) {
   const getDisplayName = (user: User) => {
     return user.username || user.firstName || 'Anonymous'
   }
+  console.log(room)
 
   return (
     <Link
@@ -42,7 +51,7 @@ export default function RoomCard({ room }: RoomCardProps) {
         </p>
         <div className="flex justify-between items-center mt-4">
           <span className="text-sm">
-            {room._count.messages} messages
+            {room.messages.length} messages
           </span>
           <span className="text-sm">
             {room.participants.length} participants
