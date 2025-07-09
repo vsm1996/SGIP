@@ -14,7 +14,7 @@ export default function Home() {
             Welcome to SGip
           </h1>
           <h2>
-            - Disciples of Nichiren
+            - Disciples of Nichiren -
           </h2>
         </div>
 
