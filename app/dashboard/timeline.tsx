@@ -45,7 +45,7 @@ const Timeline = () => {
       {error && <ErrorMessage error={error} />}
       <CreatePost handlePost={handleFetch} />
       {isLoading && <Loading />}
-      <ul className='flex flex-col'>
+      <ul className='flex flex-col space-y-8'>
         <Suspense fallback={<PostSkeleton />}>
           {posts.map((post: any) => (
             <DynamicPost key={post.id} post={post} handleFetch={handleFetch} />

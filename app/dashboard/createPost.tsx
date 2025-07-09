@@ -52,7 +52,7 @@ const CreatePost = ({ handlePost }: CreatePostProps) => {
   }
 
   return (
-    <div className='card bg-base-200 shadow-xl mb-5 text-base-content'>
+    <div className='card bg-base-200 shadow-xl mb-10 text-base-content'>
       <div className='card-body'>
         <form onSubmit={handleSubmit}>
           {errorMessage && <ErrorMessage error={errorMessage} />}

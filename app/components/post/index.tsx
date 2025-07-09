@@ -48,7 +48,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
   }, [session, post.likes, post.id])
 
   return (
-    <div className='card bg-base-200/95 backdrop-blur-sm shadow-xl mb-5 hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
+    <div className='group card bg-base-200/95 backdrop-blur-sm shadow-xl hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
       <div className='card-body'>
         {post.mentionContext && (
           <div className='bg-base-300/90 p-3 rounded-lg mb-4 border border-base-300/50'>
@@ -60,31 +60,29 @@ const Post = ({ post, handleFetch }: PostProps) => {
           </div>
         )}
 
-        <Link href={`/status/${post.id}`} className='mb-4'>
-          <div className='mb-3'>
-            <div className='mb-4 flex items-center gap-1'>
-              <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.username || post.user.name} </p>
-              <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
-            </div>
-            <p className={`font-extralight ${nunito.className} text-lg`}> {post.message} </p>
-            {post.isRichText && post.content && (
-              <div className="mt-2">
-                {showRichContent ? (
-                  <div className="rich-content" dangerouslySetInnerHTML={{ __html: post.content }} />
-                ) : (
-                  <button
-                    onClick={() => setShowRichContent(true)}
-                    className="text-xs text-accent hover:underline"
-                  >
-                    Show more content
-                  </button>
-                )}
-              </div>
-            )}
+        <Link href={`/status/${post.id}`} className='mb-5'>
+          <div className='mb-4 flex items-center gap-1'>
+            <p className={`justify-self-start font-semibold ${raleway.className}`}> {post.user.username || post.user.name} </p>
+            <small className='text-xs opacity-45'> {timeAgo(post.createdAt)} </small>
           </div>
+          <p className={`font-extralight ${nunito.className} text-lg`}> {post.message} </p>
+          {post.isRichText && post.content && (
+            <div className="mt-2">
+              {showRichContent ? (
+                <div className="rich-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+              ) : (
+                <button
+                  onClick={() => setShowRichContent(true)}
+                  className="text-xs text-accent hover:underline"
+                >
+                  Show more content
+                </button>
+              )}
+            </div>
+          )}
         </Link>
 
-        <div className='flex justify-between items-center mt-3'>
+        <div className='opacity-0 group-hover:opacity-100 flex justify-between items-center transition-opacity ease-in-out duration-500'>
           {/* Left side - Reactions */}
           <div className='flex items-center gap-3'>
             <PostReactionButton session={session} postId={post.id} handleFetch={handleFetch} />

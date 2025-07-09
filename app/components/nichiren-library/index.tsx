@@ -3,6 +3,42 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 
+const libraryLinks = [
+  {
+    label: 'The Writings of Nichiren Daishonin, Vol. 1',
+    src: 'https://www.nichirenlibrary.org/en/wnd-1/toc',
+  },
+  {
+    label: 'The Writings of Nichiren Daishonin, Vol. 2',
+    src: 'https://www.nichirenlibrary.org/en/wnd-2/toc',
+  },
+  {
+    label: 'The Record of The Orally Transmitted Teachings',
+    src: 'https://www.nichirenlibrary.org/en/ott/toc/',
+  },
+  {
+    label: 'The Lotus Sutra',
+    src: 'https://www.nichirenlibrary.org/en/lsoc/toc/',
+  },
+  {
+    label: 'The Soka Gakkai - Dictionary of Buddhism',
+    src: 'https://www.nichirenlibrary.org/en/dic/toc/',
+  },
+]
+
+const sidebarContent = libraryLinks.map((link, index) => (
+  <li key={link.label} aria-label={link.label}>
+    <Link
+      href={link.src}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block text-md p-5 hover:underline text-balance mb-4"
+    >
+      {link.label}
+    </Link>
+  </li>
+))
+
 const NichirenLibrary = ({ children }: Readonly<{
   children: React.ReactNode;
 }>) => {
@@ -35,56 +71,7 @@ const NichirenLibrary = ({ children }: Readonly<{
           </li>
           <div className="divider w-full" />
           {/* Sidebar content here */}
-          <li>
-            <Link
-              href="https://www.nichirenlibrary.org/en/wnd-1/toc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance mb-4"
-            >
-              The Writings of Nichiren Daishonin, Vol. 1
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://www.nichirenlibrary.org/en/wnd-2/toc"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance mb-4"
-            >
-              The Writings of Nichiren Daishonin, Vol. 2
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://www.nichirenlibrary.org/en/ott/toc/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance mb-4"
-            >
-              The Record of The Orally Transmitted Teachings
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://www.nichirenlibrary.org/en/lsoc/toc/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance mb-4"
-            >
-              The Lotus Sutra
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="https://www.nichirenlibrary.org/en/dic/toc/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-md p-5 hover:underline text-balance mb-4"
-            >
-              The Soka Gakkai - Dictionary of Buddhism
-            </Link>
-          </li>
+          {sidebarContent}
         </ul>
       </div>
     </div>
