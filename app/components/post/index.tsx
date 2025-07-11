@@ -82,7 +82,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
           )}
         </Link>
 
-        <div className='opacity-0 flex justify-between items-center transition-opacity ease-in-out duration-500'>
+        <div className='flex justify-between items-center'>
           {/* Left side - Reactions */}
           <div className='flex items-center gap-3'>
             <PostReactionButton session={session} postId={post.id} handleFetch={handleFetch} />
