@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import RoomCard from '@/app/components/discussion/RoomCard'
+import RoomCard from '@/components/discussion/RoomCard'
 
 interface User {
   id: string

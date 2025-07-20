@@ -1,10 +1,10 @@
 'use client';
 
-import apiClient from '@/app/services/api-client'
+import apiClient from '@/services/api-client'
 import { useSession } from 'next-auth/react'
 import React, { FormEvent, useRef, useState } from 'react'
 import { CanceledError } from 'axios'
-import ErrorMessage from '@/app/components/errorMessage';
+import ErrorMessage from '@/components/errorMessage';
 
 const CreateComment = ({ handleComment, postId }: any) => {
   const [error, setErrorMessage] = useState<string[] | null>(null)

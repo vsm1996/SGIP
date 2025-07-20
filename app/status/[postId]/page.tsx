@@ -3,16 +3,16 @@
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { AxiosResponse, CanceledError } from 'axios'
-import apiClient from '@/app/services/api-client'
+import apiClient from '@/services/api-client'
 
-import Post from '@/app/components/post'
-import Comment from '@/app/components/comment'
+import Post from '@/components/post'
+import Comment from '@/components/comment'
 import CreateComment from './createComment'
-import Loading from '@/app/components/loading';
+import Loading from '@/components/loading';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const DynamicPost = dynamic(() => import('@/app/components/post'), { ssr: false })
+const DynamicPost = dynamic(() => import('@/components/post'), { ssr: false })
 
 const PostStatusPage = () => {
   const [post, setPost] = useState<any>(null)
