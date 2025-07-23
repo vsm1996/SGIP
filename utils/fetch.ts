@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import apiClient from "../../services/api-client"
+import apiClient from "@/services/api-client"
 import { AxiosResponse, CanceledError } from "axios"
 
 export const useFetch = () => {
