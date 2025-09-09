@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import ForumPost from '@/components/post/forum-post';
+import ForumPost from '@/app/components/post/forum-post';
 
 interface Forum {
   id: string;

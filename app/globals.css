@@ -4,15 +4,45 @@
 
 
 @plugin "daisyui" {
-  themes: nature, luxury;
+  themes:
+    corporate --default,
+    luxury --prefersdark;
+}
+
+
+@plugin "daisyui/theme" {
+  name: "highkeydream";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(97% 0.013 236.62);
+  --color-base-200: oklch(95% 0.026 236.824);
+  --color-base-300: oklch(90% 0.058 230.902);
+  --color-base-content: oklch(39% 0.09 240.876);
+  --color-primary: oklch(70% 0.183 293.541);
+  --color-primary-content: oklch(28% 0.141 291.089);
+  --color-secondary: oklch(70% 0.191 22.216);
+  --color-secondary-content: oklch(25% 0.092 26.042);
+  --color-accent: oklch(77% 0.152 181.912);
+  --color-accent-content: oklch(27% 0.046 192.524);
+  --color-neutral: oklch(29% 0.066 243.157);
+  --color-neutral-content: oklch(97% 0.013 236.62);
+  --color-info: oklch(60% 0.126 221.723);
+  --color-info-content: oklch(98% 0.019 200.873);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(98% 0.018 155.826);
+  --color-warning: oklch(68% 0.162 75.834);
+  --color-warning-content: oklch(98% 0.026 102.212);
+  --color-error: oklch(58% 0.253 17.585);
+  --color-error-content: oklch(96% 0.015 12.422);
 }
 
 /* NATURE THEME COLORS */
 @plugin "daisyui/theme" {
   name: "nature";
-  default: true;
-  prefersdark: false;
-  color-scheme: "light";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
 
   /* Sky and Water */
   --color-sky-blue-clear-day: oklch(0.78 0.24 230);
@@ -91,139 +121,7 @@
   --color-moonlight-silver: oklch(0.85 0.10 240);
   --color-twilight-indigo: oklch(0.35 0.30 270);
   --color-cosmic-dust-grey: oklch(0.50 0.18 250);
-
-  --color-base-100: oklch(0.85 0.10 240);      /* moonlight silver - bg */
-  --color-base-200: oklch(0.50 0.18 250);      /* cosmic dust grey */
-  --color-base-300: oklch(0.60 0.06 250);      /* stone grey */
-  --color-base-content: oklch(0.20 0.12 260);  /* midnight blue */
-  --color-primary: oklch(0.91 0.07 25);         /* birch white */
-  --color-primary-content: oklch(0.20 0.12 260);
-  --color-secondary: oklch(0.52 0.20 220);      /* slate blue */
-  --color-secondary-content: oklch(0.85 0.10 240);
-  --color-accent: oklch(0.44 0.25 270);         /* sky purple */
-  --color-accent-content: oklch(0.85 0.10 240);
-  --color-neutral: oklch(0.50 0.18 250);         /* cosmic dust grey */
-  --color-neutral-content: oklch(0.85 0.10 240);
-  --color-info: oklch(0.46 0.50 230);            /* cobalt blue */
-  --color-success: oklch(0.75 0.30 160);         /* sea glass green */
-  --color-warning: oklch(0.78 0.40 75);          /* honey yellow */
-  --color-error: oklch(0.62 0.42 5);             /* cranberry red */
 }
-
-/* AIR */
- {
-  --color-base-100: oklch(0.92 0.04 210);    /* fog white - background */
-  --color-base-200: oklch(0.78 0.24 230);    /* sky blue - subtle surfaces */
-  --color-base-300: oklch(0.52 0.20 220);    /* slate blue - accent surfaces */
-  --color-base-content: oklch(0.20 0.12 260); /* midnight blue - main text */
-  --color-primary: oklch(0.44 0.25 270);     /* sky purple - primary buttons */
-  --color-primary-content: oklch(0.92 0.04 210); /* fog white - button text */
-  --color-secondary: oklch(0.35 0.30 270);   /* twilight indigo - secondary UI */
-  --color-secondary-content: oklch(0.92 0.04 210); /* fog white */
-  --color-accent: oklch(0.50 0.18 250);      /* cosmic dust grey - highlights */
-  --color-accent-content: oklch(0.92 0.04 210);
-  --color-neutral: oklch(0.85 0.10 220);      /* wave foam white - neutral bg */
-  --color-neutral-content: oklch(0.20 0.12 260);
-  --color-info: oklch(0.46 0.50 230);         /* cobalt blue */
-  --color-success: oklch(0.75 0.30 160);      /* sea glass green */
-  --color-warning: oklch(0.78 0.40 75);       /* honey yellow */
-  --color-error: oklch(0.55 0.52 20);         /* firebrick red */
- }
-
- /* EARTH */ {
-  --color-base-100: oklch(0.80 0.10 80);      /* sand beige - bg */
-  --color-base-200: oklch(0.75 0.14 70);      /* desert tan */
-  --color-base-300: oklch(0.58 0.25 65);      /* earthy ochre */
-  --color-base-content: oklch(0.36 0.18 45);  /* chocolate brown - text */
-  --color-primary: oklch(0.40 0.15 60);        /* earth brown - buttons */
-  --color-primary-content: oklch(0.80 0.10 80); /* sand beige text on buttons */
-  --color-secondary: oklch(0.38 0.12 50);      /* bark brown */
-  --color-secondary-content: oklch(0.80 0.10 80);
-  --color-accent: oklch(0.60 0.06 250);        /* stone grey - highlights */
-  --color-accent-content: oklch(0.80 0.10 80);
-  --color-neutral: oklch(0.70 0.15 80);        /* mushroom cap beige */
-  --color-neutral-content: oklch(0.36 0.18 45);
-  --color-info: oklch(0.50 0.35 140);          /* moss green forest floor */
-  --color-success: oklch(0.56 0.32 95);         /* olive green */
-  --color-warning: oklch(0.72 0.36 80);         /* leaf yellow autumn */
-  --color-error: oklch(0.62 0.42 5);            /* cranberry red */
- }
-
- /* FIRE */ {
-   --color-base-100: oklch(0.88 0.45 95);       /* lemon yellow - bg */
-  --color-base-200: oklch(0.74 0.28 85);       /* wheat yellow */
-  --color-base-300: oklch(0.65 0.45 40);       /* sunset orange */
-  --color-base-content: oklch(0.20 0.12 260);  /* dark midnight blue text for contrast */
-  --color-primary: oklch(0.55 0.52 20);         /* firebrick red */
-  --color-primary-content: oklch(0.92 0.04 210); /* fog white */
-  --color-secondary: oklch(0.58 0.58 25);       /* autumn leaf red */
-  --color-secondary-content: oklch(0.92 0.04 210);
-  --color-accent: oklch(0.78 0.40 75);          /* honey yellow */
-  --color-accent-content: oklch(0.20 0.12 260);
-  --color-neutral: oklch(0.80 0.10 80);          /* sand beige */
-  --color-neutral-content: oklch(0.20 0.12 260);
-  --color-info: oklch(0.46 0.50 230);            /* cobalt blue - contrast info */
-  --color-success: oklch(0.75 0.30 160);         /* sea glass green */
-  --color-warning: oklch(0.72 0.36 80);          /* leaf yellow */
-  --color-error: oklch(0.60 0.55 10);            /* raspberry red */
- }
-
- /* WATER */ {
-   --color-base-100: oklch(0.92 0.08 220);      /* wave foam white - bg */
-  --color-base-200: oklch(0.62 0.36 210);      /* river blue */
-  --color-base-300: oklch(0.48 0.27 210);      /* ocean deep */
-  --color-base-content: oklch(0.20 0.12 260);  /* midnight blue */
-  --color-primary: oklch(0.30 0.25 200);        /* abyssal blue */
-  --color-primary-content: oklch(0.92 0.08 220); /* wave foam white */
-  --color-secondary: oklch(0.75 0.30 160);      /* sea glass green */
-  --color-secondary-content: oklch(0.92 0.08 220);
-  --color-accent: oklch(0.82 0.28 170);         /* sea foam green */
-  --color-accent-content: oklch(0.20 0.12 260);
-  --color-neutral: oklch(0.40 0.30 140);         /* kelp green */
-  --color-neutral-content: oklch(0.92 0.08 220);
-  --color-info: oklch(0.46 0.50 230);            /* cobalt blue */
-  --color-success: oklch(0.75 0.30 160);         /* sea glass green */
-  --color-warning: oklch(0.78 0.40 75);          /* honey yellow */
-  --color-error: oklch(0.62 0.42 5);             /* cranberry red */
- }
-
- /* METAL */ {
-  --color-base-100: oklch(0.85 0.10 240);      /* moonlight silver - bg */
-  --color-base-200: oklch(0.50 0.18 250);      /* cosmic dust grey */
-  --color-base-300: oklch(0.60 0.06 250);      /* stone grey */
-  --color-base-content: oklch(0.20 0.12 260);  /* midnight blue */
-  --color-primary: oklch(0.91 0.07 25);         /* birch white */
-  --color-primary-content: oklch(0.20 0.12 260);
-  --color-secondary: oklch(0.52 0.20 220);      /* slate blue */
-  --color-secondary-content: oklch(0.85 0.10 240);
-  --color-accent: oklch(0.44 0.25 270);         /* sky purple */
-  --color-accent-content: oklch(0.85 0.10 240);
-  --color-neutral: oklch(0.50 0.18 250);         /* cosmic dust grey */
-  --color-neutral-content: oklch(0.85 0.10 240);
-  --color-info: oklch(0.46 0.50 230);            /* cobalt blue */
-  --color-success: oklch(0.75 0.30 160);         /* sea glass green */
-  --color-warning: oklch(0.78 0.40 75);          /* honey yellow */
-  --color-error: oklch(0.62 0.42 5);             /* cranberry red */
- }
-
- /* WOOD */ {
-  --color-base-100: oklch(0.80 0.10 80);      /* sand beige (light neutral) */
-  --color-base-200: oklch(0.75 0.50 125);     /* leaf green */
-  --color-base-300: oklch(0.72 0.42 135);     /* grass green */
-  --color-base-content: oklch(0.35 0.28 40);  /* tree bark brown */
-  --color-primary: oklch(0.76 0.40 115);       /* apple green */
-  --color-primary-content: oklch(0.80 0.10 80);
-  --color-secondary: oklch(0.42 0.48 140);     /* rainforest green */
-  --color-secondary-content: oklch(0.80 0.10 80);
-  --color-accent: oklch(0.50 0.35 140);        /* moss green */
-  --color-accent-content: oklch(0.80 0.10 80);
-  --color-neutral: oklch(0.70 0.15 80);         /* mushroom cap beige */
-  --color-neutral-content: oklch(0.35 0.28 40);
-  --color-info: oklch(0.43 0.35 150);            /* pine green */
-  --color-success: oklch(0.75 0.30 160);         /* sea glass green */
-  --color-warning: oklch(0.72 0.36 80);          /* leaf yellow */
-  --color-error: oklch(0.62 0.42 5);             /* cranberry red */
- }
 
 /* GRADIENTS */
 @theme {

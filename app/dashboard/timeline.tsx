@@ -1,15 +1,15 @@
 'use client';
 
 import React, { Suspense, useEffect, useState } from 'react'
-import apiClient from '@/services/api-client';
+import apiClient from '@/app/services/api-client';
 import { AxiosResponse, CanceledError } from 'axios';
-import CreatePost from './components/createPost';
-import PostSkeleton from '@/components/post/postSkeleton'
-import ErrorMessage from '@/components/errorMessage';
-import Loading from '@/components/loading';
+import CreatePost from './createPost';
+import PostSkeleton from '@/app/components/post/postSkeleton'
+import ErrorMessage from '../components/errorMessage';
+import Loading from '../components/loading';
 import dynamic from 'next/dynamic';
 
-const DynamicPost = dynamic(() => import('@/components/post'), { ssr: false })
+const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
 
 
 

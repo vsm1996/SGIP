@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import apiClient from '@/services/api-client';
+import apiClient from '@/app/services/api-client';
 import { CanceledError } from 'axios';
-import Post from '@/components/post';
-import Loading from '@/components/loading';
-import ErrorMessage from '@/components/errorMessage';
+import Post from '../components/post';
+import Loading from '../components/loading';
+import ErrorMessage from '../components/errorMessage';
 import { BookmarkIcon } from '@heroicons/react/24/outline';
 import dynamic from "next/dynamic";
 
-const DynamicPost = dynamic(() => import('@/components/post'), { ssr: false })
+const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
 
 interface BookmarkedPost {
   id: string;

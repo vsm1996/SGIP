@@ -1,5 +1,5 @@
 import Image from "next/image";
-import RegisterForm from "@/components/registerForm";
+import RegisterForm from "./components/registerForm";
 import Link from "next/link";
 
 export default function Home() {

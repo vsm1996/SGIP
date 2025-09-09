@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import ForumPost from '@/components/post/forum-post';
+import ForumPost from '@/app/components/post/forum-post';
 
 interface Forum {
   id: string;

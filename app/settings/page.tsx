@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import apiClient from '@/services/api-client'
-import ErrorMessage from '@/components/errorMessage'
+import apiClient from '@/app/services/api-client'
+import ErrorMessage from '@/app/components/errorMessage'
 
 const SettingsPage = () => {
   const { data: session, update: updateSession } = useSession()

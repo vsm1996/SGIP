@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import ChatRoom from '@/components/discussion/ChatRoom'
+import ChatRoom from '@/app/components/discussion/ChatRoom'
 import { use } from 'react'
 
 interface RoomPageProps {

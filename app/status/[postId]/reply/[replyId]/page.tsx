@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { AxiosResponse, CanceledError } from 'axios'
-import apiClient from '@/services/api-client'
+import apiClient from '@/app/services/api-client'
 
-import Post from '@/components/post'
-import Comment from '@/components/comment'
+import Post from '@/app/components/post'
+import Comment from '@/app/components/comment'
 import CreateReply from './createReply';
-import Loading from '@/components/loading';
-import Reply from '@/components/reply';
+import Loading from '@/app/components/loading';
+import Reply from '@/app/components/reply';
 import Link from 'next/link';
 
 const CommentStatusPage = () => {
