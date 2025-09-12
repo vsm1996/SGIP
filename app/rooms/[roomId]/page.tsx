@@ -12,7 +12,6 @@ interface RoomPageProps {
 
 export default function RoomPage({ params }: RoomPageProps) {
   const { roomId } = use(params)
-
   const { data: session } = useSession()
 
   if (!session) {
