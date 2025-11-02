@@ -1,16 +1,16 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Like } from '@prisma/client'
 import Link from 'next/link'
+import dynamic from 'next/dynamic';
 
-import PostLikeButton from '@/app/components/button/post-like'
 import PostDeleteButton from '@/app/components/button/post-delete'
 import PostReactionButton from '@/app/components/button/post-reaction'
 import PostBookmarkButton from '@/app/components/button/post-bookmark'
 import PostShareButton from '@/app/components/button/post-share'
-import EditPost from './editPost'
+
 
 import { timeAgo } from '@/app/utils'
 import { nunito, raleway } from '@/app/utils/font'
@@ -20,6 +20,8 @@ interface PostProps {
   post: any,
   handleFetch: () => void,
 }
+
+const DynamicEditPost = dynamic(() => import('./editPost'), { ssr: false })
 
 const Post = ({ post, handleFetch }: PostProps) => {
   const { data: session } = useSession()
@@ -49,7 +51,7 @@ const Post = ({ post, handleFetch }: PostProps) => {
 
   return (
     <div className='card bg-base-200/95 backdrop-blur-sm shadow-xl hover:bg-base-200/75 transition-all duration-200 ease-in-out text-base-content border border-base-300'>
-      <div className='card-body'>
+      {!isEditing && (<div className='card-body'>
         {post.mentionContext && (
           <div className='bg-base-300/90 p-3 rounded-lg mb-4 border border-base-300/50'>
             <div className='flex items-center gap-2 mb-2'>
@@ -119,10 +121,10 @@ const Post = ({ post, handleFetch }: PostProps) => {
             )}
           </div>
         </div>
-      </div>
+      </div>)}
 
       {isEditing && (
-        <EditPost
+        <DynamicEditPost
           postId={post.id}
           initialMessage={post.message}
           initialContent={post.content || ""}

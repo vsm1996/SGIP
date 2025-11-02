@@ -13,6 +13,9 @@ const nextConfig = {
         ]
       }
     ]
+  },
+  experimental: {
+    cacheComponents: true,
   }
 };
 

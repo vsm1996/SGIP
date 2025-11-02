@@ -57,9 +57,8 @@ const EditPost = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-base-200 p-6 rounded-lg w-full max-w-2xl">
-        <h2 className="text-xl font-bold mb-4">Edit Post</h2>
         <form onSubmit={handleSubmit}>
           {errorMessage && <ErrorMessage error={errorMessage} />}
 

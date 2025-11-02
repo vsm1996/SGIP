@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 
-export const revalidate = 0
-
 // Get all bookmarks for a user
 export async function GET(request: NextRequest) {
   const userId = request.nextUrl.searchParams.get('userId');

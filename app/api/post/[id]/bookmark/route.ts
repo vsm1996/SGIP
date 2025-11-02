@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 
-export const revalidate = 0
+
 
 // Toggle bookmark status for a post
 export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {

@@ -3,7 +3,7 @@ import prisma from "@/prisma/client";
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
-export const revalidate = 0;
+;
 
 // Get a specific reply
 export async function GET(

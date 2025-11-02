@@ -1,16 +1,13 @@
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import apiClient from '@/app/services/api-client';
 import { AxiosResponse, CanceledError } from 'axios';
 import CreatePost from './createPost';
 import PostSkeleton from '@/app/components/post/postSkeleton'
 import ErrorMessage from '../components/errorMessage';
 import Loading from '../components/loading';
-import dynamic from 'next/dynamic';
-
-const DynamicPost = dynamic(() => import('../components/post'), { ssr: false })
-
+import Post from '../components/post'
 
 
 const Timeline = () => {
@@ -48,7 +45,7 @@ const Timeline = () => {
       <ul className='flex flex-col space-y-8'>
         <Suspense fallback={<PostSkeleton />}>
           {posts.map((post: any) => (
-            <DynamicPost key={post.id} post={post} handleFetch={handleFetch} />
+            <Post key={post.id} post={post} handleFetch={handleFetch} />
           )
           )}
         </Suspense>

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
-import { Suspense } from "react";
 import "./globals.css";
 import AuthProvider from "./auth/Provider";
 import NavBar from "./components/navbar";
@@ -26,9 +25,7 @@ export default function RootLayout({
         <AuthProvider>
           <NavBar />
           <main className="relative">
-            <Suspense fallback={<div className=" loading loading-ring loading-lg"></div>}>
-              {children}
-            </Suspense>
+            {children}
           </main>
         </AuthProvider>
       </body>
